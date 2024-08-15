@@ -1,0 +1,10 @@
+*.swp
+*.o
+*.out
+*.d
+tovog/
+.vscode
+push_swap
+*commands.json
+.cache/
+*out.txt
