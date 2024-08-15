@@ -1,0 +1,4 @@
+-I
+./
+-I
+./lib/libftx/includes
