@@ -2,9 +2,20 @@
 *.o
 *.out
 *.d
+*.dSYM
+*.a
+
 tovog/
 .vscode
 push_swap
 *commands.json
 .cache/
 *out.txt
+
+## emacs temp
+*~
+\#*\#
+
+## Debug
+**/TAGS
+**/valgrind-out.txt
