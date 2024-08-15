@@ -7,7 +7,7 @@
 
 tovog/
 .vscode
-push_swap
+minishell
 *commands.json
 .cache/
 *out.txt
