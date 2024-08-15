@@ -1,0 +1,3 @@
+[submodule "lib/libftx"]
+	path = lib/libftx
+	url = git@github.com:RedJocker/libftx.git
