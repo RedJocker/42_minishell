@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/08/15 18:58:35 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/16 15:48:50 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,14 +41,14 @@ minishell_execute() {
 }
 
 assert_minishell_equal_bash() {
-    run bash_execute $@
+    run bash_execute "$@"
     local bash_status=$status
     local bash_output=$output
 
     #echo $bash_status 1>&3
     #echo $bash_output 1>&3
 
-    run minishell_execute $@
+    run minishell_execute "$@"
     if ! [[ $bash_output == $output ]]; then
 	echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 	false
@@ -64,6 +64,11 @@ assert_minishell_equal_bash() {
     assert_minishell_equal_bash ls
 }
 
+@test "test two simple commands in two lines of input: pwd\npwd" {
+    assert_minishell_equal_bash "pwd
+pwd"
+}
+
 @test "test simple command with one arg: ls -l" {
-    assert_minishell_equal_bash ls -l
+    assert_minishell_equal_bash "ls -l"
 }
