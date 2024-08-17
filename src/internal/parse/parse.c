@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 18:38:06 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/15 18:49:22 by maurodri         ###   ########.fr       */
+/*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
+/*   Updated: 2024/08/16 21:23:24 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "ft_stdio.h"
 
-int	main(void)
+void	parse(void)
 {
-	printf("end_to_end_test.sh\nend_to_end_test.sh~\n");
-	return (0);
+	ft_printf("/nfs/homes/dande-je/workspace/42_minishell");
 }

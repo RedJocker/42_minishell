@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/15 05:04:35 by dande-je         ###   ########.fr        #
+#    Updated: 2024/08/16 21:29:31 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ RESET                           := \033[0m
 #******************************************************************************#
 
 SRCS_DIR                        := src/
+SRCS_INTERNAL_DIR               := src/internal/
+SRCS_PARSE_DIR                  := $(SRCS_INTERNAL_DIR)parse/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/
@@ -55,6 +57,7 @@ LIBS                            := ./lib/libftx/libft.a
 NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
+SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
 
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
@@ -148,6 +151,10 @@ define debug
 	$(MAKE) WITH_DEBUG=TRUE
 endef
 
+define test
+	bats test/end_to_end_test.sh
+endef
+
 define reset_count
 	$(eval COUNT=$(1))
 	$(eval OBJS_COUNT=$(words $(SRCS_FILES)))
@@ -182,6 +189,9 @@ re: fclean all
 
 debug:
 	$(call debug)
+
+test: $(NAME)
+	$(call test)
 
 .PHONY: all clean fclean re debug
 .DEFAULT_GOAL := all
