@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/08/16 15:48:50 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/17 01:22:23 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,8 @@ assert_minishell_equal_bash() {
     #echo $bash_output 1>&3
 
     run minishell_execute "$@"
-    if ! [[ $bash_output == $output ]]; then
+    local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
+    if ! [[ $bash_output == $mini_output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
     fi
@@ -74,5 +75,10 @@ pwd"
 }
 
 @test "test simple command with one arg: ls -l" {
+    assert_minishell_equal_bash ls -l
+}
+
+
+@test "test simple command with two args: ls -l -a" {
     assert_minishell_equal_bash ls -l
 }
