@@ -6,23 +6,14 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 17:27:45 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/16 22:01:25 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/21 18:12:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_string.h"
 #include <unistd.h>
-#include "envp.h" 
-
-void	free_strarr_null_term(char **arr)
-{
-	int	i;
-
-	i = -1;
-	while (arr[++i])
-		free(arr[i]);
-	free(arr);
-}
+#include "envp.h"
+#include "ft_util.h"
 
 static int	envp_is_path(char *maybe_path)
 {
@@ -69,7 +60,7 @@ char	*envp_find_bin_by_name(char *name, char **envp)
 		free(bin);
 		bin = NULL;
 	}
-	free_strarr_null_term(path_arr);
+	ft_strarr_free(path_arr);
 	free(sname_tname[0]);
 	if (!bin)
 		bin = ft_strdup(sname_tname[1]);
