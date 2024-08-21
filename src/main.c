@@ -6,13 +6,14 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 01:25:54 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/17 01:21:54 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/21 18:46:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include "ft_string.h"
+#include "ft_util.h"
 #include "internal/parse/parse.h"
 #include "internal/envp.h"
 #include <sys/types.h>
@@ -40,14 +41,14 @@ int	main(int argc, char **argv, char **envp)
 			execve(cmd, arr, envp);
 			free(input);
 			free(cmd);
-			free(arr);
+			ft_strarr_free(arr);
 		}
 		else
 		{
 			waitpid(pid, 0, 0);
 			free(input);
 			free(cmd);
-			free(arr);
+			ft_strarr_free(arr);
 		}
 	}
 	exit(EXIT_SUCCESS);

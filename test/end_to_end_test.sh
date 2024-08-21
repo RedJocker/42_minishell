@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/08/17 01:22:23 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/21 18:46:25 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,17 @@ minishell_execute() {
     ./minishell <<< "$@"
 }
 
+minishell_leak_check() {
+    valgrind --leak-check=full \
+	     -s \
+	     --show-reachable=yes \
+	     --errors-for-leak-kinds=all \
+	     --error-exitcode=1 \
+	     --track-origins=yes \
+	     --suppressions=mini.supp \
+	     ./minishell <<< "$@"
+}
+
 assert_minishell_equal_bash() {
     run bash_execute "$@"
     local bash_status=$status
@@ -59,6 +70,13 @@ assert_minishell_equal_bash() {
 		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
     fi
+
+    run minishell_leak_check "$@"
+    if (( status != 0 )); then
+	echo -e "VALGRIND ERROR:\n$output"
+	false
+    fi
+
 }
 
 @test "test simple command: ls" {
