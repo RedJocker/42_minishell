@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/23 01:30:12 by dande-je         ###   ########.fr        #
+#    Updated: 2024/08/23 01:58:22 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRCS_DIR                        := src/
 SRCS_INTERNAL_DIR               := src/internal/
 SRCS_PARSE_DIR                  := $(SRCS_INTERNAL_DIR)parse/
 SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
+SRCS_RUNNER_DIR                 := $(SRCS_INTERNAL_DIR)runner/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/
@@ -60,6 +61,7 @@ NAME                            = minishell
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
+SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
@@ -178,6 +180,9 @@ $(NAME): $(LIBFTX) $(call reset_count, -$(words $(OBJS))) $(OBJS)
 $(LIBFTX):
 	$(call submodule_update_libftx)
 
+etags: $(NAME)
+	etags $$(find . -name '*.[ch]')
+
 bonus:
 	$(call bonus)
 
@@ -195,7 +200,7 @@ debug:
 test: $(NAME)
 	$(call test)
 
-.PHONY: all clean fclean re debug
+.PHONY: all clean fclean re debug etags
 .DEFAULT_GOAL := all
 .SILENT:
 

@@ -1,4 +1,7 @@
 -I
 ./
 -I
+./src
+-I
 ./lib/libftx/includes
+
