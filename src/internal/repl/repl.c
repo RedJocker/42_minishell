@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/23 02:16:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/23 03:36:04 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include "ft_util.h"
 #include "internal/parse/parse.h"
-#include "internal/envp.h"
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>

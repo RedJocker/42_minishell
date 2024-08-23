@@ -6,13 +6,12 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/23 02:24:00 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/23 03:35:59 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "ft_util.h"
 #include "internal/envp.h"
 #include <sys/wait.h>
 #include "internal/runner/runner.h"
