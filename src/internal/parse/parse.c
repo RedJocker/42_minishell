@@ -6,13 +6,16 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/16 21:23:24 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/23 01:03:28 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_stdio.h"
+#include "ft_string.h"
 
-void	parse(void)
+char	**parse(char *input)
 {
-	ft_printf("/nfs/homes/dande-je/workspace/42_minishell");
+	char **arr;
+
+	arr = ft_split(input, ' ');
+	return (arr);
 }

@@ -6,13 +6,13 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:23 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/16 21:18:27 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/23 01:03:51 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSE_H
 # define PARSE_H
 
-void	parse(void);
+char	**parse(char *input);
 
 #endif
