@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/16 22:03:38 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/22 23:45:14 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -110,7 +110,7 @@ define submodule_update_libftx
 	git submodule update --init --remote >/dev/null 2>&1 || true
 	git submodule foreach -q \
 		'branch="$(git config -f $toplevel/.gitmodules submodule.libftx)"; \
-		git pull origin main; \
+		git pull origin master; \
 		git fetch; \
 		git checkout v$(LIBFTX_VERSION)' \
 		>/dev/null 2>&1 || true
