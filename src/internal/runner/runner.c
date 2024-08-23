@@ -1,41 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   repl.c                                             :+:      :+:    :+:   */
+/*   runner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/23 02:16:53 by maurodri         ###   ########.fr       */
+/*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
+/*   Updated: 2024/08/23 02:24:00 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include "ft_util.h"
-#include "internal/parse/parse.h"
 #include "internal/envp.h"
 #include <sys/wait.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include "internal/runner/runner.h"
 
-int	repl(void)
+int	runner(char **arr)
 {
-	char	**arr;
+	char	*cmd;
+	pid_t	pid;
 	int		status;
-	char	*input;
 
-	status = 0;
-	while (1)
+	cmd = envp_find_bin_by_name(arr[0], __environ);
+	pid = fork();
+	if (pid == 0)
 	{
-		input = readline("RedWillShell$ ");
-		if (!input)
-			break ;
-		arr = parse(input);
-		free(input);
-		status = runner(arr);
-		ft_strarr_free(arr);
+		execve(cmd, arr, __environ);
+		status = 1;
 	}
+	else
+	{
+		waitpid(pid, 0, 0);
+		status = 0;
+	}
+	free(cmd);
 	return (status);
 }

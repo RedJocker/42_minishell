@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   runner.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/23 02:10:30 by maurodri         ###   ########.fr       */
+/*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
+/*   Updated: 2024/08/23 02:15:42 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_string.h"
+#ifndef RUNNER_H
+# define RUNNER_H
 
-char	**parse(char *input)
-{
-	char	**arr;
+int	runner(char **arr);
 
-	arr = ft_split(input, ' ');
-	return (arr);
-}
+#endif
