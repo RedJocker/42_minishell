@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   repl.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 01:25:54 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/23 01:26:47 by dande-je         ###   ########.fr       */
+/*   Created: 2024/08/23 01:15:16 by dande-je          #+#    #+#             */
+/*   Updated: 2024/08/23 01:16:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "internal/repl/repl.h"
+#ifndef REPL_H
+# define REPL_H
 
-int	main(void)
-{
-	repl();
-	exit(EXIT_SUCCESS);
-}
+void	repl(void);
+
+#endif

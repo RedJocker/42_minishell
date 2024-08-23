@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/22 23:45:14 by dande-je         ###   ########.fr        #
+#    Updated: 2024/08/23 01:30:12 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,7 @@ RESET                           := \033[0m
 SRCS_DIR                        := src/
 SRCS_INTERNAL_DIR               := src/internal/
 SRCS_PARSE_DIR                  := $(SRCS_INTERNAL_DIR)parse/
+SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/
@@ -51,13 +52,14 @@ SLEEP                           := sleep 0.01
 #                                   FILES                                      #
 #******************************************************************************#
 
-LIBFTX                           = $(addprefix $(LIBFTX_DIR), libft.a)
+LIBFTX                          := $(addprefix $(LIBFTX_DIR), libft.a)
 LIBS                            := ./lib/libftx/libft.a
 
 NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
+SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
