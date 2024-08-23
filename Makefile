@@ -178,6 +178,9 @@ $(NAME): $(LIBFTX) $(call reset_count, -$(words $(OBJS))) $(OBJS)
 $(LIBFTX):
 	$(call submodule_update_libftx)
 
+etags: $(NAME)
+	etags $$(find . -name '*.[ch]')
+
 bonus:
 	$(call bonus)
 
@@ -195,7 +198,7 @@ debug:
 test: $(NAME)
 	$(call test)
 
-.PHONY: all clean fclean re debug
+.PHONY: all clean fclean re debug etags
 .DEFAULT_GOAL := all
 .SILENT:
 

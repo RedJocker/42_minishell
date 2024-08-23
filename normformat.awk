@@ -11,7 +11,7 @@
 /^Error/ {
 	line = $4;
 	sub(/,/,"",line);
-	col = $6;
+	col = 0;
 	sub(/\):/, "", col);
 	print file_name line ":" col, $0
 }
