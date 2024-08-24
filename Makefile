@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/23 01:58:22 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/23 16:59:09 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -197,7 +197,7 @@ re: fclean all
 debug:
 	$(call debug)
 
-test: $(NAME)
+test: all
 	$(call test)
 
 .PHONY: all clean fclean re debug etags
