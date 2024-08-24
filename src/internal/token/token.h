@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   repl.h                                             :+:      :+:    :+:   */
+/*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 01:15:16 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/24 02:06:41 by maurodri         ###   ########.fr       */
+/*   Created: 2024/08/24 00:52:37 by maurodri          #+#    #+#             */
+/*   Updated: 2024/08/24 01:12:44 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef REPL_H
-# define REPL_H
+#ifndef TOKEN_H
+# define TOKEN_H
 
-int	repl(void);
+# include "minishell.h"
+
+t_token	**tokens_classify(char **arr_str_tokens);
+void	tokens_destroy(t_token **tokens);
+void	tokens_print(t_token **tokens);
 
 #endif

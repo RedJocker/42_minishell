@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 01:25:54 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/23 01:26:47 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/24 02:10:15 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,5 @@
 
 int	main(void)
 {
-	repl();
-	exit(EXIT_SUCCESS);
+	exit(repl());
 }

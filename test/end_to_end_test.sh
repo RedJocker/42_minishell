@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/08/23 17:35:36 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/24 01:34:24 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,7 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
     local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
     if ! [[ $bash_output == $mini_output ]]; then
-		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$mini_output>"
+		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
     fi
 
