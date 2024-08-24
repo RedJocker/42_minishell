@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/23 03:36:04 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/24 01:31:35 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "internal/runner/runner.h"
+#include "internal/token/token.h"
 
 int	repl(void)
 {
-	char	**arr;
+	char	**str_tokens;
+	t_token	**tokens;
 	int		status;
 	char	*input;
 
@@ -31,10 +33,13 @@ int	repl(void)
 		input = readline("RedWillShell$ ");
 		if (!input)
 			break ;
-		arr = parse(input);
+		str_tokens = parse(input);
 		free(input);
-		status = runner(arr);
-		ft_strarr_free(arr);
+		tokens = tokens_classify(str_tokens);
+		tokens_print(tokens);
+		tokens_destroy(tokens);
+		status = runner(str_tokens);
+		ft_strarr_free(str_tokens);
 	}
 	return (status);
 }
