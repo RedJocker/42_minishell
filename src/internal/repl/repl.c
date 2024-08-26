@@ -6,13 +6,14 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/25 22:19:21 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/26 02:40:35 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include "ft_util.h"
+#include "internal/default.h"
 #include "internal/parse/parse.h"
 #include <sys/wait.h>
 #include <readline/readline.h>
@@ -31,7 +32,7 @@ int	repl(void)
 	t_command	command;
 
 	status = 0;
-	while (1)
+	while (WAIT)
 	{
 		input = readline("RedWillShell$ ");
 		if (!input)
