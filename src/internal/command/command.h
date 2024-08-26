@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.h                                            :+:      :+:    :+:   */
+/*   command.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/24 00:52:37 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/25 01:25:28 by maurodri         ###   ########.fr       */
+/*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
+/*   Updated: 2024/08/25 20:23:31 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_H
-# define TOKEN_H
+#ifndef COMMAND_H
+# define COMMAND_H
 
 # include "minishell.h"
 
-t_token	**tokens_classify(char **arr_str_tokens, int *out_len);
-void	tokens_destroy(t_token **tokens);
-void	tokens_print(t_token **tokens);
+t_command	command_build(t_token **tokens, int tokens_len);
+void		command_destroy(t_command cmd);
 
 #endif

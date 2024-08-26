@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/24 01:05:27 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/25 21:04:14 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRCS_PARSE_DIR                  := $(SRCS_INTERNAL_DIR)parse/
 SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 SRCS_RUNNER_DIR                 := $(SRCS_INTERNAL_DIR)runner/
 SRCS_TOKEN_DIR                  := $(SRCS_INTERNAL_DIR)token/
+SRCS_COMMAND_DIR                  := $(SRCS_INTERNAL_DIR)command/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/
@@ -65,6 +66,10 @@ SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)
+SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
+							command_build.c \
+							command_invalid.c \
+							command_simple.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
 DEPS                            += $(OBJS:.o=.d)
