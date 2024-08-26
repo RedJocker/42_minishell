@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   default.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 01:25:54 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/26 03:19:42 by dande-je         ###   ########.fr       */
+/*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
+/*   Updated: 2024/08/26 01:33:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "internal/signal/signal.h"
-#include "internal/repl/repl.h"
+#ifndef DEFAULT_H
+# define DEFAULT_H
 
-int	main(void)
+enum e_default
 {
-	signals_initializer();
-	exit(repl());
-}
+	DEFAULT = 0,
+	FAIL = -1,
+	WAIT = 1,
+	CHAR_BYTE = 1,
+};
+
+#endif

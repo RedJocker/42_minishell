@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   signal.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 01:25:54 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/26 03:19:42 by dande-je         ###   ########.fr       */
+/*   Created: 2024/08/26 00:47:20 by dande-je          #+#    #+#             */
+/*   Updated: 2024/08/26 03:20:12 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "internal/signal/signal.h"
-#include "internal/repl/repl.h"
+#ifndef SIGNAL_H
+# define SIGNAL_H
 
-int	main(void)
+enum e_signal
 {
-	signals_initializer();
-	exit(repl());
-}
+	SET = 1,
+	GET = -1,
+};
+
+int		signal_status(int value, int type);
+void	signals_initializer(void);
+
+#endif
