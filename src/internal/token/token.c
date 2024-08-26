@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/24 02:06:46 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/25 21:27:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,20 +88,19 @@ t_token	*token_classify(char *str_token)
 	return (token_new(WORD, str_token));
 }
 
-t_token	**tokens_classify(char **arr_str_tokens)
+t_token	**tokens_classify(char **arr_str_tokens, int *out_len)
 {
-	int		len;
 	int		i;
 	t_token	**arr_tokens;
 
-	len = 0;
-	while (arr_str_tokens[len])
-		len++;
-	arr_tokens = ft_calloc(len + 1, sizeof(t_token *));
+	*out_len = 0;
+	while (arr_str_tokens[*out_len])
+		(*out_len)++;
+	arr_tokens = ft_calloc(*out_len + 1, sizeof(t_token *));
 	if (!arr_tokens)
 		return (NULL);
 	i = -1;
-	while (++i < len)
+	while (++i < *out_len)
 	{
 		arr_tokens[i] = token_classify(arr_str_tokens[i]);
 		if (!arr_tokens[i])

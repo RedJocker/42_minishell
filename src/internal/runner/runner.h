@@ -6,13 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/23 02:15:42 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/25 22:20:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RUNNER_H
 # define RUNNER_H
 
-int	runner(char **arr);
+# include "minishell.h"
+
+int	runner(t_command cmd);
 
 #endif
