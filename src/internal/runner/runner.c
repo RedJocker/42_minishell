@@ -6,16 +6,14 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/25 22:21:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:13:45 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <unistd.h>
-#include "internal/envp.h"
 #include <sys/wait.h>
-#include "internal/runner/runner.h"
-#include "minishell.h"
+#include "internal/envp.h"
+#include "internal/command/command.h"
 
 int	runner(t_command cmd)
 {

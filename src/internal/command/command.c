@@ -6,15 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/25 22:19:38 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:12:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command_internal.h"
-#include "ft_util.h"
-#include "minishell.h"
 #include "ft_string.h"
 #include "ft_memlib.h"
+#include "command_internal.h"
 
 int	command_debug_id(void)
 {

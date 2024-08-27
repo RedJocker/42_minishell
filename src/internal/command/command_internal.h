@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/25 21:07:59 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:08:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_INTERNAL_H
 # define COMMAND_INTERNAL_H
 
-# include "command.h"
+# include "internal/command/command.h"
 
 t_command	command_new(t_command_type type, char *type_str);
 void		command_free(t_command cmd);

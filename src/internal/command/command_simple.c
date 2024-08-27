@@ -6,16 +6,15 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/25 22:20:26 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:12:31 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command_internal.h"
 #include "ft_string.h"
-#include "ft_util.h"
 #include "ft_memlib.h"
-#include "internal/command/command.h"
-#include "minishell.h"
+#include "ft_util.h"
+#include "internal/token/token.h"
+#include "internal/command/command_internal.h"
 
 int	token_tyoe_is_redirect(t_token *token)
 {

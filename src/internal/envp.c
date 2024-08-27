@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 17:27:45 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/21 18:12:20 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:14:28 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_string.h"
 #include <unistd.h>
-#include "envp.h"
+#include "ft_string.h"
 #include "ft_util.h"
+#include "internal/envp.h"
 
 static int	envp_is_path(char *maybe_path)
 {

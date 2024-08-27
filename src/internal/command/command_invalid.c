@@ -6,14 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:08:23 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/26 03:21:32 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:13:01 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command_internal.h"
 #include "ft_memlib.h"
 #include "ft_string.h"
-#include "minishell.h"
+#include "internal/command/command_internal.h"
 
 t_command	command_invalid_new(char *message)
 {

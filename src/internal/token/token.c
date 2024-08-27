@@ -6,15 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/25 21:27:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:02:06 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "token.h"
+#include <stdio.h>
 #include "ft_memlib.h"
 #include "ft_string.h"
-#include "minishell.h"
-#include <stdio.h>
+#include "internal/token/token.h"
 
 void	token_type_string(char out_str[23], t_token_type type)
 {

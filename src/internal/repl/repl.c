@@ -6,18 +6,18 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/26 02:40:35 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/27 00:13:35 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
-#include "ft_util.h"
-#include "internal/default.h"
-#include "internal/parse/parse.h"
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "ft_util.h"
+#include "internal/default.h"
+#include "internal/parse/parse.h"
 #include "internal/runner/runner.h"
 #include "internal/token/token.h"
 #include "internal/command/command.h"
