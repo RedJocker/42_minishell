@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:08:23 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:13:01 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/27 02:28:20 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ t_command	command_invalid_new(char *message)
 {
 	t_command	cmd;
 
-	cmd = NULL;
-	command_new(CMD_INVALID, "CMD_INVALID");
+	cmd = command_new(CMD_INVALID, "CMD_INVALID");
+	if (!cmd)
+		return (NULL);
 	cmd->invalid = ft_calloc(1, sizeof(t_command_invalid));
 	if (!cmd->invalid)
 	{
