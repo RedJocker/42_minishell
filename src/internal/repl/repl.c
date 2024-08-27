@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/27 00:13:35 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/27 05:00:55 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "ft_string.h"
 #include "ft_util.h"
 #include "internal/default.h"
 #include "internal/parse/parse.h"
@@ -36,7 +37,9 @@ int	repl(void)
 	{
 		input = readline("RedWillShell$ ");
 		if (!input)
-			break ;
+			input = ft_strdup("exit");
+		else if (*input != '\0')
+			add_history(input);
 		str_tokens = parse(input);
 		free(input);
 		tokens = tokens_classify(str_tokens, &tokens_len);

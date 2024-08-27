@@ -6,12 +6,14 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/26 03:36:26 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/27 05:04:37 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/readline.h>
 #include <signal.h>
 #include <unistd.h>
+#include <errno.h>
 #include "ft_memlib.h"
 #include "ft_stdio.h"
 #include "internal/default.h"
@@ -44,16 +46,20 @@ int	signal_status(int value, int type)
 	return (signal_status);
 }
 
-int	exit_status(int value, int type)
+void	signal_sigquit(void)
 {
-	static volatile int	exit_status;
-
-	if (type == SET)
-		exit_status = value;
-	return (exit_status);
+	if (signal_status(DEFAULT, GET) == ENOTRECOVERABLE)
+	{
+		
+	}
 }
 
 static void	sigint_handler(int signal)
 {
-	signal_status(signal, SET);
+	signal_status(SIG_BASE + signal, SET);
+	ft_putstr_fd("\n", STDIN_FILENO);
+	exit(signal_status(DEFAULT, GET));
+	rl_on_new_line();
+	rl_replace_line("", DEFAULT);
+	rl_redisplay();
 }

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:20 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/26 03:20:12 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/27 04:15:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ enum e_signal
 {
 	SET = 1,
 	GET = -1,
+	SIG_BASE = 128,
 };
 
 int		signal_status(int value, int type);
