@@ -6,13 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:12:39 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/28 03:00:30 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "command_internal.h"
+#include "internal/token/token.h"
 
 int	command_debug_id(void)
 {
@@ -25,8 +26,12 @@ int	command_token_precedence(t_token_type token_type)
 {
 	if (token_type == WORD)
 		return (10);
-	else if (token_type == OP_PIPE)
+	else if (token_type == OP_EOF)
 		return (9);
+	else if (token_type == OP_NEWLINE)
+		return (8);
+	else if (token_type == OP_PIPE)
+		return (8);
 	return (11);
 }
 

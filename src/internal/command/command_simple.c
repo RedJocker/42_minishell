@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:12:31 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/28 02:30:18 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "internal/token/token.h"
 #include "internal/command/command_internal.h"
 
-int	token_tyoe_is_redirect(t_token *token)
+int	token_type_is_redirect(t_token *token)
 {
 	return (token && token->type == OP_REDIRECT_OUT_TRUNC);
 }
@@ -34,7 +34,7 @@ int	command_simple_is_invalid(
 	i = fst_token_idx - 1;
 	while (++i < *endtoken_idx)
 	{
-		if (token_tyoe_is_redirect(tokens[i])
+		if (token_type_is_redirect(tokens[i])
 			&& !token_type_is_word(tokens[i + 1]))
 		{
 			*endtoken_idx = i + 1;
