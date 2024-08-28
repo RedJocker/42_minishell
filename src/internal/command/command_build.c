@@ -6,11 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/25 21:56:37 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/28 03:20:03 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command_internal.h"
+#include "internal/token/token.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 // TODO: improve invalid message
 t_command	command_build_simple(
@@ -25,10 +28,16 @@ t_command	command_build_simple(
 
 t_command	command_build(t_token **tokens, int tokens_len)
 {
-	int			cmd_operator_idx;
+	int	cmd_operator_idx;
 
+	if (tokens_len == 1 && tokens[0]->type == OP_EOF) // TODO handle with private builtin to exit printing exit
+	{
+		tokens_destroy(tokens);
+		printf("exit\n");
+		exit(0);
+	}
 	cmd_operator_idx = command_operator_idx(tokens, tokens_len);
-	if (cmd_operator_idx == -1)
+	if (tokens[cmd_operator_idx]->type == OP_NEWLINE)
 		return (command_build_simple(tokens, 0, tokens_len));
 	return (command_invalid_new("temporarily unnexpected"));
 }

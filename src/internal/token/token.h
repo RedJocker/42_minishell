@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 00:52:37 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:01:36 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/27 20:01:21 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ typedef enum e_token_type
 	OP_REDIRECT_IN,
 	OP_REDIRECT_IN_HEREDOC,
 	OP_PIPE,
+	OP_NEWLINE,
 	WORD,
+	OP_EOF,
 	INVALID,
 }	t_token_type;
 

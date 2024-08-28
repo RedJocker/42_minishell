@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:02:06 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/28 03:29:26 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,22 @@ void	token_type_string(char out_str[23], t_token_type type)
 {
 	if (type == OP_REDIRECT_OUT_TRUNC)
 		ft_strlcpy(out_str, "OP_REDIRECT_OUT_TRUNC", 22);
+	else if (type == OP_REDIRECT_OUT_APPND)
+		ft_strlcpy(out_str, "OP_REDIRECT_OUT_APPND", 22);
+	else if (type == OP_REDIRECT_IN)
+		ft_strlcpy(out_str, "OP_REDIRECT_IN", 15);
+	else if (type == OP_REDIRECT_IN_HEREDOC)
+		ft_strlcpy(out_str, "OP_REDIRECT_IN_HEREDOC", 23);
+	else if (type == OP_PIPE)
+		ft_strlcpy(out_str, "OP_PIPE", 8);
+	else if (type == OP_NEWLINE)
+		ft_strlcpy(out_str, "OP_NEW_LINE", 12);
 	else if (type == WORD)
 		ft_strlcpy(out_str, "WORD", 5);
+	else if (type == OP_EOF)
+		ft_strlcpy(out_str, "OP_EOF", 7);
+	else if (type == INVALID)
+		ft_strlcpy(out_str, "INVALID", 8);
 }
 
 void	token_print(t_token *token)
@@ -82,7 +96,11 @@ void	tokens_destroy(t_token **tokens)
 // TODO
 t_token	*token_classify(char *str_token)
 {
-	if (ft_strncmp(">", str_token, 2) == 0)
+	if (!str_token)
+		return (token_new(OP_EOF, "OP_EOF"));
+	else if (ft_strncmp("\n", str_token, 2) == 0)
+		return (token_new(OP_NEWLINE, str_token));
+	else if (ft_strncmp(">", str_token, 2) == 0)
 		return (token_new(OP_REDIRECT_OUT_TRUNC, str_token));
 	return (token_new(WORD, str_token));
 }
@@ -95,6 +113,7 @@ t_token	**tokens_classify(char **arr_str_tokens, int *out_len)
 	*out_len = 0;
 	while (arr_str_tokens[*out_len])
 		(*out_len)++;
+	*out_len = (*out_len == 0) * 1 + (*out_len != 0) * *out_len;
 	arr_tokens = ft_calloc(*out_len + 1, sizeof(t_token *));
 	if (!arr_tokens)
 		return (NULL);

@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/26 03:14:05 by dande-je         ###   ########.fr        #
+#    Updated: 2024/08/28 03:23:42 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,8 @@ SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
-SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c)
+SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c \
+								ft_extensions.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_build.c \
@@ -93,7 +94,7 @@ COMP_MESSAGE                    = Building C object
 #******************************************************************************#
 
 CC                             := cc
-CFLAGS                         = -Wall -Wextra -Werror -Ofast
+CFLAGS                         = -Wall -Wextra -g3 #-Werror -Ofast
 CPPFLAGS                       := $(addprefix -I,$(INCS)) -MMD -MP
 DFLAGS                         := -Wall -Wextra -Werror -g3
 LFLAGS                         := -march=native
