@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/29 19:18:07 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/30 04:26:44 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,8 @@ NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
-SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
+SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c \
+								   terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c \

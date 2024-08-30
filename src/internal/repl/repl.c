@@ -6,10 +6,11 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/30 02:58:48 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/30 04:30:40 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -23,6 +24,7 @@
 #include "internal/runner/runner.h"
 #include "internal/token/token.h"
 #include "internal/command/command.h"
+#include "internal/signal/terminal.h"
 
 static int hystory_should_add_input(char *input)
 {
@@ -47,6 +49,7 @@ int	repl(void)
 	t_command	command;
 
 	status = 0;
+	terminal_properties(false);
 	while (WAIT)
 	{
 		input = readline("RedWillShell$ ");
@@ -64,6 +67,7 @@ int	repl(void)
 		tokens_destroy(tokens);
 		status = runner(command);
 		command_destroy(command);
+		terminal_properties(true);
 	}
 	return (status);
 }
