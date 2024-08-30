@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/28 02:30:18 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/29 21:10:24 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "ft_util.h"
 #include "internal/token/token.h"
 #include "internal/command/command_internal.h"
+#include "io_handler.h"
+#include <fcntl.h>
 
 int	token_type_is_redirect(t_token *token)
 {
@@ -58,8 +60,9 @@ void	command_simple_fill(
 			cmd->simple->cmd_argv[j++] = ft_strdup(tokens[i]->content);
 		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)
 		{
-			cmd->output.type = IO_PATH;
-			cmd->output.path = ft_strdup(tokens[++i]->content);
+			io_handler_set_path(
+				cmd, tokens[++i]->content,
+				O_WRONLY | O_CREAT | O_TRUNC, 0666);
 			continue ;
 		}
 	}

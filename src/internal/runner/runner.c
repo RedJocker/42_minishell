@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:13:45 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:57:07 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include <sys/wait.h>
 #include "internal/envp.h"
 #include "internal/command/command.h"
+#include "internal/command/io_handler.h"
+#include "runner.h"
+#include "internal/ft_extensions.h"
+#include <stdio.h>
 
 int	runner(t_command cmd)
 {
@@ -25,6 +29,13 @@ int	runner(t_command cmd)
 	pid = fork();
 	if (pid == 0)
 	{
+		io_handler_redirect(&cmd->output, STDOUT);
+		if (cmd->output.type == IO_ERROR)
+		{
+			//TODO
+			ft_assert(0, "TODO0");
+			return (1);
+		}
 		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, __environ);
 		status = 1;
 	}
