@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/28 03:23:49 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/30 02:58:48 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ int	repl(void)
 	{
 		input = readline("RedWillShell$ ");
 		if (hystory_should_add_input(input))
-		// commented out because is causing leaks on test, TODO improve suppresions
-			; //add_history(input);
+			add_history(input);
 		else if (input)
 			continue ;
 		str_tokens = parse(input);

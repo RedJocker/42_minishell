@@ -20,3 +20,11 @@
 	obj:/usr/bin/*
 }
 
+{
+   ignore_add_history
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:add_history
+   ...
+}
