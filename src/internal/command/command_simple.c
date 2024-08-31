@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/29 21:10:24 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/30 20:55:36 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ void	command_simple_fill(
 			cmd->simple->cmd_argv[j++] = ft_strdup(tokens[i]->content);
 		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)
 		{
-			io_handler_set_path(
-				cmd, tokens[++i]->content,
+			io_handlers_add_path(
+				&cmd->output, tokens[++i]->content,
 				O_WRONLY | O_CREAT | O_TRUNC, 0666);
 			continue ;
 		}

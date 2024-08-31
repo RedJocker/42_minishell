@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/08/24 01:34:24 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/30 23:13:47 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ minishell_leak_check() {
 	     --errors-for-leak-kinds=all \
 	     --error-exitcode=1 \
 	     --track-origins=yes \
+	     --track-fds=yes \
 	     --suppressions=mini.supp \
 	     ./minishell <<< "$@"
 }
@@ -77,6 +78,8 @@ assert_minishell_equal_bash() {
 		false
     fi
 
+    #echo "$output" 1>&3
+
     if ! [[ $bash_status == $status ]]; then
 		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
@@ -87,7 +90,20 @@ assert_minishell_equal_bash() {
 	echo -e "VALGRIND ERROR:\n$output"
 	false
     fi
+}
 
+@test "test empty" {
+    assert_minishell_equal_bash ""
+}
+
+@test "test empty line" {
+    assert_minishell_equal_bash "
+"
+}
+
+@test "test blank line" {
+    assert_minishell_equal_bash "	    
+"
 }
 
 @test "test simple command: ls" {
@@ -103,6 +119,10 @@ assert_minishell_equal_bash() {
 pwd"
 }
 
+@test "test simple command absolute path: /usr/bin/ls" {
+    assert_minishell_equal_bash /usr/bin/ls
+}
+
 @test "test simple command with one arg: ls -l" {
     assert_minishell_equal_bash ls -l
 }
@@ -116,7 +136,6 @@ pwd"
     assert_minishell_equal_bash "ls -a $temp_dir -H > $file
 cat $file"
 }
-
 
 @test "test simple command with one > redirect between args: ls -a \$temp_dir > \$file -H" {
     file="$temp_dir/a.txt"
@@ -136,3 +155,21 @@ cat $file"
 cat $file"
 }
 
+@test "test simple command with two > redirects to different files: ls -a $temp_dir -H > $file1 > $file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file2 
+echo ===$file1===
+cat $file1
+echo "===$file2==="
+cat $file2
+"
+}
+
+@test "test simple command with two > redirects to same file: ls -a $temp_dir -H > $file1 > $file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file1 
+echo ===$file1===
+cat $file1
+"
+}

@@ -6,14 +6,17 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/28 03:00:30 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/30 20:54:35 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "collection/ft_arraylist.h"
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "command_internal.h"
+#include "ft_util.h"
 #include "internal/token/token.h"
+#include "io_handler.h"
 
 int	command_debug_id(void)
 {
@@ -67,8 +70,7 @@ int	command_operator_idx(t_token **tokens, int tokens_len)
 
 void	command_free(t_command cmd)
 {
-	if (cmd->output.type == IO_PATH)
-		free(cmd->output.path);
+	ft_arraylist_destroy(cmd->output);
 	free(cmd->debug_id);
 	free(cmd);
 }
@@ -82,7 +84,7 @@ t_command	command_new(t_command_type	type, char *type_str)
 	if (!cmd)
 		return (NULL);
 	cmd->type = type;
-	cmd->output.type = IO_NONE;
+	cmd->output = ft_arraylist_new((t_consumer) io_handler_destroy);
 	id_str = ft_itoa(command_debug_id());
 	if (!id_str)
 		return (ft_free_retnull(cmd));

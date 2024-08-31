@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/29 20:57:07 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/30 21:09:17 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,10 @@ int	runner(t_command cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		io_handler_redirect(&cmd->output, STDOUT);
-		if (cmd->output.type == IO_ERROR)
+		if (!io_handlers_redirect(cmd->output, STDOUT))
 		{
 			//TODO
-			ft_assert(0, "TODO0");
+			ft_assert(0, "TODO0 redirect error");
 			return (1);
 		}
 		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, __environ);
