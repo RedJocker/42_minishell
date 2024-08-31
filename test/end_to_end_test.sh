@@ -155,3 +155,21 @@ cat $file"
 cat $file"
 }
 
+@test "test simple command with two > redirects to different files: ls -a $temp_dir -H > $file1 > $file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file2 
+echo ===$file1===
+cat $file1
+echo "===$file2==="
+cat $file2
+"
+}
+
+@test "test simple command with two > redirects to same file: ls -a $temp_dir -H > $file1 > $file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file1 
+echo ===$file1===
+cat $file1
+"
+}

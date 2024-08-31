@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:03:51 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/30 20:52:00 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define COMMAND_H
 
 # include "internal/token/token.h"
+# include "collection/ft_arraylist.h"
 
 typedef enum e_io_handler_type
 {
@@ -70,7 +71,7 @@ struct s_command
 {
 	char			*debug_id;
 	t_command_type	type;
-	t_io_handler	output;
+	t_arraylist		output;
 	union
 	{
 		t_command_simple	*simple;
