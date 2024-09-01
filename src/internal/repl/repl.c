@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/31 20:55:18 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/31 22:50:23 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "ft_string.h"
 #include "ft_util.h"
 #include "ft_ctype.h"
 #include "internal/default.h"
 #include "internal/parse/parse.h"
 #include "internal/runner/runner.h"
+#include "internal/signal/signal.h"
 #include "internal/token/token.h"
 #include "internal/command/command.h"
 #include "internal/signal/terminal.h"
@@ -56,7 +56,10 @@ int	repl(void)
 		if (hystory_should_add_input(input))
 			add_history(input);
 		else if (input)
+		{
+			free(input);
 			continue ;
+		}
 		str_tokens = parse(input);
 		//ft_strarr_printfd(str_tokens, 1);
 		free(input);
@@ -66,8 +69,9 @@ int	repl(void)
 		command = command_build(tokens, tokens_len);
 		tokens_destroy(tokens);
 		status = runner(command);
+		signal_status(status, SET);
 		command_destroy(command);
 		terminal_properties(true);
 	}
-	return (status);
+	return (signal_status(DEFAULT, GET));
 }

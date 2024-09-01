@@ -6,11 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/31 20:54:04 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/31 22:28:41 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "command_internal.h"
+#include "internal/default.h"
+#include "internal/signal/signal.h"
 #include "internal/token/token.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,7 +36,7 @@ t_command	command_build(t_token **tokens, int tokens_len)
 	{
 		tokens_destroy(tokens);
 		printf("exit\n");
-		exit(0);
+		exit(signal_status(DEFAULT, GET));
 	}
 	cmd_operator_idx = command_operator_idx(tokens, tokens_len);
 	if (tokens[cmd_operator_idx]->type == OP_NEWLINE)
