@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/08/30 23:13:47 by maurodri         ###   ########.fr        #
+#    Updated: 2024/08/31 21:16:09 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    bash <<< "$@"
+    PS1='RedWillShell$ ' bash --norc -iv <<< "$@"
     delete_temp_folder
 }
 
@@ -69,11 +69,14 @@ assert_minishell_equal_bash() {
     local bash_output=$output
 
     #echo $bash_status 1>&3
-    #echo $bash_output 1>&3
+    #echo "$bash_output" 1>&3
+    
+    local bash_out_norm=$(awk 'NR > 2 && !/^RedWillShell\$/ { print $0}' <<< "$output")
     
     run minishell_execute "$@"
     local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
-    if ! [[ $bash_output == $mini_output ]]; then
+
+    if ! [[ $bash_out_norm == $mini_output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
     fi
@@ -155,7 +158,7 @@ cat $file"
 cat $file"
 }
 
-@test "test simple command with two > redirects to different files: ls -a $temp_dir -H > $file1 > $file2" {
+@test "test simple command with two > redirects to different files: ls -a \$temp_dir -H > \$file1 > \$file2" {
     file1="$temp_dir/a.txt"
     file2="$temp_dir/b.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file2 
@@ -166,10 +169,16 @@ cat $file2
 "
 }
 
-@test "test simple command with two > redirects to same file: ls -a $temp_dir -H > $file1 > $file1" {
+@test "test simple command with two > redirects to same file: ls -a \$temp_dir -H > \$file1 > \$file1" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file1 
 echo ===$file1===
 cat $file1
 "
+}
+
+@test "test simple command with invalid redirect syntax" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > > $file1
+echo \$?"
 }
