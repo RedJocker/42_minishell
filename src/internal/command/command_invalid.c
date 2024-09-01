@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:08:23 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 02:28:20 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/31 18:52:55 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,5 @@ void	command_invalid_destroy(t_command cmd)
 {
 	free(cmd->invalid->msg);
 	free(cmd->invalid);
+	command_free(cmd);
 }

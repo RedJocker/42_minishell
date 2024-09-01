@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/30 04:30:40 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:55:18 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include "internal/command/command.h"
 #include "internal/signal/terminal.h"
 
-static int hystory_should_add_input(char *input)
+static int	hystory_should_add_input(char *input)
 {
 	if (!input)
 		return (0);

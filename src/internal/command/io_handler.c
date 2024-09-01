@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/30 21:32:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:17:29 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	io_handler_set_error(t_io_handler *io, int err_no, char *strerr)
 	io->error = strerr;
 }
 
-
 void	io_handler_set_path(t_io_handler *io, char *path, int flags, int mode)
 {
 	io->type = IO_PATH;
@@ -50,7 +49,7 @@ void	io_handler_set_path(t_io_handler *io, char *path, int flags, int mode)
 void	io_handlers_add_path(
 		t_arraylist *lst_iohandlers, char *path, int flags, int mode)
 {
-	t_io_handler *io;
+	t_io_handler	*io;
 
 	io = ft_calloc(1, sizeof(t_io_handler));
 	io_handler_set_path(io, path, flags, mode);
@@ -59,7 +58,7 @@ void	io_handlers_add_path(
 
 void	io_handler_path_to_fd(t_io_handler *io)
 {
-	int fd;
+	int	fd;
 
 	fd = open(io->path, io->flags, io->mode);
 	if (fd < 0)

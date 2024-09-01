@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/30 20:55:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:51:45 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_command	command_simple_new(
 	if (!cmd->simple)
 		return (ft_free_retnull(cmd));
 	i = fst_token_idx - 1;
-	while (++i < endtoken_idx)
+	while (++i < endtoken_idx - 1)
 		cmd->simple->cmd_argc++;
 	cmd->simple->cmd_argv = (
 			ft_calloc(cmd->simple->cmd_argc + 1, sizeof(char *)));

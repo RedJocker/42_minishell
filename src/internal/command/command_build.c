@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/28 03:20:03 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/08/31 20:54:04 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_command	command_build_simple(
 {
 	if (command_simple_is_invalid(tokens, fst_token_idx, &endtoken_idx))
 		return (command_invalid_new(
-				"bash: syntax error near unexpected token `newline'"));
+				"bash: syntax error near unexpected token `>'"));
 	else
 		return (command_simple_new(tokens, fst_token_idx, endtoken_idx));
 }
