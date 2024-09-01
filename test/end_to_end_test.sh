@@ -41,7 +41,7 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    PS1='RedWillShell$ ' bash --norc -iv <<< "$@"
+    PS1='RedWillShell$ ' bash --norc <<< "$@"
     delete_temp_folder
 }
 
@@ -76,7 +76,7 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
     local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    if ! [[ $bash_out_norm == $mini_output ]]; then
+    if ! [[ $bash_output == $mini_output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
     fi
