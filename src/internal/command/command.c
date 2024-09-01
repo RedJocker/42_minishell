@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/30 20:54:35 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/01 16:58:25 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,6 @@
 #include "ft_util.h"
 #include "internal/token/token.h"
 #include "io_handler.h"
-
-int	command_debug_id(void)
-{
-	static int	id = 0;
-
-	return (id++);
-}
-
-int	command_token_precedence(t_token_type token_type)
-{
-	if (token_type == WORD)
-		return (10);
-	else if (token_type == OP_EOF)
-		return (9);
-	else if (token_type == OP_NEWLINE)
-		return (8);
-	else if (token_type == OP_PIPE)
-		return (8);
-	return (11);
-}
 
 void	command_destroy(t_command cmd)
 {

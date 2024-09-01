@@ -1,26 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   runner.h                                           :+:      :+:    :+:   */
+/*   parse_internal.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
+/*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:05:37 by maurodri         ###   ########.fr       */
+/*   Created: 2024/09/01 17:09:06 by maurodri          #+#    #+#             */
+/*   Updated: 2024/09/01 17:12:33 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RUNNER_H
-# define RUNNER_H
+#ifndef PARSE_INTERNAL_H
+# define PARSE_INTERNAL_H
 
-# include "internal/command/command.h"
-
-typedef enum e_builtin
-{
-	NOT_BUILTIN,
-	BUILTIN_ECHO
-}	t_builtin;
-
-int	runner(t_command cmd);
+char	*parse_operator_newline(char **input);
+int		parse_is_operator(char maybe_operator);
+char	*parse_operator(char **input);
 
 #endif

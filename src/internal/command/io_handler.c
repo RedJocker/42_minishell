@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/31 20:17:29 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/01 17:01:54 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,6 @@ void	io_handler_set_path(t_io_handler *io, char *path, int flags, int mode)
 	io->mode = mode;
 }
 
-void	io_handlers_add_path(
-		t_arraylist *lst_iohandlers, char *path, int flags, int mode)
-{
-	t_io_handler	*io;
-
-	io = ft_calloc(1, sizeof(t_io_handler));
-	io_handler_set_path(io, path, flags, mode);
-	*lst_iohandlers = ft_arraylist_add(*lst_iohandlers, io);
-}
-
 void	io_handler_path_to_fd(t_io_handler *io)
 {
 	int	fd;
@@ -84,22 +74,4 @@ void	io_handler_redirect(t_io_handler *io, int fd)
 		return ;
 	if (dup2(io->fd, fd) < 0)
 		io_handler_set_error(io, errno, strerror(errno));
-}
-
-int	io_handlers_redirect(t_arraylist lst_iohandlers, int fd)
-{
-	int				len;
-	int				i;
-	t_io_handler	*io;
-
-	len = ft_arraylist_len(lst_iohandlers);
-	i = -1;
-	while (++i < len)
-	{
-		io = ft_arraylist_get(lst_iohandlers, i);
-		io_handler_redirect(io, fd);
-		if (io->type == IO_ERROR)
-			return (0);
-	}
-	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/31 20:28:38 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/01 17:04:59 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	runner(t_command cmd)
 	int			pids_len;
 	int			status;
 	int			i;
-	t_builtin   maybe_builtin;
+	t_builtin	maybe_builtin;
 
 	pids = ft_arraylist_new(free);
 	//runner_cmd_expand(cmd);

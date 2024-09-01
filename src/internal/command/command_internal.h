@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:08:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/01 16:57:28 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,7 @@ t_command	command_simple_new(
 void		command_simple_destroy(t_command cmd);
 int			command_simple_is_invalid(
 				t_token **tokens, int fst_token_idx, int *endtoken_idx);
+int			command_debug_id(void);
+int			command_token_precedence(t_token_type token_type);
 
 #endif
