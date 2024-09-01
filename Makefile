@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/08/30 04:26:44 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/01 17:13:45 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,19 +62,23 @@ LIBS                            := ./lib/libftx/libft.a
 NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
-SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
+SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c \
+								parse_operator.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c \
 								   terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c \
 								ft_extensions.c)
-SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)
+SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
+								 tokens.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_build.c \
 								   command_invalid.c \
 								   command_simple.c \
-								   io_handler.c)
+								   command_util.c \
+								   io_handler.c \
+							           io_handlers.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
 DEPS                            += $(OBJS:.o=.d)

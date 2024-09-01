@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   runner.h                                           :+:      :+:    :+:   */
+/*   token_internal.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
+/*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:05:37 by maurodri         ###   ########.fr       */
+/*   Created: 2024/09/01 16:25:12 by maurodri          #+#    #+#             */
+/*   Updated: 2024/09/01 16:33:36 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RUNNER_H
-# define RUNNER_H
+#ifndef TOKEN_INTERNAL_H
+# define TOKEN_INTERNAL_H
 
-# include "internal/command/command.h"
+# include "token.h"
 
-typedef enum e_builtin
-{
-	NOT_BUILTIN,
-	BUILTIN_ECHO
-}	t_builtin;
-
-int	runner(t_command cmd);
+t_token		*token_classify(char *str_token);
+void		token_destroy(t_token *token);
+t_token		*token_new(t_token_type type, char *content);
+void		token_print(t_token *token);
 
 #endif

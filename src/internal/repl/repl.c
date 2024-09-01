@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/31 22:50:23 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/01 16:54:58 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include "internal/token/token.h"
 #include "internal/command/command.h"
 #include "internal/signal/terminal.h"
+#include "repl.h"
 
 static int	hystory_should_add_input(char *input)
 {
@@ -39,39 +40,40 @@ static int	hystory_should_add_input(char *input)
 	return (0);
 }
 
+int	repl_loop(t_repl *mini)
+{
+	mini->input = readline("RedWillShell$ ");
+	if (hystory_should_add_input(mini->input))
+		add_history(mini->input);
+	else if (mini->input)
+	{
+		free(mini->input);
+		return (0);
+	}
+	mini->str_tokens = parse(mini->input);
+	//ft_strarr_printfd(mini->str_tokens, 1);
+	free(mini->input);
+	mini->tokens = tokens_classify(mini->str_tokens, &mini->tokens_len);
+	ft_strarr_free(mini->str_tokens);
+	//tokens_print(mini->tokens);
+	mini->command = command_build(mini->tokens, mini->tokens_len);
+	tokens_destroy(mini->tokens);
+	mini->status = runner(mini->command);
+	signal_status(mini->status, SET);
+	command_destroy(mini->command);
+	terminal_properties(true);
+	return (0);
+}
+
 int	repl(void)
 {
-	char		**str_tokens;
-	t_token		**tokens;
-	int			status;
-	char		*input;
-	int			tokens_len;
-	t_command	command;
+	t_repl	mini;
+	int		should_close;
 
-	status = 0;
+	mini.status = 0;
 	terminal_properties(false);
-	while (WAIT)
-	{
-		input = readline("RedWillShell$ ");
-		if (hystory_should_add_input(input))
-			add_history(input);
-		else if (input)
-		{
-			free(input);
-			continue ;
-		}
-		str_tokens = parse(input);
-		//ft_strarr_printfd(str_tokens, 1);
-		free(input);
-		tokens = tokens_classify(str_tokens, &tokens_len);
-		ft_strarr_free(str_tokens);
-		//tokens_print(tokens);
-		command = command_build(tokens, tokens_len);
-		tokens_destroy(tokens);
-		status = runner(command);
-		signal_status(status, SET);
-		command_destroy(command);
-		terminal_properties(true);
-	}
+	should_close = 0;
+	while (!should_close)
+		should_close = repl_loop(&mini);
 	return (signal_status(DEFAULT, GET));
 }
