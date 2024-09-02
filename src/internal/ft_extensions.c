@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 22:31:17 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/28 03:26:54 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/02 00:00:14 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	ft_assert(int booll, char *msg)
 		ft_puterr("assertion failed: ");
 		ft_puterrl(msg);
 		(void) *mem;
+		mem = (mem + 50 / *mem);
 	}
 }
 
