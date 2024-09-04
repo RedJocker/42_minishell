@@ -6,13 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 17:06:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:13:50 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:28:29 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_string.h"
-#include "internal/ft_extensions.h"
 #include "parse_internal.h"
+#include "ft_assert.h"
 
 char	*parse_operator_newline(char **input)
 {

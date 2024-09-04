@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:01:54 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/02 02:04:28 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	io_handler_path_to_fd(t_io_handler *io)
 	fd = open(io->path, io->flags, io->mode);
 	if (fd < 0)
 	{
+		// TODO include path on strerror format("%s: %s", path, strerror(errno))
 		io_handler_set_error(io, errno, strerror(errno));
 		return ;
 	}

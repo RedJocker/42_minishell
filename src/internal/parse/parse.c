@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/01 17:12:58 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:29:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 #include "ft_stdio.h"
 #include "internal/token/token.h"
 #include "ft_ctype.h"
-#include "internal/ft_extensions.h"
 #include "parse_internal.h"
+#include "ft_util.h"
 
 int	parse_word_find_len(char *input)
 {

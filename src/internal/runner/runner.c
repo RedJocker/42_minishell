@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:04:59 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:28:30 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "internal/command/command.h"
 #include "internal/command/io_handler.h"
 #include "runner.h"
-#include "internal/ft_extensions.h"
+#include "ft_assert.h"
 #include "ft_string.h"
 
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
@@ -83,6 +83,10 @@ int	runner_cmd_builtin_echo(t_command cmd)
 	int			i;
 	const char	*space_newline = " \n";
 
+	if (!io_handlers_redirect(cmd->output, STDOUT))
+	{
+		ft_assert(0, "TODO handle error");
+	}
 	i = 0;
 	while (++i < cmd->simple->cmd_argc - 1)
 	{
@@ -118,14 +122,14 @@ int	runner(t_command cmd)
 	t_builtin	maybe_builtin;
 
 	pids = ft_arraylist_new(free);
-	//runner_cmd_expand(cmd);
+	//runner_cmd_expand(cmd); //TODO
 	maybe_builtin = runner_maybe_cmd_builtin(cmd);
 	if (maybe_builtin)
 		status = runner_cmd_builtin(maybe_builtin, cmd, &pids);
 	else if (cmd->type == CMD_SIMPLE)
 		status = runner_cmd_simple(cmd, &pids);
 	else if (cmd->type == CMD_INVALID)
-		runner_cmd_invalid(cmd, &pids);
+		status = runner_cmd_invalid(cmd, &pids);
 	pids_len = ft_arraylist_len(pids);
 	i = -1;
 	while (++i < pids_len - 1)
