@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/01 20:47:29 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/05 20:24:41 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -180,5 +180,13 @@ cat $file1
 @test "test simple command with invalid redirect syntax" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H > > $file1
+echo \$?"
+}
+
+@test "test simple command with out redirection to file without permission " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "touch $file1
+chmod 000 $file1
+ls > $file1
 echo \$?"
 }
