@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/05 00:58:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 03:52:53 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ int	repl_loop(t_repl *mini)
 		return (0);
 	}
 	mini->str_tokens = parse(mini->input);
-	ft_strarr_printfd(mini->str_tokens, 1);
+	//ft_strarr_printfd(mini->str_tokens, 1);
 	free(mini->input);
 	mini->tokens = tokens_classify(mini->str_tokens, &mini->tokens_len);
 	ft_strarr_free(mini->str_tokens);
-	tokens_print(mini->tokens);
+	//tokens_print(mini->tokens);
 	mini->command = command_build(mini->tokens, mini->tokens_len);
 	tokens_destroy(mini->tokens);
-	mini->status = runner(mini->command);
+	mini->status = runner(mini->command, mini->status);
 	signal_status(mini->status, SET);
 	command_destroy(mini->command);
 	terminal_properties(true);

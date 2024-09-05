@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/05 01:37:46 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 04:29:25 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include "collection/ft_arraylist.h"
+#include "ft_util.h"
 #include "internal/envp.h"
 #include "internal/command/command.h"
 #include "internal/command/io_handler.h"
 #include "runner.h"
 #include "ft_assert.h"
 #include "ft_string.h"
+#include "stringbuilder.h"
 
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
@@ -114,7 +116,40 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 	return (0);
 }
 
-int	runner(t_command cmd)
+void	runner_cmd_expand_str(
+	char *str, int last_status_code, t_arraylist *lst_new_args)
+{
+	// TODO cmd_expand on general case
+	if (ft_strncmp(str, "$?", 3) == 0)
+		*lst_new_args = (
+			ft_arraylist_add(*lst_new_args, ft_itoa(last_status_code)));
+	else
+		*lst_new_args = (
+			ft_arraylist_add(*lst_new_args, ft_strdup(str)));
+}
+
+void	runner_cmd_expand(t_command cmd, int last_status_code)
+{
+	t_arraylist lst_new_args;
+	int			i;
+
+	if (cmd->type != CMD_SIMPLE)
+		return;
+	lst_new_args = ft_arraylist_new(free);
+	i = -1;
+	while (cmd->simple->cmd_argv[++i])
+		runner_cmd_expand_str(
+			cmd->simple->cmd_argv[i], last_status_code, &lst_new_args);
+	// TODO improve allocation error handling
+	ft_strarr_free(cmd->simple->cmd_argv);
+	cmd->simple->cmd_argv = ft_lststr_to_arrstr(lst_new_args);
+	ft_arraylist_destroy(lst_new_args);
+	cmd->simple->cmd_argc = 0;
+	while (cmd->simple->cmd_argv[cmd->simple->cmd_argc])
+		cmd->simple->cmd_argc++;
+}
+
+int	runner(t_command cmd, int last_cmd_status)
 {
 	t_arraylist	pids;
 	int			pids_len;
@@ -123,7 +158,8 @@ int	runner(t_command cmd)
 	t_builtin	maybe_builtin;
 
 	pids = ft_arraylist_new(free);
-	//runner_cmd_expand(cmd); //TODO
+	runner_cmd_expand(cmd, last_cmd_status); // TODO
+	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
 	maybe_builtin = runner_maybe_cmd_builtin(cmd);
 	if (maybe_builtin)
 		status = runner_cmd_builtin(maybe_builtin, cmd, &pids);

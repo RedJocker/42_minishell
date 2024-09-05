@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:05:37 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 03:04:19 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ typedef enum e_builtin
 	BUILTIN_ECHO
 }	t_builtin;
 
-int	runner(t_command cmd);
+int	runner(t_command cmd, int last_status_code);
 
 #endif

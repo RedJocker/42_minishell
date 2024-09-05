@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 16:33:21 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 02:51:37 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	token_destroy(t_token *token)
 	free(token);
 }
 
-// TODO
+// TODO classify remaining operators
 t_token	*token_classify(char *str_token)
 {
 	if (!str_token)
