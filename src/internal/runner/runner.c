@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/04 15:28:30 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 01:37:46 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
 	pid_t	*pid;
-	int		status;
+	int      status;
+	char	*err_msg;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
 	pid = malloc(sizeof(pid_t));
@@ -36,11 +37,10 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 		free(pid);
 		cmd->simple->cmd_path = (
 				envp_find_bin_by_name(cmd->simple->cmd_argv[0], __environ));
-		if (!io_handlers_redirect(cmd->output, STDOUT))
+		if (!io_handlers_redirect(cmd->output, STDOUT, &err_msg))
 		{
-			//TODO
-			ft_assert(0, "TODO0 redirect error");
-			return (1);
+			ft_assert(0, err_msg); //TODO
+			return (2);
 		}
 		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, __environ);
 		status = 1;
@@ -83,9 +83,10 @@ int	runner_cmd_builtin_echo(t_command cmd)
 	int			i;
 	const char	*space_newline = " \n";
 
-	if (!io_handlers_redirect(cmd->output, STDOUT))
+	if (!io_handlers_redirect(cmd->output, STDOUT, &arg))
 	{
-		ft_assert(0, "TODO handle error");
+		ft_assert(0, arg); // TODO
+		return (2);
 	}
 	i = 0;
 	while (++i < cmd->simple->cmd_argc - 1)

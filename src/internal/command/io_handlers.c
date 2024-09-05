@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:59:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:03:30 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 01:34:56 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "io_handler.h"
 #include "ft_memlib.h"
 
-int	io_handlers_redirect(t_arraylist lst_iohandlers, int fd)
+int	io_handlers_redirect(t_arraylist lst_iohandlers, int fd, char **out_errmsg)
 {
 	int				len;
 	int				i;
@@ -24,7 +24,7 @@ int	io_handlers_redirect(t_arraylist lst_iohandlers, int fd)
 	while (++i < len)
 	{
 		io = ft_arraylist_get(lst_iohandlers, i);
-		io_handler_redirect(io, fd);
+		io_handler_redirect(io, fd, out_errmsg);
 		if (io->type == IO_ERROR)
 			return (0);
 	}
