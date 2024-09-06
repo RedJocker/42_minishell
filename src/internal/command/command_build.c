@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 16:58:56 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 01:02:37 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,24 @@
 #include "internal/token/token.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "ft_stdio.h"
 
-// TODO: improve invalid message
 t_command	command_build_simple(
 	t_token **tokens, int fst_token_idx, int endtoken_idx)
 {
+	t_command	cmd;
+	char		*err_msg;
+	t_token		*err_tkn;
+	const char	*err_template = "bash: syntax error near unexpected token `%s'";
+
 	if (command_simple_is_invalid(tokens, fst_token_idx, &endtoken_idx))
-		return (command_invalid_new(
-				"bash: syntax error near unexpected token `>'"));
+	{
+		err_tkn = tokens[endtoken_idx];
+		ft_asprintf(&err_msg, err_template, err_tkn->content);
+		cmd = command_invalid_new(err_msg);
+		free(err_msg);
+		return (cmd);
+	}
 	else
 		return (command_simple_new(tokens, fst_token_idx, endtoken_idx));
 }

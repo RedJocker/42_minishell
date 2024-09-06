@@ -6,12 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 17:01:54 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 01:59:13 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
 #include "command.h"
+#include "ft_assert.h"
 #include "ft_memlib.h"
 #include "ft_string.h"
 #include "ft_util.h"
@@ -19,6 +20,7 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include "ft_stdio.h"
 
 void	io_handler_destroy(t_io_handler *io)
 {
@@ -46,14 +48,15 @@ void	io_handler_set_path(t_io_handler *io, char *path, int flags, int mode)
 	io->mode = mode;
 }
 
-void	io_handler_path_to_fd(t_io_handler *io)
+void	io_handler_path_to_fd(t_io_handler *io, char **out_errmsg)
 {
-	int	fd;
+	int		fd;
 
 	fd = open(io->path, io->flags, io->mode);
 	if (fd < 0)
 	{
-		io_handler_set_error(io, errno, strerror(errno));
+		ft_asprintf(out_errmsg, "bash: %s: %s", io->path, strerror(errno));
+		io_handler_set_error(io, errno, *out_errmsg);
 		return ;
 	}
 	free(io->path);
@@ -61,17 +64,21 @@ void	io_handler_path_to_fd(t_io_handler *io)
 	io->fd = fd;
 }
 
-void	io_handler_to_fd(t_io_handler *io)
+void	io_handler_to_fd(t_io_handler *io, char **out_errmsg)
 {
 	if (io->type == IO_PATH)
-		io_handler_path_to_fd(io);
+		io_handler_path_to_fd(io, out_errmsg);
 }
 
-void	io_handler_redirect(t_io_handler *io, int fd)
+void	io_handler_redirect(t_io_handler *io, int fd, char **out_errmsg)
 {
-	io_handler_to_fd(io);
+
+	io_handler_to_fd(io, out_errmsg);
 	if (io->type != IO_FD)
 		return ;
 	if (dup2(io->fd, fd) < 0)
-		io_handler_set_error(io, errno, strerror(errno));
+	{
+		ft_asprintf(out_errmsg, "bash: %s", strerror(errno));
+		io_handler_set_error(io, errno, *out_errmsg);
+	}
 }

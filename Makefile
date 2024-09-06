@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/01 17:13:45 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/04 15:28:18 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 #                                REQUIREMENTS                                  #
 #******************************************************************************#
 
-LIBFTX_VERSION                   := 1.0.0
+LIBFTX_VERSION                   := 1.1.0
 
 #******************************************************************************#
 #                                   COLOR                                      #
@@ -68,8 +68,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c \
 								   terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
-SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c \
-								ft_extensions.c)
+SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
 								 tokens.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \

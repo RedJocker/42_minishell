@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/08/31 21:16:09 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/05 20:24:41 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    PS1='RedWillShell$ ' bash --norc <<< "$@"
+    PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     delete_temp_folder
 }
 
@@ -71,12 +71,12 @@ assert_minishell_equal_bash() {
     #echo $bash_status 1>&3
     #echo "$bash_output" 1>&3
     
-    local bash_out_norm=$(awk 'NR > 2 && !/^RedWillShell\$/ { print $0}' <<< "$output")
+    #local bash_out_norm=$(awk 'NR > 2 && !/^RedWillShell\$/ { print $0}' <<< "$output")
     
     run minishell_execute "$@"
-    local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
+    #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    if ! [[ $bash_output == $mini_output ]]; then
+    if ! [[ $bash_output == $output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
     fi
@@ -180,5 +180,13 @@ cat $file1
 @test "test simple command with invalid redirect syntax" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H > > $file1
+echo \$?"
+}
+
+@test "test simple command with out redirection to file without permission " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "touch $file1
+chmod 000 $file1
+ls > $file1
 echo \$?"
 }

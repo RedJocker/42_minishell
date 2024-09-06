@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/01 16:54:58 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/05 03:52:53 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "internal/command/command.h"
 #include "internal/signal/terminal.h"
 #include "repl.h"
+#include "ft_memlib.h"
 
 static int	hystory_should_add_input(char *input)
 {
@@ -58,22 +59,25 @@ int	repl_loop(t_repl *mini)
 	//tokens_print(mini->tokens);
 	mini->command = command_build(mini->tokens, mini->tokens_len);
 	tokens_destroy(mini->tokens);
-	mini->status = runner(mini->command);
+	mini->status = runner(mini->command, mini->status);
 	signal_status(mini->status, SET);
 	command_destroy(mini->command);
 	terminal_properties(true);
 	return (0);
 }
 
+void repl_init(t_repl *mini)
+{
+	ft_bzero(mini, sizeof(t_repl));
+	terminal_properties(false);
+}
+
 int	repl(void)
 {
 	t_repl	mini;
-	int		should_close;
 
-	mini.status = 0;
-	terminal_properties(false);
-	should_close = 0;
-	while (!should_close)
-		should_close = repl_loop(&mini);
+	repl_init(&mini);
+	while (!mini.should_close)
+		mini.should_close = repl_loop(&mini);
 	return (signal_status(DEFAULT, GET));
 }
