@@ -6,18 +6,16 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/04 15:29:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:42:28 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
+#include "ft_ctype.h"
 #include "ft_string.h"
 #include "ft_memlib.h"
-#include "ft_stdio.h"
-#include "internal/token/token.h"
-#include "ft_ctype.h"
-#include "parse_internal.h"
 #include "ft_util.h"
+#include "internal/parse/parse_internal.h"
 
 int	parse_word_find_len(char *input)
 {

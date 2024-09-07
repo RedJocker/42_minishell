@@ -6,13 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/05 21:04:49 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:42:46 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef IO_HANDLER_H
 # define IO_HANDLER_H
 
-# include "command.h"
+# include "internal/command/command.h"
 
 # define STDIN 0
 # define STDOUT 1

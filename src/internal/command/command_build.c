@@ -6,17 +6,17 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/05 01:02:37 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:45:30 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command_internal.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "ft_stdio.h"
 #include "internal/default.h"
+#include "internal/command/command_internal.h"
 #include "internal/signal/signal.h"
 #include "internal/token/token.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include "ft_stdio.h"
 
 t_command	command_build_simple(
 	t_token **tokens, int fst_token_idx, int endtoken_idx)

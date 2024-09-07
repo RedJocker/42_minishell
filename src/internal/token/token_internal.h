@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:25:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 16:33:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:37:30 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKEN_INTERNAL_H
 # define TOKEN_INTERNAL_H
 
-# include "token.h"
+# include "internal/token/token.h"
 
 t_token		*token_classify(char *str_token);
 void		token_destroy(t_token *token);

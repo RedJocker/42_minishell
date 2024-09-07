@@ -6,14 +6,14 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/08/27 05:04:37 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:39:44 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <errno.h>
 #include <readline/readline.h>
 #include <signal.h>
 #include <unistd.h>
-#include <errno.h>
 #include "ft_memlib.h"
 #include "ft_stdio.h"
 #include "internal/default.h"

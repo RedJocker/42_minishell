@@ -6,27 +6,27 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/05 03:52:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:41:38 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/history.h>
+#include <readline/readline.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/wait.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "ft_util.h"
+#include <unistd.h>
 #include "ft_ctype.h"
+#include "ft_memlib.h"
+#include "ft_util.h"
+#include "internal/command/command.h"
 #include "internal/default.h"
 #include "internal/parse/parse.h"
+#include "internal/repl/repl.h"
 #include "internal/runner/runner.h"
 #include "internal/signal/signal.h"
-#include "internal/token/token.h"
-#include "internal/command/command.h"
 #include "internal/signal/terminal.h"
-#include "repl.h"
-#include "ft_memlib.h"
+#include "internal/token/token.h"
 
 static int	hystory_should_add_input(char *input)
 {

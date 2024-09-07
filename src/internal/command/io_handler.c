@@ -6,21 +6,17 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/05 01:59:13 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:43:20 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "command.h"
-#include "ft_assert.h"
-#include "ft_memlib.h"
-#include "ft_string.h"
-#include "ft_util.h"
-#include <fcntl.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
 #include "ft_stdio.h"
+#include "ft_string.h"
+#include "internal/command/command.h"
 
 void	io_handler_destroy(t_io_handler *io)
 {

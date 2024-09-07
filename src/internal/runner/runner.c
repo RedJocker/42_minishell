@@ -6,23 +6,21 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/06 02:56:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:40:06 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include "collection/ft_arraylist.h"
+#include "ft_assert.h"
+#include "ft_stdio.h"
+#include "ft_string.h"
 #include "ft_util.h"
 #include "internal/envp.h"
 #include "internal/command/command.h"
 #include "internal/command/io_handler.h"
-#include "runner.h"
-#include "ft_assert.h"
-#include "ft_string.h"
-#include "stringbuilder.h"
-#include "ft_stdio.h"
+#include "internal/runner/runner.h"
 
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {

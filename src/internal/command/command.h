@@ -6,15 +6,15 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/30 20:52:00 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:45:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_H
 # define COMMAND_H
 
-# include "internal/token/token.h"
 # include "collection/ft_arraylist.h"
+# include "internal/token/token.h"
 
 typedef enum e_io_handler_type
 {

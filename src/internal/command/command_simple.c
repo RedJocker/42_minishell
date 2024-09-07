@@ -6,17 +6,17 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 23:49:02 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:44:15 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
 #include "internal/token/token.h"
 #include "internal/command/command_internal.h"
-#include "io_handler.h"
-#include <fcntl.h>
+#include "internal/command/io_handler.h"
 
 int	token_type_is_redirect(t_token *token)
 {

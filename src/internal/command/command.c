@@ -6,17 +6,17 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/01 16:58:25 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/07 04:46:12 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
 #include "ft_string.h"
 #include "ft_memlib.h"
-#include "command_internal.h"
 #include "ft_util.h"
+#include "internal/command/command_internal.h"
+#include "internal/command/io_handler.h"
 #include "internal/token/token.h"
-#include "io_handler.h"
 
 void	command_destroy(t_command cmd)
 {
