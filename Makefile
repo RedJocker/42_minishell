@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/04 15:28:18 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/07 05:03:30 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRCS_PARSE_DIR                  := $(SRCS_INTERNAL_DIR)parse/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
 SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 SRCS_RUNNER_DIR                 := $(SRCS_INTERNAL_DIR)runner/
+SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_INTERNAL_DIR)token/
 SRCS_COMMAND_DIR                := $(SRCS_INTERNAL_DIR)command/
 INCS                            := src/ lib/libftx/includes/
@@ -68,6 +69,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c \
 								   terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
+SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
 								 tokens.c)
