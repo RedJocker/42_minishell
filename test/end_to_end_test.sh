@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/05 22:30:54 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/08 04:07:15 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -165,9 +165,7 @@ cat $file"
     file1="$temp_dir/a.txt"
     file2="$temp_dir/b.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file2 
-echo ===$file1===
 cat $file1
-echo "===$file2==="
 cat $file2
 "
 }
@@ -175,22 +173,74 @@ cat $file2
 @test "test simple command with two > redirects to same file: ls -a \$temp_dir -H > \$file1 > \$file1" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file1 
-echo ===$file1===
+cat $file1
+"
+}
+ 
+@test "test simple command with invalid redirect syntax" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > > $file1
+printf \$?"
+}
+
+@test "test simple command with > redirection to file without permission " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "printf protected > $file1
+chmod 444 $file1
+ls > $file1
+printf \$?
 cat $file1
 "
 }
 
-@test "test simple command with invalid redirect syntax" {
+@test "test builtin echo with one arg" {
+    assert_minishell_equal_bash "echo testing
+"
+}
+
+@test "test builtin echo with two args" {
+    assert_minishell_equal_bash "echo testing two
+"
+}
+
+@test "test builtin echo with > redirection end" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H > > $file1
+    assert_minishell_equal_bash "ls $temp_dir 
+echo working > $file1
+cat $file
+ls $temp_dir
+"
+}
+
+@test "test builtin echo with > redirection middle" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls $temp_dir 
+echo > $file1 working
+cat $file
+ls $temp_dir
+"
+}
+
+@test "test builtin echo with > redirection start" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls $temp_dir 
+> $file1 echo working
+cat $file
+ls $temp_dir
+"
+}
+
+@test "test builtin echo with invalid redirect syntax" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo what > > $file1
 echo \$?"
 }
 
-@test "test simple command with out redirection to file without permission " {
+@test "test builtin echo with > redirection to file without permission " {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo protected > $file1
+    assert_minishell_equal_bash "printf protected > $file1
 chmod 444 $file1
-ls > $file1
+echo override > $file1
 echo \$?
 cat $file1
 "
