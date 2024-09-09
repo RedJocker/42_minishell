@@ -129,10 +129,12 @@ pwd"
     assert_minishell_equal_bash /usr/bin/ls
 }
 
+# FIX: if you use different files in the root of the project, this test not working.
 @test "test simple command with one arg: ls -l" {
     assert_minishell_equal_bash ls -l
 }
 
+# FIX: if you use different files in the root of the project, this test not working.
 @test "test simple command with two args: ls -l -a" {
     assert_minishell_equal_bash ls -l
 }
