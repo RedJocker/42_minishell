@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/07 04:44:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:00:28 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
+#include "internal/command/command.h"
 #include "internal/token/token.h"
 #include "internal/command/command_internal.h"
 #include "internal/command/io_handler.h"
@@ -50,7 +51,8 @@ void	command_simple_fill(
 	t_command cmd, t_token **tokens, int fst_token_idx, int endtoken_idx)
 {
 	int	i;
-	int	j;
+	int j;
+	int flags_mode[2];
 
 	i = fst_token_idx - 1;
 	j = 0;
@@ -60,9 +62,10 @@ void	command_simple_fill(
 			cmd->simple->cmd_argv[j++] = ft_strdup(tokens[i]->content);
 		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)
 		{
+			flags_mode[0] = O_WRONLY | O_CREAT | O_TRUNC;
+			flags_mode[1] = 0666;
 			io_handlers_add_path(
-				&cmd->output, tokens[++i]->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 0666);
+				&cmd->io_handlers, tokens[++i]->content, flags_mode, IO_OUT);
 			continue ;
 		}
 	}

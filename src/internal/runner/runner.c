@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 05:27:51 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:06:28 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 		free(pid);
 		cmd->simple->cmd_path = (
 				envp_find_bin_by_name(cmd->simple->cmd_argv[0], __environ));
-		if (!io_handlers_redirect(cmd->output, STDOUT_FILENO, &err_msg))
+		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 		{
 			ft_putendl(err_msg); // TODO: Set the correct fd to write the error.
 			status = 1;
@@ -55,7 +55,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	}
 	else
 	{
-		//TODO change status to function error handling 
+		//TODO change status to function error handling
 		*pids = ft_arraylist_add(*pids, pid);
 		if (!(*pids))
 			status = 1;

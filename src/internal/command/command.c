@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/07 04:46:12 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:00:29 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	command_operator_idx(t_token **tokens, int tokens_len)
 
 void	command_free(t_command cmd)
 {
-	ft_arraylist_destroy(cmd->output);
+	ft_arraylist_destroy(cmd->io_handlers);
 	free(cmd->debug_id);
 	free(cmd);
 }
@@ -64,7 +64,7 @@ t_command	command_new(t_command_type	type, char *type_str)
 	if (!cmd)
 		return (NULL);
 	cmd->type = type;
-	cmd->output = ft_arraylist_new((t_consumer) io_handler_destroy);
+	cmd->io_handlers = ft_arraylist_new((t_consumer) io_handler_destroy);
 	id_str = ft_itoa(command_debug_id());
 	if (!id_str)
 		return (ft_free_retnull(cmd));

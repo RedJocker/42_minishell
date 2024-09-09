@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/07 04:43:20 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 18:59:39 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,14 @@ void	io_handler_set_error(t_io_handler *io, int err_no, char *strerr)
 	io->error = strerr;
 }
 
-void	io_handler_set_path(t_io_handler *io, char *path, int flags, int mode)
+void	io_handler_set_path(
+		t_io_handler *io, char *path, int flags_mode[2], t_io_direction io_dir)
 {
 	io->type = IO_PATH;
 	io->path = ft_strdup(path);
-	io->flags = flags;
-	io->mode = mode;
+	io->flags = flags_mode[0];
+	io->mode = flags_mode[1];
+	io->direction = io_dir;
 }
 
 void	io_handler_path_to_fd(t_io_handler *io, char **out_errmsg)
@@ -66,13 +68,15 @@ void	io_handler_to_fd(t_io_handler *io, char **out_errmsg)
 		io_handler_path_to_fd(io, out_errmsg);
 }
 
-void	io_handler_redirect(t_io_handler *io, int fd, char **out_errmsg)
+void	io_handler_redirect(t_io_handler *io, char **out_errmsg)
 {
+	int fd_target;
 
+	fd_target = (int) io->direction;
 	io_handler_to_fd(io, out_errmsg);
 	if (io->type != IO_FD)
 		return ;
-	if (dup2(io->fd, fd) < 0)
+	if (dup2(io->fd, fd_target) < 0)
 	{
 		ft_asprintf(out_errmsg, "bash: %s", strerror(errno));
 		io_handler_set_error(io, errno, *out_errmsg);

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/07 04:45:36 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:03:07 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,16 @@ typedef enum e_io_handler_type
 	IO_ERROR,
 }	t_io_handler_type;
 
+typedef enum e_io_direction
+{
+	IO_IN,
+	IO_OUT,
+}	t_io_direction;
+
 typedef struct s_io_handler
 {
 	t_io_handler_type	type;
+	t_io_direction		direction;
 	union
 	{
 		int		fd;
@@ -71,7 +78,7 @@ struct s_command
 {
 	char			*debug_id;
 	t_command_type	type;
-	t_arraylist		output;
+	t_arraylist		io_handlers;
 	union
 	{
 		t_command_simple	*simple;
