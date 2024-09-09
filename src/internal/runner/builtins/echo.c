@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:55:24 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/07 04:59:56 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 03:22:58 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	runner_cmd_builtin_echo(t_command cmd)
 	int				out_len;
 	const char		*space_newline = " \n";
 
-	out_fd = STDOUT;
+	out_fd = STDOUT_FILENO;
 	out_len = ft_arraylist_len(cmd->output);
 	if (out_len)
 	{
@@ -52,7 +52,7 @@ int	runner_cmd_builtin_echo(t_command cmd)
 		write(out_fd, arg, len_arg);
 	}
 	write(out_fd, &(space_newline[1]), 1);
-	if (out_fd != STDOUT)
+	if (out_fd != STDOUT_FILENO)
 		close(out_fd);
 	return (0);
 }
