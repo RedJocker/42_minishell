@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/09 19:18:03 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/09 19:49:50 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -232,7 +232,7 @@ ls $temp_dir
 "
 }
 
-@test "test builtin echo with invalid redirect syntax" {
+@test "test builtin echo with invalid redirect syntax > >" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "echo what > > $file1
 echo \$?"
@@ -252,7 +252,55 @@ cat $file1
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H >> $file
 cat $file
-ls -l $temp_dir >> $file
+uname >> $file
 cat $file
+"
+}
+
+
+@test "test simple command with one >> redirect at middle of command: ls -a  >> \$file \$temp_dir -H" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a >> $file $temp_dir -H
+cat $file
+uname >> $file
+cat $file
+"
+}
+
+@test "test simple command with one >> redirect at start of command: >> \$file ls -a \$temp_dir -H" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash ">> $file ls -a $temp_dir -H
+cat $file
+uname >> $file
+cat $file
+"
+}
+
+@test "test simple command with invalid redirect syntax > >>" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > >> $file1
+printf \$?"
+}
+
+@test "test simple command with invalid redirect syntax >> >" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> > $file1
+printf \$?"
+}
+
+
+@test "test simple command with invalid redirect syntax >> >>" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> > $file1
+printf \$?"
+}
+
+@test "test simple command with >> redirection to file without permission " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "printf protected >> $file1
+chmod 444 $file1
+ls >> $file1
+printf \$?
+cat $file1
 "
 }
