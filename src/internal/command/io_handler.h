@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:05:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:07:55 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef IO_HANDLER_H
@@ -20,7 +20,7 @@ void	io_handler_set_path(
 			int flags_mode[2],
 			t_io_direction io_dir);
 void	io_handler_redirect(t_io_handler *io, char **out_errmsg);
-int     io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg);
+int		io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg);
 void	io_handler_destroy(t_io_handler *io);
 void	io_handlers_add_path(
 			t_arraylist *lst_iohandlers,

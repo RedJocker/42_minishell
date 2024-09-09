@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:00:28 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:08:30 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	command_simple_fill(
 	t_command cmd, t_token **tokens, int fst_token_idx, int endtoken_idx)
 {
 	int	i;
-	int j;
-	int flags_mode[2];
+	int	j;
+	int	flags_mode[2];
 
 	i = fst_token_idx - 1;
 	j = 0;
@@ -87,7 +87,7 @@ t_command	command_simple_new(
 	while (++i < endtoken_idx - 1)
 	{
 		if (token_type_is_redirect(tokens[i])
-				&& token_type_is_word(tokens[i + 1]))
+			&& token_type_is_word(tokens[i + 1]))
 			++i;
 		else if (token_type_is_word(tokens[i]))
 			cmd->simple->cmd_argc++;

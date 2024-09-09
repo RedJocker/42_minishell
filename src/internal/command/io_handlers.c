@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:59:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:00:27 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:07:47 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg)
 {
 	int				len;
 	int				i;
-	t_io_handler   *io;
+	t_io_handler	*io;
 
 	len = ft_arraylist_len(lst_iohandlers);
 	i = -1;
@@ -32,7 +32,7 @@ int	io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg)
 	return (1);
 }
 
-int io_handlers_to_fd(t_arraylist lst_iohandlers, char **out_errmsg)
+int	io_handlers_to_fd(t_arraylist lst_iohandlers, char **out_errmsg)
 {
 	int				len;
 	int				i;

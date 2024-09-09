@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/08 04:07:15 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/09 18:18:12 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -136,7 +136,7 @@ pwd"
 
 # FIX: if you use different files in the root of the project, this test not working.
 @test "test simple command with two args: ls -l -a" {
-    assert_minishell_equal_bash ls -l
+    assert_minishell_equal_bash ls -l -a
 }
 
 @test "test simple command with one > redirect at end of command: ls -a \$temp_dir -H > \$file" {

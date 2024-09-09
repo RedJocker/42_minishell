@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/07 04:41:38 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:07:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	repl_loop(t_repl *mini)
 	return (0);
 }
 
-void repl_init(t_repl *mini)
+void	repl_init(t_repl *mini)
 {
 	ft_bzero(mini, sizeof(t_repl));
 	terminal_properties(false);

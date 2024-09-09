@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 18:59:39 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:08:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	io_handler_to_fd(t_io_handler *io, char **out_errmsg)
 
 void	io_handler_redirect(t_io_handler *io, char **out_errmsg)
 {
-	int fd_target;
+	int	fd_target;
 
 	fd_target = (int) io->direction;
 	io_handler_to_fd(io, out_errmsg);
