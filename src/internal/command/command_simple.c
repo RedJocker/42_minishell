@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:08:30 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:42:02 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@
 
 int	token_type_is_redirect(t_token *token)
 {
-	return (token && token->type == OP_REDIRECT_OUT_TRUNC);
+	return (token &&
+			(token->type == OP_REDIRECT_OUT_TRUNC
+			|| token->type == OP_REDIRECT_OUT_APPND));
 }
 
 int	token_type_is_word(t_token *token)
@@ -60,9 +62,14 @@ void	command_simple_fill(
 	{
 		if (tokens[i]->type == WORD)
 			cmd->simple->cmd_argv[j++] = ft_strdup(tokens[i]->content);
-		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)
+		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC
+				 || tokens[i]->type == OP_REDIRECT_OUT_APPND)
 		{
-			flags_mode[0] = O_WRONLY | O_CREAT | O_TRUNC;
+			flags_mode[0] = O_WRONLY | O_CREAT;
+			if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)
+				flags_mode[0] |= O_TRUNC;
+			else
+				flags_mode[0] |= O_APPEND;
 			flags_mode[1] = 0666;
 			io_handlers_add_path(
 				&cmd->io_handlers, tokens[++i]->content, flags_mode, IO_OUT);
