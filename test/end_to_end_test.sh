@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/09 18:18:12 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/09 19:18:03 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -245,5 +245,14 @@ chmod 444 $file1
 echo override > $file1
 echo \$?
 cat $file1
+"
+}
+
+@test "test simple command with one >> redirect at end of command: ls -a \$temp_dir -H >> \$file" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> $file
+cat $file
+ls -l $temp_dir >> $file
+cat $file
 "
 }
