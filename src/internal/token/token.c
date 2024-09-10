@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:46:31 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/10 12:32:27 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	token_destroy(t_token *token)
 	free(token);
 }
 
-// TODO classify remaining operators
+// TODO: classify remaining operators
 t_token	*token_classify(char *str_token)
 {
 	if (!str_token)
@@ -79,5 +79,7 @@ t_token	*token_classify(char *str_token)
 		return (token_new(OP_REDIRECT_OUT_APPND, str_token));
 	else if (ft_strncmp(">", str_token, 2) == 0)
 		return (token_new(OP_REDIRECT_OUT_TRUNC, str_token));
+	else if (ft_strncmp("<", str_token, 2) == 0)
+		return (token_new(OP_REDIRECT_IN, str_token));
 	return (token_new(WORD, str_token));
 }

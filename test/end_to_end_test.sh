@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/10 11:25:57 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/10 13:00:25 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -305,7 +305,7 @@ cat $file1
 
 @test "test simple command with < redirection at end: cat < \$file1 " {
     file1="$temp_dir/input.txt"
-    assert_minishell_equal_bash "printf 'input from file\n' >> $file1
+    assert_minishell_equal_bash "printf input > $file1
 cat < $file1
 "
 }

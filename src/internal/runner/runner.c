@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:10:26 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/10 12:33:14 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	}
 	else
 	{
-		//TODO change status to function error handling
+		//TODO: change status to function error handling
 		*pids = ft_arraylist_add(*pids, pid);
 		if (!(*pids))
 			status = 1;
@@ -96,7 +96,7 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 void	runner_cmd_expand_str(
 	char *str, int last_status_code, t_arraylist *lst_new_args)
 {
-	// TODO cmd_expand on general case
+	// TODO: cmd_expand on general case
 	if (ft_strncmp(str, "$?", 3) == 0)
 		*lst_new_args = (
 				ft_arraylist_add(*lst_new_args, ft_itoa(last_status_code)));
@@ -117,7 +117,7 @@ void	runner_cmd_expand(t_command cmd, int last_status_code)
 	while (cmd->simple->cmd_argv[++i])
 		runner_cmd_expand_str(
 			cmd->simple->cmd_argv[i], last_status_code, &lst_new_args);
-	// TODO improve allocation error handling
+	// TODO: improve allocation error handling
 	ft_strarr_free(cmd->simple->cmd_argv);
 	cmd->simple->cmd_argv = ft_lststr_to_arrstr(lst_new_args);
 	ft_arraylist_destroy(lst_new_args);
