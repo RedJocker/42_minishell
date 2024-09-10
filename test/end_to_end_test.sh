@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/09 19:49:50 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/10 11:25:57 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -257,7 +257,6 @@ cat $file
 "
 }
 
-
 @test "test simple command with one >> redirect at middle of command: ls -a  >> \$file \$temp_dir -H" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a >> $file $temp_dir -H
@@ -288,10 +287,9 @@ printf \$?"
 printf \$?"
 }
 
-
 @test "test simple command with invalid redirect syntax >> >>" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H >> > $file1
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> >> $file1
 printf \$?"
 }
 
@@ -302,5 +300,12 @@ chmod 444 $file1
 ls >> $file1
 printf \$?
 cat $file1
+"
+}
+
+@test "test simple command with < redirection at end: cat < \$file1 " {
+    file1="$temp_dir/input.txt"
+    assert_minishell_equal_bash "printf 'input from file\n' >> $file1
+cat < $file1
 "
 }
