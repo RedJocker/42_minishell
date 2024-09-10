@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 05:27:51 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:10:26 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
 	pid_t	*pid;
-	int      status;
+	int		status;
 	char	*err_msg;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
@@ -39,7 +39,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 		free(pid);
 		cmd->simple->cmd_path = (
 				envp_find_bin_by_name(cmd->simple->cmd_argv[0], __environ));
-		if (!io_handlers_redirect(cmd->output, STDOUT_FILENO, &err_msg))
+		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 		{
 			ft_putendl(err_msg); // TODO: Set the correct fd to write the error.
 			status = 1;
@@ -55,7 +55,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	}
 	else
 	{
-		//TODO change status to function error handling 
+		//TODO change status to function error handling
 		*pids = ft_arraylist_add(*pids, pid);
 		if (!(*pids))
 			status = 1;
@@ -85,7 +85,6 @@ t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 	return (NOT_BUILTIN);
 }
 
-
 int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 {
 	(void) pids;
@@ -100,19 +99,19 @@ void	runner_cmd_expand_str(
 	// TODO cmd_expand on general case
 	if (ft_strncmp(str, "$?", 3) == 0)
 		*lst_new_args = (
-			ft_arraylist_add(*lst_new_args, ft_itoa(last_status_code)));
+				ft_arraylist_add(*lst_new_args, ft_itoa(last_status_code)));
 	else
 		*lst_new_args = (
-			ft_arraylist_add(*lst_new_args, ft_strdup(str)));
+				ft_arraylist_add(*lst_new_args, ft_strdup(str)));
 }
 
 void	runner_cmd_expand(t_command cmd, int last_status_code)
 {
-	t_arraylist lst_new_args;
+	t_arraylist	lst_new_args;
 	int			i;
 
 	if (cmd->type != CMD_SIMPLE)
-		return;
+		return ;
 	lst_new_args = ft_arraylist_new(free);
 	i = -1;
 	while (cmd->simple->cmd_argv[++i])

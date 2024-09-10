@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/07 04:44:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:42:02 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
+#include "internal/command/command.h"
 #include "internal/token/token.h"
 #include "internal/command/command_internal.h"
 #include "internal/command/io_handler.h"
 
 int	token_type_is_redirect(t_token *token)
 {
-	return (token && token->type == OP_REDIRECT_OUT_TRUNC);
+	return (token &&
+			(token->type == OP_REDIRECT_OUT_TRUNC
+			|| token->type == OP_REDIRECT_OUT_APPND));
 }
 
 int	token_type_is_word(t_token *token)
@@ -51,6 +54,7 @@ void	command_simple_fill(
 {
 	int	i;
 	int	j;
+	int	flags_mode[2];
 
 	i = fst_token_idx - 1;
 	j = 0;
@@ -58,11 +62,17 @@ void	command_simple_fill(
 	{
 		if (tokens[i]->type == WORD)
 			cmd->simple->cmd_argv[j++] = ft_strdup(tokens[i]->content);
-		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)
+		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC
+				 || tokens[i]->type == OP_REDIRECT_OUT_APPND)
 		{
+			flags_mode[0] = O_WRONLY | O_CREAT;
+			if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)
+				flags_mode[0] |= O_TRUNC;
+			else
+				flags_mode[0] |= O_APPEND;
+			flags_mode[1] = 0666;
 			io_handlers_add_path(
-				&cmd->output, tokens[++i]->content,
-				O_WRONLY | O_CREAT | O_TRUNC, 0666);
+				&cmd->io_handlers, tokens[++i]->content, flags_mode, IO_OUT);
 			continue ;
 		}
 	}
@@ -84,7 +94,7 @@ t_command	command_simple_new(
 	while (++i < endtoken_idx - 1)
 	{
 		if (token_type_is_redirect(tokens[i])
-				&& token_type_is_word(tokens[i + 1]))
+			&& token_type_is_word(tokens[i + 1]))
 			++i;
 		else if (token_type_is_word(tokens[i]))
 			cmd->simple->cmd_argc++;

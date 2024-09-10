@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:55:24 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/09 05:24:58 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:03:53 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ static int	set_out_len(t_command cmd, char **arg, int *out_fd)
 {
 	int	out_len;
 
-	out_len = ft_arraylist_len(cmd->output);
+	out_len = ft_arraylist_len(cmd->io_handlers);
 	if (out_len)
 	{
-		if (!io_handlers_to_fd(cmd->output, arg))
+		if (!io_handlers_to_fd(cmd->io_handlers, arg))
 			return (FAIL);
 		*out_fd = ((t_io_handler *)
-			ft_arraylist_get(cmd->output, out_len - 1))->fd; // TODO:Verifiy which name can be used to remove magic number.
+			ft_arraylist_get(cmd->io_handlers, out_len - 1))->fd; // TODO:Verifiy which name can be used to remove magic number.
 	}
 	return (true);
 }
