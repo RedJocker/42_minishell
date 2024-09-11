@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/10 20:50:48 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/10 21:31:26 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,6 +97,8 @@ assert_minishell_equal_bash() {
 	false
     fi
 }
+
+# TEST BEGIN
 
 @test "test empty" {
     assert_minishell_equal_bash ""
@@ -422,5 +424,35 @@ printf duplicate > $file1
 cat $file1
 ls -a $temp_dir -H < $file1 >> $file1 
 cat $file1
+"
+}
+
+@test "test simple command with single quote on args: printf 'hello'" {
+    assert_minishell_equal_bash "
+printf 'hello'
+"
+}
+
+@test "test simple command with single quote on invocation: 'printf' hello" {
+    assert_minishell_equal_bash "
+'printf' hello
+"
+}
+
+@test "test simple command with single quote on arg with space: printf 'hello there'" {
+    assert_minishell_equal_bash "
+printf 'hello there' 
+"
+}
+
+@test "test simple command with single quote on middle of arg: printf he'll'o" {
+    assert_minishell_equal_bash "
+printf he'll'o 
+"
+}
+
+@test "test simple command with single quote on middle of invocation: p'rin'tf hello" {
+    assert_minishell_equal_bash "
+p'rin'tf hello 
 "
 }
