@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:42:02 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/10 12:37:02 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	token_type_is_redirect(t_token *token)
 {
 	return (token &&
 			(token->type == OP_REDIRECT_OUT_TRUNC
-			|| token->type == OP_REDIRECT_OUT_APPND));
+			|| token->type == OP_REDIRECT_OUT_APPND
+			|| token->type == OP_REDIRECT_IN));
 }
 
 int	token_type_is_word(t_token *token)
@@ -73,6 +74,14 @@ void	command_simple_fill(
 			flags_mode[1] = 0666;
 			io_handlers_add_path(
 				&cmd->io_handlers, tokens[++i]->content, flags_mode, IO_OUT);
+			continue ;
+		}
+		else if (tokens[i]->type == OP_REDIRECT_IN)
+		{
+			flags_mode[0] = O_RDONLY;
+			flags_mode[1] = 0666;
+			io_handlers_add_path(
+				&cmd->io_handlers, tokens[++i]->content, flags_mode, IO_IN);
 			continue ;
 		}
 	}

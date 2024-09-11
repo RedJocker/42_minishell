@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/09 19:49:50 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/10 21:31:26 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,6 +98,8 @@ assert_minishell_equal_bash() {
     fi
 }
 
+# TEST BEGIN
+
 @test "test empty" {
     assert_minishell_equal_bash ""
 }
@@ -166,7 +168,10 @@ cat $file"
 @test "test simple command with two > redirects to different files: ls -a \$temp_dir -H > \$file1 > \$file2" {
     file1="$temp_dir/a.txt"
     file2="$temp_dir/b.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file2 
+    assert_minishell_equal_bash "
+printf truncable > $file1
+cat $file1
+ls -a $temp_dir -H > $file1 > $file2 
 cat $file1
 cat $file2
 "
@@ -257,7 +262,6 @@ cat $file
 "
 }
 
-
 @test "test simple command with one >> redirect at middle of command: ls -a  >> \$file \$temp_dir -H" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a >> $file $temp_dir -H
@@ -288,10 +292,9 @@ printf \$?"
 printf \$?"
 }
 
-
 @test "test simple command with invalid redirect syntax >> >>" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H >> > $file1
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> >> $file1
 printf \$?"
 }
 
@@ -302,5 +305,154 @@ chmod 444 $file1
 ls >> $file1
 printf \$?
 cat $file1
+"
+}
+
+@test "test simple command with two >> redirects to different files: ls -a \$temp_dir -H >> \$file1 >> \$file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "
+printf non-truncable > $file1
+printf non-truncable > $file2
+cat $file1
+cat $file2
+ls -a $temp_dir -H >> $file1 >> $file2 
+cat $file1
+cat $file2
+"
+}
+
+@test "test simple command with two >> redirects to same file: ls -a \$temp_dir -H >> \$file1 >> \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+printf non-truncable > $file1
+cat $file1
+ls -a $temp_dir -H >> $file1 >> $file1 
+cat $file1
+"
+}
+
+@test "test simple command with >> and > redirects to same file: ls -a \$temp_dir -H >> \$file1 > \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+printf truncable > $file1
+cat $file1
+ls -a $temp_dir -H >> $file1 > $file1 
+cat $file1
+"
+}
+
+@test "test simple command with > and >> redirects to same file: ls -a \$temp_dir -H > \$file1 >> \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+printf truncable > $file1
+cat $file1
+ls -a $temp_dir -H > $file1 >> $file1 
+cat $file1
+"
+}
+
+@test "test simple command with < redirection at end: cat < \$file1 " {
+    file1="$temp_dir/input.txt"
+    assert_minishell_equal_bash "printf input > $file1
+cat < $file1
+"
+}
+
+@test "test simple command with invalid redirect syntax > <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H > < $file1
+printf \$?"
+}
+
+@test "test simple command with invalid redirect syntax < >" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H < > $file1
+printf \$?"
+}
+
+@test "test simple command with invalid redirect syntax >> <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> < $file1
+printf \$?"
+}
+
+@test "test simple command with invalid redirect syntax < >>" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H < >> $file1
+printf \$?"
+}
+
+@test "test simple command with invalid redirect syntax < <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H < < $file1
+printf \$?"
+}
+
+@test "test simple command with < redirection from file without permission " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "printf protected >> $file1
+chmod 000 $file1
+< $file1 cat
+printf \$?
+"
+}
+
+@test "test simple command with < redirection from file that does not exist" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "printf excludable > $file1
+rm $file1
+< $file1 cat
+printf \$?
+"
+}
+
+@test "test simple command with < and > redirects to same file: ls -a \$temp_dir -H < \$file1 > \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+printf clonable > $file1
+cat $file1
+ls -a $temp_dir -H < $file1 > $file1 
+cat $file1
+"
+}
+
+@test "test simple command with < and >> redirects to same file: ls -a \$temp_dir -H < \$file1 >> \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+printf duplicate > $file1
+cat $file1
+ls -a $temp_dir -H < $file1 >> $file1 
+cat $file1
+"
+}
+
+@test "test simple command with single quote on args: printf 'hello'" {
+    assert_minishell_equal_bash "
+printf 'hello'
+"
+}
+
+@test "test simple command with single quote on invocation: 'printf' hello" {
+    assert_minishell_equal_bash "
+'printf' hello
+"
+}
+
+@test "test simple command with single quote on arg with space: printf 'hello there'" {
+    assert_minishell_equal_bash "
+printf 'hello there' 
+"
+}
+
+@test "test simple command with single quote on middle of arg: printf he'll'o" {
+    assert_minishell_equal_bash "
+printf he'll'o 
+"
+}
+
+@test "test simple command with single quote on middle of invocation: p'rin'tf hello" {
+    assert_minishell_equal_bash "
+p'rin'tf hello 
 "
 }
