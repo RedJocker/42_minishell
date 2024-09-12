@@ -6,10 +6,11 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/10 12:32:27 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/12 01:27:09 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include "ft_memlib.h"
 #include "ft_string.h"
@@ -68,18 +69,37 @@ void	token_destroy(t_token *token)
 	free(token);
 }
 
+bool	token_is_invalid_quote(char *str_token)
+{
+	char    open_quote;
+	int     i;
+
+	open_quote = 0;
+	i = -1;
+	while (str_token[++i])
+	{
+		if (open_quote > 0)
+			open_quote = (str_token[i] != open_quote) * open_quote;
+		else if (str_token[i] == '\'' || str_token[i] == '\"')
+			open_quote = str_token[i];
+	}
+	return (open_quote > 0);
+}
+
 // TODO: classify remaining operators
 t_token	*token_classify(char *str_token)
 {
 	if (!str_token)
 		return (token_new(OP_EOF, "OP_EOF"));
 	else if (ft_strncmp("\n", str_token, 2) == 0)
-		return (token_new(OP_NEWLINE, str_token));
+		return (token_new(OP_NEWLINE, "newline"));
 	else if (ft_strncmp(">>", str_token, 3) == 0)
 		return (token_new(OP_REDIRECT_OUT_APPND, str_token));
 	else if (ft_strncmp(">", str_token, 2) == 0)
 		return (token_new(OP_REDIRECT_OUT_TRUNC, str_token));
 	else if (ft_strncmp("<", str_token, 2) == 0)
 		return (token_new(OP_REDIRECT_IN, str_token));
+	else if (token_is_invalid_quote(str_token))
+		return (token_new(INVALID, "newline"));
 	return (token_new(WORD, str_token));
 }

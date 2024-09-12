@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/10 12:37:02 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/12 00:55:28 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 int	token_type_is_redirect(t_token *token)
 {
-	return (token &&
-			(token->type == OP_REDIRECT_OUT_TRUNC
+	return (token
+		&& (token->type == OP_REDIRECT_OUT_TRUNC
 			|| token->type == OP_REDIRECT_OUT_APPND
 			|| token->type == OP_REDIRECT_IN));
 }
@@ -46,6 +46,11 @@ int	command_simple_is_invalid(
 			*endtoken_idx = i + 1;
 			return (1);
 		}
+		else if (tokens[i]->type == INVALID)
+		{
+			*endtoken_idx = i;
+			return (1);
+		}
 	}
 	return (0);
 }
@@ -64,7 +69,7 @@ void	command_simple_fill(
 		if (tokens[i]->type == WORD)
 			cmd->simple->cmd_argv[j++] = ft_strdup(tokens[i]->content);
 		else if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC
-				 || tokens[i]->type == OP_REDIRECT_OUT_APPND)
+			|| tokens[i]->type == OP_REDIRECT_OUT_APPND)
 		{
 			flags_mode[0] = O_WRONLY | O_CREAT;
 			if (tokens[i]->type == OP_REDIRECT_OUT_TRUNC)

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/07 04:42:28 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/12 00:38:21 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,21 @@ int	parse_word_find_len(char *input)
 	int	l;
 
 	l = 0;
+	// TODO: improve len count on quoted cases
 	while (1)
 	{
 		if (input[l] == '\0'
 			|| parse_is_operator(input[l]) || ft_isspace(input[l]))
 			return (l);
 		else if (input[l] == '"')
-		{
-			while (input[++l] != '"')
+			while (input[++l] && input[l] != '"')
 				;
-		}
 		else if (input[l] == '\'')
-		{
-			while (input[++l] != '\'')
+			while (input[++l] && input[l] != '\'')
 				;
-		}
 		else if (input[l] == '\\')
-		{
-			if (input[++l] == '\0')
-				continue ;
-		}
-		l++;
+			l++;
+		l += input[l] != '\0';
 	}
 }
 
