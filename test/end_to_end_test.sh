@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/10 21:31:26 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/11 23:05:24 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+    LANGUAGE="en_US.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     delete_temp_folder
 }
 
