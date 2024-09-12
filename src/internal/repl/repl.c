@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/11 03:20:50 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/12 03:13:31 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "internal/signal/signal.h"
 #include "internal/signal/terminal.h"
 #include "internal/token/token.h"
+#include "internal/environ/environ.h"
 
 static bool	history_add_input(char *input);
 
@@ -55,6 +56,7 @@ void	repl_loop(void)
 int	repl(void)
 {
 	signals_initializer();
+	environ_initializer();
 	terminal_properties(false);
 	while (WAIT)
 		repl_loop();

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/12 03:09:52 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/12 04:32:23 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@
 #include "ft_string.h"
 #include "ft_util.h"
 #include "stringbuilder.h"
+#include "internal/default.h"
 #include "internal/envp.h"
 #include "internal/command/command.h"
 #include "internal/command/io_handler.h"
 #include "internal/runner/runner.h"
 #include "internal/runner/builtins/builtins.h"
+#include "internal/environ/environ.h"
 
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
@@ -41,7 +43,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	{
 		free(pid);
 		cmd->simple->cmd_path = (
-				envp_find_bin_by_name(cmd->simple->cmd_argv[0], __environ));
+				envp_find_bin_by_name(cmd->simple->cmd_argv[0], environ_status(NULL, GET)));
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 		{
 			ft_putendl(err_msg); // TODO: Set the correct fd to write the error.
@@ -50,7 +52,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 			command_destroy(cmd);
 			exit(status);
 		}
-		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, __environ);
+		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, environ_status(NULL, GET));
 		// todo check possible leak pids list
 		status = 1;
 		command_destroy(cmd);

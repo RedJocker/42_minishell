@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.h                                           :+:      :+:    :+:   */
+/*   environ.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/26 00:47:20 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/12 02:21:51 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
+/*   Updated: 2024/09/12 02:33:05 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNAL_H
-# define SIGNAL_H
+#include <unistd.h>
+#include "internal/default.h"
 
-enum e_signal
+char	**environ_status(char **value, int type)
 {
-	SIG_BASE = 128,
-};
+	static char	**environ;
 
-int		signal_status(int value, int type);
-void	signals_initializer(void);
+	if (type == SET)
+		environ = value;
+	return (environ);
+}
 
-#endif
+void	environ_initializer(void)
+{
+	environ_status(__environ, SET);
+}

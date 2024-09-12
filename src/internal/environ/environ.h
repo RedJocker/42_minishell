@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.h                                           :+:      :+:    :+:   */
+/*   environ.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/26 00:47:20 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/12 02:21:51 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/12 02:10:47 by dande-je          #+#    #+#             */
+/*   Updated: 2024/09/12 03:12:46 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SIGNAL_H
-# define SIGNAL_H
+#ifndef ENVIRON_H
+# define ENVIRON_H
 
-enum e_signal
-{
-	SIG_BASE = 128,
-};
-
-int		signal_status(int value, int type);
-void	signals_initializer(void);
+void	environ_initializer(void);
+char	**environ_status(char **value, int type);
 
 #endif

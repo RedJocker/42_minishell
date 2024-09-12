@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/11 04:36:03 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/12 04:26:55 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRCS_RUNNER_DIR                 := $(SRCS_INTERNAL_DIR)runner/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_INTERNAL_DIR)token/
 SRCS_COMMAND_DIR                := $(SRCS_INTERNAL_DIR)command/
+SRCS_ENVIRON_DIR                := $(SRCS_INTERNAL_DIR)environ/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/
@@ -64,22 +65,23 @@ NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c \
-								parse_operator.c)
+								   parse_operator.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c \
 								   terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c)
+SRCS_FILES                      += $(addprefix $(SRCS_ENVIRON_DIR), environ.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
-								 tokens.c)
+								   tokens.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_build.c \
 								   command_invalid.c \
 								   command_simple.c \
 								   command_util.c \
 								   io_handler.c \
-							           io_handlers.c)
+								   io_handlers.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
 DEPS                            += $(OBJS:.o=.d)
