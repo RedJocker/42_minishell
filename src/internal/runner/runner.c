@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/10 12:33:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/12 03:09:52 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 #include <unistd.h>
 #include "collection/ft_arraylist.h"
 #include "ft_assert.h"
+#include "ft_ctype.h"
+#include "ft_memlib.h"
 #include "ft_stdio.h"
 #include "ft_string.h"
 #include "ft_util.h"
+#include "stringbuilder.h"
 #include "internal/envp.h"
 #include "internal/command/command.h"
 #include "internal/command/io_handler.h"
@@ -93,16 +96,70 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 	return (0);
 }
 
+
+int runner_cmd_expand_dollar(char *str, char **out_res, int last_status_code)
+{
+	int	i;
+	// TODO: cmd_expand on general case
+	if (ft_strncmp(str, "$?", 2) == 0)
+	{
+		*out_res = ft_itoa(last_status_code);
+		return (2);
+	}
+	i = 1;
+	if (ft_isalpha(i) || str[i] == '_')
+	{
+		i++;
+		while (ft_isalnum(i) || str[i] == '_')
+			i++;
+	}
+	*out_res = ft_calloc(i + 1, sizeof(char));
+	ft_strlcpy(*out_res, str, i + 1);
+	return (i);
+}
+
 void	runner_cmd_expand_str(
 	char *str, int last_status_code, t_arraylist *lst_new_args)
 {
-	// TODO: cmd_expand on general case
-	if (ft_strncmp(str, "$?", 3) == 0)
-		*lst_new_args = (
-				ft_arraylist_add(*lst_new_args, ft_itoa(last_status_code)));
-	else
-		*lst_new_args = (
-				ft_arraylist_add(*lst_new_args, ft_strdup(str)));
+	t_stringbuilder	builder;
+	char 			*res;
+	char            open_quote;
+	int				i;
+
+	builder = stringbuilder_new();
+	open_quote = 0;
+	i = -1;
+	while (str[++i])
+	{
+		if (open_quote == 0)
+		{
+			if (str[i] == '$')
+			{
+				// TODO: change parameter to list to handle several words on expansion
+				i += runner_cmd_expand_dollar(str + i, &res, last_status_code);
+				stringbuilder_addstr(&builder, res);
+				free(res);
+			}
+			else if (str[i] == '\'' || str[i] == '\"')
+				open_quote = str[i];
+			else
+				builder = stringbuilder_addchar(builder, str[i]);
+		}
+		else
+		{
+			if (str[i] == open_quote)
+				open_quote = 0;
+			else if (open_quote == '\'')
+				builder = stringbuilder_addchar(builder, str[i]);
+			else
+			{
+				// TODO: other quotes
+				builder = stringbuilder_addchar(builder, str[i]); 
+			}
+		}
+	}
+	res = stringbuilder_build(builder);
+	*lst_new_args = (ft_arraylist_add(*lst_new_args, res));
 }
 
 void	runner_cmd_expand(t_command cmd, int last_status_code)
