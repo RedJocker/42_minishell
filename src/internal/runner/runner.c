@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/12 04:32:23 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:54:00 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int runner_cmd_expand_dollar(char *str, char **out_res, int last_status_code)
 	if (ft_strncmp(str, "$?", 2) == 0)
 	{
 		*out_res = ft_itoa(last_status_code);
-		return (2);
+		return (1);
 	}
 	i = 1;
 	if (ft_isalpha(i) || str[i] == '_')
@@ -117,14 +117,14 @@ int runner_cmd_expand_dollar(char *str, char **out_res, int last_status_code)
 	}
 	*out_res = ft_calloc(i + 1, sizeof(char));
 	ft_strlcpy(*out_res, str, i + 1);
-	return (i);
+	return (i - 1);
 }
 
 void	runner_cmd_expand_str(
 	char *str, int last_status_code, t_arraylist *lst_new_args)
 {
 	t_stringbuilder	builder;
-	char 			*res;
+	char			*res;
 	char            open_quote;
 	int				i;
 
@@ -156,7 +156,7 @@ void	runner_cmd_expand_str(
 			else
 			{
 				// TODO: other quotes
-				builder = stringbuilder_addchar(builder, str[i]); 
+				builder = stringbuilder_addchar(builder, str[i]);
 			}
 		}
 	}
