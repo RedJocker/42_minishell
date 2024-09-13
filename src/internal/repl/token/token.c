@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/12 01:27:09 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/13 03:09:17 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "ft_memlib.h"
 #include "ft_string.h"
-#include "internal/token/token.h"
+#include "internal/repl/token/token.h"
 
 void	token_type_string(char out_str[23], t_token_type type)
 {

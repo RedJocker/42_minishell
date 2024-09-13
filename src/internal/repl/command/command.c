@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/13 00:42:30 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/13 03:10:08 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "ft_util.h"
 #include "internal/repl/command/command_internal.h"
 #include "internal/repl/command/io_handler.h"
-#include "internal/token/token.h"
+#include "internal/repl/token/token.h"
 
 void	command_destroy(t_command cmd)
 {

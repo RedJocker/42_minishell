@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:22:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/07 04:37:12 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/13 03:09:37 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "ft_memlib.h"
-#include "internal/token/token_internal.h"
+#include "internal/repl/token/token_internal.h"
 
 t_token	**tokens_classify(char **arr_str_tokens, int *out_len)
 {
