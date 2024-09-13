@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/12 04:26:55 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/13 00:47:34 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,13 +33,13 @@ RESET                           := \033[0m
 
 SRCS_DIR                        := src/
 SRCS_INTERNAL_DIR               := src/internal/
+SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
+SRCS_COMMAND_DIR                := $(SRCS_REPL_DIR)command/
 SRCS_PARSE_DIR                  := $(SRCS_INTERNAL_DIR)parse/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
-SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 SRCS_RUNNER_DIR                 := $(SRCS_INTERNAL_DIR)runner/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_INTERNAL_DIR)token/
-SRCS_COMMAND_DIR                := $(SRCS_INTERNAL_DIR)command/
 SRCS_ENVIRON_DIR                := $(SRCS_INTERNAL_DIR)environ/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/

@@ -6,11 +6,11 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:56:15 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/07 04:43:34 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:42:58 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal/command/command_internal.h"
+#include "internal/repl/command/command_internal.h"
 
 int	command_debug_id(void)
 {

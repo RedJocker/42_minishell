@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:16 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/11 03:22:41 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:39:31 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define REPL_H
 
 # include <stdbool.h>
-# include "internal/command/command.h"
+# include "internal/repl/command/command.h"
 # include "internal/token/token.h"
 
 typedef struct s_repl

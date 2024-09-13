@@ -6,13 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:59:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:07:47 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:49:09 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal/command/command.h"
-#include "io_handler.h"
 #include "ft_memlib.h"
+#include "internal/repl/command/command.h"
+#include "internal/repl/command/io_handler.h"
 
 int	io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg)
 {

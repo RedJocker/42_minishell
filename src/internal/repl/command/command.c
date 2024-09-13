@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:00:29 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:42:30 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
-#include "internal/command/command_internal.h"
-#include "internal/command/io_handler.h"
+#include "internal/repl/command/command_internal.h"
+#include "internal/repl/command/io_handler.h"
 #include "internal/token/token.h"
 
 void	command_destroy(t_command cmd)

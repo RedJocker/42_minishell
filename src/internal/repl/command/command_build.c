@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/10 12:32:48 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:42:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include "ft_stdio.h"
 #include "internal/default.h"
-#include "internal/command/command_internal.h"
+#include "internal/repl/command/command_internal.h"
 #include "internal/signal/signal.h"
 #include "internal/token/token.h"
 

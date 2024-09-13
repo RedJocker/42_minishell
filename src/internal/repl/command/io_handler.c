@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/09 19:08:20 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:43:02 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <unistd.h>
 #include "ft_stdio.h"
 #include "ft_string.h"
-#include "internal/command/command.h"
+#include "internal/repl/command/command.h"
 
 void	io_handler_destroy(t_io_handler *io)
 {

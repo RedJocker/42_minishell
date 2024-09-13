@@ -6,16 +6,16 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:55:24 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/09 19:03:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:49:51 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
 #include <unistd.h>
 #include "ft_string.h"
-#include "internal/command/command.h"
-#include "internal/command/io_handler.h"
 #include "internal/default.h"
+#include "internal/repl/command/command.h"
+#include "internal/repl/command/io_handler.h"
 
 static int	set_out_len(t_command cmd, char **arg, int *out_fd);
 static void	echo_display(t_command cmd, char **arg, int *out_fd);

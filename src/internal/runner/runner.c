@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/12 17:54:00 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:50:08 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 #include "ft_util.h"
 #include "stringbuilder.h"
 #include "internal/default.h"
+#include "internal/environ/environ.h"
 #include "internal/envp.h"
-#include "internal/command/command.h"
-#include "internal/command/io_handler.h"
+#include "internal/repl/command/command.h"
+#include "internal/repl/command/io_handler.h"
 #include "internal/runner/runner.h"
 #include "internal/runner/builtins/builtins.h"
-#include "internal/environ/environ.h"
 
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
