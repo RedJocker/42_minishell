@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/13 00:55:55 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/13 01:09:48 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include "internal/repl/parse/parse.h"
 #include "internal/repl/command/command.h"
 #include "internal/repl/repl.h"
-#include "internal/runner/runner.h"
+#include "internal/repl/runner/runner.h"
 #include "internal/signal/signal.h"
 #include "internal/signal/terminal.h"
 #include "internal/token/token.h"

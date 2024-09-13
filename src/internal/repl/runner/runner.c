@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/13 00:50:08 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/13 01:09:41 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 #include "internal/envp.h"
 #include "internal/repl/command/command.h"
 #include "internal/repl/command/io_handler.h"
-#include "internal/runner/runner.h"
-#include "internal/runner/builtins/builtins.h"
+#include "internal/repl/runner/runner.h"
+#include "internal/repl/runner/builtins/builtins.h"
 
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {

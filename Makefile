@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/13 01:03:20 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/13 03:06:26 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,8 +36,8 @@ SRCS_INTERNAL_DIR               := src/internal/
 SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 SRCS_COMMAND_DIR                := $(SRCS_REPL_DIR)command/
 SRCS_PARSE_DIR                  := $(SRCS_REPL_DIR)parse/
+SRCS_RUNNER_DIR                 := $(SRCS_REPL_DIR)runner/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
-SRCS_RUNNER_DIR                 := $(SRCS_INTERNAL_DIR)runner/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_INTERNAL_DIR)token/
 SRCS_ENVIRON_DIR                := $(SRCS_INTERNAL_DIR)environ/
