@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/13 00:49:36 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/13 00:55:55 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "ft_util.h"
 #include "internal/default.h"
 #include "internal/environ/environ.h"
-#include "internal/parse/parse.h"
+#include "internal/repl/parse/parse.h"
 #include "internal/repl/command/command.h"
 #include "internal/repl/repl.h"
 #include "internal/runner/runner.h"
