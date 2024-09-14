@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/14 04:04:58 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/14 05:13:53 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct s_command_simple
 	char	*cmd_path;
 	int		cmd_argc;
 	char	**cmd_argv;
-	char	**cmd_envp; // TODO: Verify this var.
 }	t_command_simple;
 
 typedef struct s_command_invalid

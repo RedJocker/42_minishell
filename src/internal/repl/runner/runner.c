@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/14 04:05:11 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/14 05:23:36 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include "internal/repl/command/io_handler.h"
 #include "internal/repl/runner/runner.h"
 #include "internal/repl/runner/builtins/builtins.h"
+#include "internal/ft_extension.h"
 
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
@@ -46,14 +47,14 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 				envp_find_bin_by_name(cmd->simple->cmd_argv[0], __environ)); // TODO: Insert new environ;
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 		{
-			ft_putendl(err_msg); // TODO: Set the correct fd to write the error.
+			ft_puterrl(err_msg);
 			status = 1;
 			// todo check possible leak pids list
 			command_destroy(cmd);
 			exit(status);
 		}
 		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, __environ); // TODO: Insert new envrion;
-		// todo check possible leak pids list
+		// TODO: check possible leak pids list
 		status = 1;
 		command_destroy(cmd);
 		exit(status);
@@ -98,26 +99,66 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 	return (0);
 }
 
-
-int runner_cmd_expand_dollar(char *str, char **out_res, int last_status_code)
+char	*env_mock(char *s)
 {
-	int	i;
-	// TODO: cmd_expand on general case
+	(void) s;
+	return (ft_strdup("abc def"));
+}
+
+int	runner_cmd_expand_dollar(
+	char *str, t_stringbuilder *builder, int last_status_code)
+{
+	int		i;
+	char	*var_name;
+	char	*var_value;
+
+	ft_assert(ft_strncmp(str, "$", 1) == 0, "expected $");
 	if (ft_strncmp(str, "$?", 2) == 0)
 	{
-		*out_res = ft_itoa(last_status_code);
+		var_value = ft_itoa(last_status_code);
+		stringbuilder_addstr(builder, var_value);
+		free(var_value);
 		return (1);
 	}
 	i = 1;
-	if (ft_isalpha(i) || str[i] == '_')
+	if (ft_isalpha(str[i]) || str[i] == '_')
 	{
 		i++;
-		while (ft_isalnum(i) || str[i] == '_')
+		while (ft_isalnum(str[i]) || str[i] == '_')
 			i++;
 	}
-	*out_res = ft_calloc(i + 1, sizeof(char));
-	ft_strlcpy(*out_res, str, i + 1);
+	var_name = ft_calloc(i, sizeof(char));
+	ft_strlcpy(var_name, str + 1, i);
+	// TODO: look expansion on env
+	var_value = env_mock(var_name);
+	free(var_name);
+	stringbuilder_addstr(builder, var_value);
+	free(var_value);
 	return (i - 1);
+}
+
+int	runner_cmd_expand_dollar_split(
+	char *str,
+	t_stringbuilder *builder,
+	t_arraylist *lst_new_args,
+	int last_status_code)
+{
+	int		i;
+	char	**split;
+	char	*temp;
+	int		j;
+
+	i = runner_cmd_expand_dollar(str, builder, last_status_code);
+	temp = stringbuilder_build(*builder);
+	split = ft_splitfun(temp, (t_pred_int) ft_isspace);
+	free(temp);
+	j = -1;
+	while (split[++j + 1])
+		*lst_new_args = ft_arraylist_add(*lst_new_args, ft_strdup(split[j]));
+	*builder = stringbuilder_new();
+	stringbuilder_addstr(builder, ft_strdup(split[j]));
+	ft_strarr_free(split);
+	return (i);
 }
 
 void	runner_cmd_expand_str(
@@ -125,7 +166,7 @@ void	runner_cmd_expand_str(
 {
 	t_stringbuilder	builder;
 	char			*res;
-	char            open_quote;
+	char			open_quote;
 	int				i;
 
 	builder = stringbuilder_new();
@@ -136,12 +177,7 @@ void	runner_cmd_expand_str(
 		if (open_quote == 0)
 		{
 			if (str[i] == '$')
-			{
-				// TODO: change parameter to list to handle several words on expansion
-				i += runner_cmd_expand_dollar(str + i, &res, last_status_code);
-				stringbuilder_addstr(&builder, res);
-				free(res);
-			}
+				i += runner_cmd_expand_dollar_split(str + i, &builder, lst_new_args, last_status_code);
 			else if (str[i] == '\'' || str[i] == '\"')
 				open_quote = str[i];
 			else
@@ -151,13 +187,10 @@ void	runner_cmd_expand_str(
 		{
 			if (str[i] == open_quote)
 				open_quote = 0;
-			else if (open_quote == '\'')
-				builder = stringbuilder_addchar(builder, str[i]);
+			else if (open_quote == '\"' && str[i] == '$')
+				i += runner_cmd_expand_dollar(str + i, &builder, last_status_code);
 			else
-			{
-				// TODO: other quotes
 				builder = stringbuilder_addchar(builder, str[i]);
-			}
 		}
 	}
 	res = stringbuilder_build(builder);
