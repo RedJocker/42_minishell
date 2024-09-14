@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   default.h                                          :+:      :+:    :+:   */
+/*   environ_destroy.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/14 03:50:10 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/14 02:33:40 by dande-je          #+#    #+#             */
+/*   Updated: 2024/09/14 03:18:44 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFAULT_H
-# define DEFAULT_H
+#include <stdlib.h>
+#include "internal/environ/environ_internal.h"
 
-enum e_default_values
+void	environ_destroy(t_environ_vars *environ_var)
 {
-	DEFAULT = 0,
-	DEFAULT_INIT = -1,
-	FAIL = -1,
-	WAIT = 1,
-	CHAR_BYTE = 1,
-	NULL_BYTE = 1,
-};
+	t_environ_vars	*environ_vars_temp;
 
-typedef enum e_operations t_operations;
-enum e_operations
-{
-	SET = 1,
-	GET = -1,
-};
-
-#endif
+	while (environ_var)
+	{
+		environ_vars_temp = environ_var;
+		environ_var = environ_var->next;
+		free(environ_vars_temp);
+	}
+}
