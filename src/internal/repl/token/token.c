@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/13 03:09:17 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/14 05:20:07 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	token_destroy(t_token *token)
 
 bool	token_is_invalid_quote(char *str_token)
 {
-	char    open_quote;
-	int     i;
+	char	open_quote;
+	int		i;
 
 	open_quote = 0;
 	i = -1;
