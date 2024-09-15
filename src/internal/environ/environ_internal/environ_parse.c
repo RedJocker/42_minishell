@@ -1,26 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   terminal.c                                         :+:      :+:    :+:   */
+/*   environ_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/30 04:20:53 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/15 03:40:52 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/15 03:41:36 by dande-je          #+#    #+#             */
+/*   Updated: 2024/09/15 05:27:50 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <termios.h>
-#include <unistd.h>
-
-// TODO: Create a folder to terminal.
-void	terminal_properties(bool reset)
+#include "ft_string.h"
+#include "stdio.h"
+void	environ_parse(char *environ_var)
 {
-	static struct termios	terminal;
+	char	**environ_var_split;
 
-	if (reset)
-		tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
-	else
-		tcgetattr(STDIN_FILENO, &terminal);
+	printf("sem split |%s|\n", environ_var);
+	environ_var_split = ft_split(environ_var, '=');
+	printf("key = |%s| - valur = |%s|\n", environ_var_split[0], environ_var_split[1]);
 }
