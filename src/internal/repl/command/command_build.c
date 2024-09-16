@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/13 03:10:22 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/16 04:36:49 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "ft_stdio.h"
 #include "internal/default.h"
+#include "internal/env/env.h"
 #include "internal/repl/command/command_internal.h"
 #include "internal/repl/token/token.h"
 #include "internal/signal/signal.h"
@@ -47,6 +48,7 @@ t_command	command_build(t_token **tokens, int tokens_len)
 	{
 		tokens_destroy(tokens);
 		printf("exit\n");
+		env_destroy();
 		exit(signal_status(DEFAULT, GET));
 	}
 	cmd_operator_idx = command_operator_idx(tokens, tokens_len);

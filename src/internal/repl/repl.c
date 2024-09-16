@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/14 05:18:49 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/16 04:24:19 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include "ft_ctype.h"
 #include "ft_util.h"
 #include "internal/default.h"
-#include "internal/environ/environ.h"
+#include "internal/env/env.h"
 #include "internal/repl/parse/parse.h"
 #include "internal/repl/command/command.h"
 #include "internal/repl/repl.h"
@@ -56,10 +56,11 @@ void	repl_loop(void)
 int	repl(void)
 {
 	signals_initializer();
-	environ_initializer();
+	env_initializer();
 	terminal_properties(false);
 	while (WAIT)
 		repl_loop();
+	env_destroy();
 	return (signal_status(DEFAULT, GET));
 }
 

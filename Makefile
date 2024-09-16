@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/15 03:53:43 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/16 02:47:25 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,8 +40,8 @@ SRCS_RUNNER_DIR                 := $(SRCS_REPL_DIR)runner/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_REPL_DIR)token/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
-SRCS_ENVIRON_DIR                := $(SRCS_INTERNAL_DIR)environ/
-SRCS_ENVIRON_INTERNAL_DIR       := $(SRCS_ENVIRON_DIR)environ_internal/
+SRCS_ENV_DIR                    := $(SRCS_INTERNAL_DIR)env/
+SRCS_ENV_INTERNAL_DIR           := $(SRCS_ENV_DIR)env_internal/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/
@@ -74,11 +74,11 @@ SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), envp.c \
 								     ft_splitfun.c)
-SRCS_FILES                      += $(addprefix $(SRCS_ENVIRON_DIR), environ.c)
-SRCS_FILES                      += $(addprefix $(SRCS_ENVIRON_INTERNAL_DIR), environ_build.c \
-								   environ_destroy.c \
-								   environ_manage.c \
-								   environ_parse.c)
+SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c)
+SRCS_FILES                      += $(addprefix $(SRCS_ENV_INTERNAL_DIR), env_build.c \
+								   env_destroy.c \
+								   env_manage.c \
+								   env_parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
 								   tokens.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
