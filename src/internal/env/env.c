@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/16 04:37:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/16 05:39:00 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "internal/default.h"
 #include "internal/env/env_internal/env_internal.h"
 
+#include <stdio.h>
 void	env_initializer(void)
 {
 	extern char	**environ;
@@ -33,6 +34,9 @@ void	env_initializer(void)
 			env_set_vars_size(ADD);
 		}
 	}
+	t_env_var *test = env_parse_key("PATH");
+	if (test)
+		printf("%s - path\n", test->key);
 }
 
 void	env_destroy(void)
