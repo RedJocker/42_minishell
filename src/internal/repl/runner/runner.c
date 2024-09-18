@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/14 05:23:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:27:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@
 #include "ft_string.h"
 #include "ft_util.h"
 #include "stringbuilder.h"
-// #include "internal/default.h"
-// #include "internal/environ/environ.h"
-#include "internal/envp.h"
+#include "internal/env/envp.h"
 #include "internal/repl/command/command.h"
 #include "internal/repl/command/io_handler.h"
 #include "internal/repl/runner/runner.h"
@@ -34,7 +32,9 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	pid_t	*pid;
 	int		status;
 	char	*err_msg;
+	char	**envp;
 
+	envp = get_envp();
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
 	pid = malloc(sizeof(pid_t));
 	*pid = fork();
@@ -44,16 +44,18 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	{
 		free(pid);
 		cmd->simple->cmd_path = (
-				envp_find_bin_by_name(cmd->simple->cmd_argv[0], __environ)); // TODO: Insert new environ;
+				get_bin_path_with_envp(cmd->simple->cmd_argv[0], envp));
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 		{
+			ft_strarr_free(envp);
 			ft_puterrl(err_msg);
 			status = 1;
 			// todo check possible leak pids list
 			command_destroy(cmd);
 			exit(status);
 		}
-		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, __environ); // TODO: Insert new envrion;
+		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, envp);
+		ft_strarr_free(envp);
 		// TODO: check possible leak pids list
 		status = 1;
 		command_destroy(cmd);
@@ -67,6 +69,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 			status = 1;
 		else
 			status = 0;
+		ft_strarr_free(envp);
 	}
 	return (status);
 }

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   envp.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
+/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/09 17:35:23 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 00:14:36 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/18 00:09:21 by dande-je          #+#    #+#             */
+/*   Updated: 2024/09/18 00:09:56 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ENVP_H
 # define ENVP_H
 
-# define SPACE_CHARS " \r\n\t\v\f"
-
-char	*envp_find_bin_by_name(char *name, char **envp);
+char	**get_envp(void);
+char	*get_bin_path_with_envp(char *bin, char **envp);
 
 #endif
