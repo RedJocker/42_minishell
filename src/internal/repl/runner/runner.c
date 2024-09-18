@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/18 04:24:31 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/18 20:33:08 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,61 +27,6 @@
 #include "internal/repl/runner/builtins/builtins.h"
 #include "internal/ft_extension.h"
 
-int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
-{
-	pid_t	*pid;
-	int		status;
-	char	*err_msg;
-	char	**envp;
-
-	envp = get_envp();
-	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
-	pid = malloc(sizeof(pid_t));
-	*pid = fork();
-	if (*pid < 0)
-		exit(1);
-	if (*pid == 0)
-	{
-		free(pid);
-		cmd->simple->cmd_path = (
-				get_bin_path_with_envp(cmd->simple->cmd_argv[0], envp));
-		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
-		{
-			ft_strarr_free(envp);
-			ft_puterrl(err_msg);
-			status = 1;
-			// todo check possible leak pids list
-			command_destroy(cmd);
-			exit(status);
-		}
-		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, envp);
-		ft_strarr_free(envp);
-		// TODO: check possible leak pids list
-		status = 1;
-		command_destroy(cmd);
-		exit(status);
-	}
-	else
-	{
-		//TODO: change status to function error handling
-		*pids = ft_arraylist_add(*pids, pid);
-		if (!(*pids))
-			status = 1;
-		else
-			status = 0;
-		ft_strarr_free(envp);
-	}
-	return (status);
-}
-
-int	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
-{
-	(void) pids;
-	ft_assert(cmd->type == CMD_INVALID, "expected only invalid");
-	ft_puterrl(cmd->invalid->msg);
-	return (2);
-}
-
 t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 {
 	char	*invocation;
@@ -100,6 +45,75 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 	if (builtin == BUILTIN_ECHO)
 		runner_cmd_builtin_echo(cmd);
 	return (0);
+}
+
+void runner_cmd_simple_panic(t_command cmd, char *msg, int status_code)
+{
+
+	ft_puterrl(msg);
+	free(msg);
+	command_destroy(cmd);
+	exit(status_code);
+}
+
+int	runner_cmd_simple_execve(t_command cmd)
+{
+	int		status_code;
+	char	*err_msg;
+
+	execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, cmd->simple->cmd_envp);
+	status_code = 1;
+	err_msg = ft_strdup("TODO: make a error message and check better status code");
+	runner_cmd_simple_panic(cmd, err_msg, status_code);
+	return (status_code);
+}
+
+int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
+{
+	pid_t		*pid;
+	int			status;
+	char		*err_msg;
+	t_builtin	maybe_builtin;
+	
+	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
+	pid = malloc(sizeof(pid_t));
+	*pid = fork();
+	status = 0;
+	if (*pid < 0)
+		exit(1);
+	if (*pid == 0)
+	{
+		free(pid);
+		cmd->simple->cmd_envp = __environ; // TODO: change to get_envp
+		cmd->simple->cmd_path = (
+				envp_find_bin_by_name(cmd->simple->cmd_argv[0], cmd->simple->cmd_envp));
+		ft_arraylist_destroy(*pids);
+		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
+			runner_cmd_simple_panic(cmd, ft_strdup(err_msg), 1);
+		maybe_builtin = runner_maybe_cmd_builtin(cmd);
+		if (maybe_builtin)
+		{
+			status = runner_cmd_builtin(maybe_builtin, cmd, pids);
+			return (status);
+		}
+		runner_cmd_simple_execve(cmd);
+	}
+	else
+	{
+		//TODO: change status to function error handling
+		*pids = ft_arraylist_add(*pids, pid);
+		if (!(*pids))
+			status = 1;
+	}
+	return (status);
+}
+
+int	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
+{
+	(void) pids;
+	ft_assert(cmd->type == CMD_INVALID, "expected only invalid");
+	ft_puterrl(cmd->invalid->msg);
+	return (2);
 }
 
 char	*env_mock(char *s)
@@ -227,15 +241,11 @@ int	runner(t_command cmd, int last_cmd_status)
 	int			pids_len;
 	int			status;
 	int			i;
-	t_builtin	maybe_builtin;
 
 	pids = ft_arraylist_new(free);
 	runner_cmd_expand(cmd, last_cmd_status);
 	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
-	maybe_builtin = runner_maybe_cmd_builtin(cmd);
-	if (maybe_builtin)
-		status = runner_cmd_builtin(maybe_builtin, cmd, &pids);
-	else if (cmd->type == CMD_SIMPLE)
+	if (cmd->type == CMD_SIMPLE)
 		status = runner_cmd_simple(cmd, &pids);
 	else if (cmd->type == CMD_INVALID)
 		status = runner_cmd_invalid(cmd, &pids);

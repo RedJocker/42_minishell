@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/13 03:10:43 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/18 20:36:11 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,5 +125,7 @@ void	command_simple_destroy(t_command cmd)
 	if (cmd->simple->cmd_path)
 		free(cmd->simple->cmd_path);
 	free(cmd->simple);
+	//TODO: free envp after change out of __environ
+	//ft_strarr_free(cmd->simple->cmd_envp);
 	command_free(cmd);
 }
