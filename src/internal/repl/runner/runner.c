@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/18 00:27:39 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/18 04:24:31 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int	runner_cmd_expand_dollar_split(
 	while (split[++j + 1])
 		*lst_new_args = ft_arraylist_add(*lst_new_args, ft_strdup(split[j]));
 	*builder = stringbuilder_new();
-	stringbuilder_addstr(builder, ft_strdup(split[j]));
+	stringbuilder_addstr(builder, split[j]);
 	ft_strarr_free(split);
 	return (i);
 }
