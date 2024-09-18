@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:12:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/18 00:20:07 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/18 04:53:37 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ char	**get_envp(void)
 		return (NULL);
 }
 
+// TODO: make **env and add no execve.
 char	*get_bin_path_with_envp(char *bin, char **envp)
 {
 	char	*bin_path;

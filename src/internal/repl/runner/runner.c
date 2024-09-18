@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/18 00:27:39 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/18 04:50:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 			command_destroy(cmd);
 			exit(status);
 		}
-		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, envp);
+		execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, __environ);
 		ft_strarr_free(envp);
 		// TODO: check possible leak pids list
 		status = 1;
@@ -91,6 +91,8 @@ t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 	invocation = cmd->simple->cmd_argv[0];
 	if (ft_strncmp(invocation, "echo", 5) == 0)
 		return (BUILTIN_ECHO);
+	else if (ft_strncmp(invocation, "export", ft_strlen("export")) == 0)
+		return (BUILTIN_EXPORT);
 	return (NOT_BUILTIN);
 }
 
@@ -99,6 +101,8 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 	(void) pids;
 	if (builtin == BUILTIN_ECHO)
 		runner_cmd_builtin_echo(cmd);
+	else if (builtin == BUILTIN_EXPORT)
+		runner_cmd_builtin_export(cmd);
 	return (0);
 }
 
