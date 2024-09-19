@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/16 04:24:19 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 05:50:12 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include "internal/repl/runner/runner.h"
 #include "internal/repl/token/token.h"
 #include "internal/signal/signal.h"
-#include "internal/signal/terminal.h"
+#include "internal/terminal/terminal.h"
 
 static bool	history_add_input(char *input);
 
@@ -75,9 +75,6 @@ static bool	history_add_input(char *input)
 {
 	if (!input)
 		return (false);
-	// TODO: why else if not work?
-	// else if (!ft_isspace(*input))
-	// 	return (true);
 	while (*input)
 	{
 		if (!ft_isspace(*input))

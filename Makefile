@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/18 04:55:25 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/19 05:53:24 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRCS_RUNNER_DIR                 := $(SRCS_REPL_DIR)runner/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_REPL_DIR)token/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
+SRCS_TERMINAL_DIR               := $(SRCS_INTERNAL_DIR)terminal/
 SRCS_ENV_DIR                    := $(SRCS_INTERNAL_DIR)env/
 SRCS_ENV_INTERNAL_DIR           := $(SRCS_ENV_DIR)env_internal/
 INCS                            := src/ lib/libftx/includes/
@@ -67,8 +68,8 @@ NAME                            = minishell
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c \
 								   parse_operator.c)
-SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c \
-								   terminal.c)
+SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
+SRCS_FILES                      += $(addprefix $(SRCS_TERMINAL_DIR), terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
