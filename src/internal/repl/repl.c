@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 07:40:44 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 07:50:32 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "internal/env/env.h"
 #include "internal/repl/repl.h"
 #include "internal/signal/signal.h"
-#include "internal/terminal/terminal.h"
+#include "internal/repl/terminal/terminal.h"
 #include "internal/repl/history/history.h"
 #include "internal/repl/shell/shell.h"
 
