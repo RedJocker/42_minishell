@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/16 04:36:49 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:38:44 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #include "ft_stdio.h"
 #include "internal/default.h"
 #include "internal/env/env.h"
-#include "internal/repl/command/command_internal.h"
-#include "internal/repl/token/token.h"
+#include "internal/repl/shell/command/command_internal.h"
+#include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
 
 t_command	command_build_simple(

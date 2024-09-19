@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/18 01:20:32 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:36:22 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RUNNER_H
 # define RUNNER_H
 
-# include "internal/repl/command/command.h"
+# include "internal/repl/shell/command/command.h"
 
 typedef enum e_builtin
 {

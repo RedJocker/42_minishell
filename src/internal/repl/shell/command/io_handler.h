@@ -6,13 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/13 00:40:10 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:37:45 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef IO_HANDLER_H
 # define IO_HANDLER_H
 
-# include "internal/repl/command/command.h"
+# include "internal/repl/shell/command/command.h"
 
 void	io_handler_set_path(
 			t_io_handler *io,

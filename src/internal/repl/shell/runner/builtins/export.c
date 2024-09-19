@@ -15,8 +15,8 @@
 #include "ft_string.h"
 #include "ft_stdio.h"
 #include "internal/default.h"
-#include "internal/repl/command/command.h"
-#include "internal/repl/command/io_handler.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/io_handler.h"
 
 static int	set_out_len(t_command cmd, char **arg, int *out_fd);
 static void	export_display(t_command cmd, char **arg, int *out_fd);

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 07:38:02 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:36:01 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include <stdbool.h>
 #include "ft_util.h"
 #include "internal/default.h"
-#include "internal/repl/command/command.h"
-#include "internal/repl/parse/parse.h"
-#include "internal/repl/runner/runner.h"
-#include "internal/repl/token/token.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/parse/parse.h"
+#include "internal/repl/shell/runner/runner.h"
+#include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
 #include "internal/repl/shell/shell.h"
 

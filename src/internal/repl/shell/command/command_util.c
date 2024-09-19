@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_internal.h                                   :+:      :+:    :+:   */
+/*   command_util.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 16:25:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/13 03:09:31 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/01 16:56:15 by maurodri          #+#    #+#             */
+/*   Updated: 2024/09/19 08:39:18 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_INTERNAL_H
-# define TOKEN_INTERNAL_H
+#include "internal/repl/shell/command/command_internal.h"
 
-# include "internal/repl/token/token.h"
+int	command_debug_id(void)
+{
+	static int	id = 0;
 
-t_token		*token_classify(char *str_token);
-void		token_destroy(t_token *token);
-t_token		*token_new(t_token_type type, char *content);
-void		token_print(t_token *token);
+	return (id++);
+}
 
-#endif
+int	command_token_precedence(t_token_type token_type)
+{
+	if (token_type == WORD)
+		return (10);
+	else if (token_type == OP_EOF)
+		return (9);
+	else if (token_type == OP_NEWLINE)
+		return (8);
+	else if (token_type == OP_PIPE)
+		return (8);
+	return (11);
+}

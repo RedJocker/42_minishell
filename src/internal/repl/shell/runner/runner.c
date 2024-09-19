@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/18 22:50:11 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:40:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 #include "ft_util.h"
 #include "stringbuilder.h"
 #include "internal/env/envp.h"
-#include "internal/repl/command/command.h"
-#include "internal/repl/command/io_handler.h"
-#include "internal/repl/runner/runner.h"
-#include "internal/repl/runner/builtins/builtins.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/io_handler.h"
+#include "internal/repl/shell/runner/runner.h"
+#include "internal/repl/shell/runner/builtins/builtins.h"
 #include "internal/ft_extension.h"
 
 t_builtin	runner_maybe_cmd_builtin(t_command cmd)

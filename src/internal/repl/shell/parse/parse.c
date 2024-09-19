@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/13 00:55:38 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:39:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
-#include "internal/repl/parse/parse_internal.h"
+#include "internal/repl/shell/parse/parse_internal.h"
 
 int	parse_word_find_len(char *input)
 {

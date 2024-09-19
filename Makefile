@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/19 08:24:49 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/19 09:08:40 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,14 +37,14 @@ SRCS_ENV_DIR                    := $(SRCS_INTERNAL_DIR)env/
 SRCS_ENV_INTERNAL_DIR           := $(SRCS_ENV_DIR)env_internal/
 SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
-SRCS_COMMAND_DIR                := $(SRCS_REPL_DIR)command/
 SRCS_HISTORY_DIR                := $(SRCS_REPL_DIR)history/
-SRCS_PARSE_DIR                  := $(SRCS_REPL_DIR)parse/
-SRCS_RUNNER_DIR                 := $(SRCS_REPL_DIR)runner/
-SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_SHELL_DIR                  := $(SRCS_REPL_DIR)shell/
+SRCS_COMMAND_DIR                := $(SRCS_SHELL_DIR)command/
+SRCS_PARSE_DIR                  := $(SRCS_SHELL_DIR)parse/
+SRCS_RUNNER_DIR                 := $(SRCS_SHELL_DIR)runner/
+SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
+SRCS_TOKEN_DIR                  := $(SRCS_SHELL_DIR)token/
 SRCS_TERMINAL_DIR               := $(SRCS_REPL_DIR)terminal/
-SRCS_TOKEN_DIR                  := $(SRCS_REPL_DIR)token/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/

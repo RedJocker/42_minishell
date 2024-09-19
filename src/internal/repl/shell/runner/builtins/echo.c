@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:55:24 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/13 00:49:51 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:40:11 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include <unistd.h>
 #include "ft_string.h"
 #include "internal/default.h"
-#include "internal/repl/command/command.h"
-#include "internal/repl/command/io_handler.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/io_handler.h"
 
 static int	set_out_len(t_command cmd, char **arg, int *out_fd);
 static void	echo_display(t_command cmd, char **arg, int *out_fd);

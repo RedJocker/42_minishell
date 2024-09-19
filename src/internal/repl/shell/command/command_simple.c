@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/18 20:36:11 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/19 08:39:11 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
-#include "internal/repl/command/command.h"
-#include "internal/repl/command/command_internal.h"
-#include "internal/repl/command/io_handler.h"
-#include "internal/repl/token/token.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/command_internal.h"
+#include "internal/repl/shell/command/io_handler.h"
+#include "internal/repl/shell/token/token.h"
 
 int	token_type_is_redirect(t_token *token)
 {
