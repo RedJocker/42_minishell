@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 05:50:12 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 06:28:20 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "ft_ctype.h"
 #include "ft_util.h"
 #include "internal/default.h"
 #include "internal/env/env.h"
@@ -27,17 +26,27 @@
 #include "internal/repl/token/token.h"
 #include "internal/signal/signal.h"
 #include "internal/terminal/terminal.h"
+#include "internal/repl/history/history.h"
 
-static bool	history_add_input(char *input);
+static void	repl_loop(void);
 
-void	repl_loop(void)
+int	repl(void)
+{
+	signals_initializer();
+	env_initializer();
+	terminal_properties(false);
+	while (WAIT)
+		repl_loop();
+	env_destroy();
+	return (signal_status(DEFAULT, GET));
+}
+
+static void	repl_loop(void)
 {
 	mini()->redisplay_status = true;
 	mini()->input = readline("RedWillShell$ ");
 	mini()->redisplay_status = false;
-	if (history_add_input(mini()->input))
-		add_history(mini()->input);
-	else if (mini()->input)
+	if (!history_add_input(mini()->input))
 		return ;
 	mini()->str_tokens = parse(mini()->input);
 	//ft_strarr_printfd(mini()->str_tokens, 1);
@@ -53,33 +62,9 @@ void	repl_loop(void)
 	terminal_properties(true);
 }
 
-int	repl(void)
-{
-	signals_initializer();
-	env_initializer();
-	terminal_properties(false);
-	while (WAIT)
-		repl_loop();
-	env_destroy();
-	return (signal_status(DEFAULT, GET));
-}
-
 t_repl	*mini(void)
 {
 	static t_repl	mini;
 
 	return (&mini);
-}
-
-static bool	history_add_input(char *input)
-{
-	if (!input)
-		return (false);
-	while (*input)
-	{
-		if (!ft_isspace(*input))
-			return (true);
-		input++;
-	}
-	return (false);
 }

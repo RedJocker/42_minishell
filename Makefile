@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/19 05:53:24 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/19 06:28:50 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,16 +33,17 @@ RESET                           := \033[0m
 
 SRCS_DIR                        := src/
 SRCS_INTERNAL_DIR               := src/internal/
-SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
-SRCS_COMMAND_DIR                := $(SRCS_REPL_DIR)command/
-SRCS_PARSE_DIR                  := $(SRCS_REPL_DIR)parse/
-SRCS_RUNNER_DIR                 := $(SRCS_REPL_DIR)runner/
-SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
-SRCS_TOKEN_DIR                  := $(SRCS_REPL_DIR)token/
-SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
-SRCS_TERMINAL_DIR               := $(SRCS_INTERNAL_DIR)terminal/
 SRCS_ENV_DIR                    := $(SRCS_INTERNAL_DIR)env/
 SRCS_ENV_INTERNAL_DIR           := $(SRCS_ENV_DIR)env_internal/
+SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
+SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
+SRCS_TERMINAL_DIR               := $(SRCS_INTERNAL_DIR)terminal/
+SRCS_COMMAND_DIR                := $(SRCS_REPL_DIR)command/
+SRCS_HISTORY_DIR                := $(SRCS_REPL_DIR)history/
+SRCS_RUNNER_DIR                 := $(SRCS_REPL_DIR)runner/
+SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
+SRCS_PARSE_DIR                  := $(SRCS_REPL_DIR)parse/
+SRCS_TOKEN_DIR                  := $(SRCS_REPL_DIR)token/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
 LIBFTX_DIR                      := lib/libftx/
@@ -66,14 +67,6 @@ LIBS                            := ./lib/libftx/libft.a
 NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
-SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c \
-								   parse_operator.c)
-SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
-SRCS_FILES                      += $(addprefix $(SRCS_TERMINAL_DIR), terminal.c)
-SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
-SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
-SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
-								   export.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), ft_splitfun.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c \
 								   envp.c)
@@ -81,8 +74,9 @@ SRCS_FILES                      += $(addprefix $(SRCS_ENV_INTERNAL_DIR), env_bui
 								   env_destroy.c \
 								   env_manage.c \
 								   env_parse.c)
-SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
-								   tokens.c)
+SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
+SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
+SRCS_FILES                      += $(addprefix $(SRCS_TERMINAL_DIR), terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_build.c \
 								   command_invalid.c \
@@ -90,6 +84,14 @@ SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_util.c \
 								   io_handler.c \
 								   io_handlers.c)
+SRCS_FILES                      += $(addprefix $(SRCS_HISTORY_DIR), history.c)
+SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
+SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
+								   export.c)
+SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c \
+								   parse_operator.c)
+SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
+								   tokens.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
 DEPS                            += $(OBJS:.o=.d)
