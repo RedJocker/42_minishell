@@ -25,6 +25,7 @@ char	**get_envp(void)
 		return (NULL);
 }
 
+// TODO: make **env and add no execve.
 char	*get_bin_path_with_envp(char *bin, char **envp)
 {
 	char	*bin_path;

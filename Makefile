@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/18 00:17:02 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/18 04:55:25 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,8 @@ SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c \
 								   terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
-SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c)
+SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
+								   export.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), ft_splitfun.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c \
 								   envp.c)

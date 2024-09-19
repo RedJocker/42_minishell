@@ -116,6 +116,30 @@ int	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
 	return (2);
 }
 
+t_builtin	runner_maybe_cmd_builtin(t_command cmd)
+{
+	char	*invocation;
+
+	if (cmd->type != CMD_SIMPLE || cmd->simple->cmd_argc <= 0)
+		return (0);
+	invocation = cmd->simple->cmd_argv[0];
+	if (ft_strncmp(invocation, "echo", 5) == 0)
+		return (BUILTIN_ECHO);
+	else if (ft_strncmp(invocation, "export", ft_strlen("export")) == 0)
+		return (BUILTIN_EXPORT);
+	return (NOT_BUILTIN);
+}
+
+int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
+{
+	(void) pids;
+	if (builtin == BUILTIN_ECHO)
+		runner_cmd_builtin_echo(cmd);
+	else if (builtin == BUILTIN_EXPORT)
+		runner_cmd_builtin_export(cmd);
+	return (0);
+}
+
 char	*env_mock(char *s)
 {
 	(void) s;
