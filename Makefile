@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/19 09:08:40 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/19 09:43:20 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
 SRCS_HISTORY_DIR                := $(SRCS_REPL_DIR)history/
 SRCS_SHELL_DIR                  := $(SRCS_REPL_DIR)shell/
+SRCS_SHELL_INTERNAL_DIR         := $(SRCS_SHELL_DIR)shell_internal/
 SRCS_COMMAND_DIR                := $(SRCS_SHELL_DIR)command/
 SRCS_PARSE_DIR                  := $(SRCS_SHELL_DIR)parse/
 SRCS_RUNNER_DIR                 := $(SRCS_SHELL_DIR)runner/
@@ -92,6 +93,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
 								   export.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
+SRCS_FILES                      += $(addprefix $(SRCS_SHELL_INTERNAL_DIR), shell_build.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
 								   tokens.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)

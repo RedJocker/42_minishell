@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/16 05:00:45 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 09:47:32 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ enum e_default_values
 	NULL_BYTE = 1,
 };
 
-typedef enum e_operations t_operations;
+typedef enum e_operations	t_operations;
 enum e_operations
 {
 	SET = 1,

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 07:50:32 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 09:26:00 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ static void	repl_loop(void)
 	shell_set_input();
 	if (!history_add_input(shell_get_input()))
 		return ;
-	shell_build_token();
-	shell_build_command();
-	shell_run_command();
+	shell_command();
 	terminal_properties(true);
 }

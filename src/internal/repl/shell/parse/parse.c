@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 08:39:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 09:36:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,6 @@ char	**parse(char *input)
 		arr = ft_calloc(1, sizeof(char *));
 	else
 		arr = parse_split_input(input);
+	free(input);
 	return (arr);
 }
