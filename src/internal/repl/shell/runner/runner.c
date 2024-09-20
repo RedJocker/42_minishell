@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:40:36 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/20 00:02:14 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 	(void) pids;
 	if (builtin == BUILTIN_ECHO)
 		runner_cmd_builtin_echo(cmd);
+	// TODO: check need for return status_code 
+	exit(0);
 	return (0);
 }
 
