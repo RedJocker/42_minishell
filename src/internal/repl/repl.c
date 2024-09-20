@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 09:26:00 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/19 21:18:59 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void	repl_loop(void);
 
 int	repl(void)
 {
-	signals_initializer();
 	env_initializer();
 	terminal_properties(false);
 	while (WAIT)
