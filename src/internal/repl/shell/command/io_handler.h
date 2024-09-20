@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:37:45 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:38:48 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef IO_HANDLER_H
@@ -29,5 +29,10 @@ void	io_handlers_add_path(
 			t_io_direction io_dir);
 void	io_handler_to_fd(t_io_handler *io, char **out_errmsg);
 int		io_handlers_to_fd(t_arraylist lst_iohandlers, char **out_errmsg);
+void	io_handlers_add_pipe(
+			t_arraylist *lst_iohandlers,
+			int fd,
+			t_io_direction io_dir);
+void	io_handlers_close(t_arraylist lst_iohandlers);
 
 #endif

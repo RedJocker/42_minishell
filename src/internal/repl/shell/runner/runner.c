@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 00:02:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:38:49 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include "internal/repl/shell/runner/runner.h"
 #include "internal/repl/shell/runner/builtins/builtins.h"
 #include "internal/ft_extension.h"
+
+int runner_cmd(t_command cmd, t_arraylist *pids, int last_cmd_status);
 
 t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 {
@@ -70,13 +72,32 @@ int	runner_cmd_simple_execve(t_command cmd)
 	return (status_code);
 }
 
+void command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
+
+// pipe_fds[0] read, pipe_fds[1] write
+int	runner_cmd_pipe(t_command cmd, t_arraylist *pids, int last_status_code)
+{
+	int			status;
+	int			pipe_fds[2];
+
+	ft_assert(cmd->type == CMD_PIPE, "expected only cmd_pipe");
+	status = 0;
+	pipe(pipe_fds);
+	command_add_pipe_io(cmd->pipe->cmd_before, pipe_fds[1], IO_OUT);
+	command_add_pipe_io(cmd->pipe->cmd_after, pipe_fds[0], IO_IN);
+	runner_cmd(cmd->pipe->cmd_before, pids, last_status_code);
+	runner_cmd(cmd->pipe->cmd_after, pids, last_status_code);
+	return (status);
+}
+
+
 int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
 	pid_t		*pid;
 	int			status;
 	char		*err_msg;
 	t_builtin	maybe_builtin;
-	
+
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
 	pid = malloc(sizeof(pid_t));
 	*pid = fork();
@@ -104,6 +125,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	{
 		//TODO: change status to function error handling
 		*pids = ft_arraylist_add(*pids, pid);
+		io_handlers_close(cmd->io_handlers);
 		if (!(*pids))
 			status = 1;
 	}
@@ -237,6 +259,21 @@ void	runner_cmd_expand(t_command cmd, int last_status_code)
 		cmd->simple->cmd_argc++;
 }
 
+int runner_cmd(t_command cmd, t_arraylist *pids, int last_cmd_status)
+{
+	int			status;
+
+	runner_cmd_expand(cmd, last_cmd_status);
+	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
+	if (cmd->type == CMD_SIMPLE)
+		status = runner_cmd_simple(cmd, pids);
+	else if (cmd->type == CMD_INVALID)
+		status = runner_cmd_invalid(cmd, pids);
+	else if (cmd->type == CMD_PIPE)
+		status = runner_cmd_pipe(cmd, pids, last_cmd_status);
+	return (status);
+}
+
 int	runner(t_command cmd, int last_cmd_status)
 {
 	t_arraylist	pids;
@@ -245,12 +282,7 @@ int	runner(t_command cmd, int last_cmd_status)
 	int			i;
 
 	pids = ft_arraylist_new(free);
-	runner_cmd_expand(cmd, last_cmd_status);
-	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
-	if (cmd->type == CMD_SIMPLE)
-		status = runner_cmd_simple(cmd, &pids);
-	else if (cmd->type == CMD_INVALID)
-		status = runner_cmd_invalid(cmd, &pids);
+	status = runner_cmd(cmd, &pids, last_cmd_status);
 	pids_len = ft_arraylist_len(pids);
 	i = -1;
 	while (++i < pids_len - 1)

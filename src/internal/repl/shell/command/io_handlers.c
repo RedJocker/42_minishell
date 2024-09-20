@@ -6,13 +6,15 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:59:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:39:35 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:38:49 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "collection/ft_arraylist.h"
 #include "ft_memlib.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/io_handler.h"
+#include <unistd.h>
 
 int	io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg)
 {
@@ -61,4 +63,33 @@ void	io_handlers_add_path(
 	io = ft_calloc(1, sizeof(t_io_handler));
 	io_handler_set_path(io, path, flags_mode, io_dir);
 	*lst_iohandlers = ft_arraylist_add(*lst_iohandlers, io);
+}
+
+void	io_handlers_add_pipe(
+	t_arraylist *lst_iohandlers,
+	int fd,
+	t_io_direction io_dir)
+{
+	t_io_handler	*io;
+	io = ft_calloc(1, sizeof(t_io_handler));
+	io->type = IO_FD;
+	io->direction = io_dir;
+	io->fd = fd;
+	*lst_iohandlers = ft_arraylist_addat(*lst_iohandlers, io, 0);
+}
+
+void	io_handlers_close(t_arraylist lst_iohandlers)
+{
+	int	len;
+	int	i;
+	t_io_handler *io;
+
+	len = ft_arraylist_len(lst_iohandlers);
+	i = -1;
+	while (++i < len)
+	{
+		io = ft_arraylist_get(lst_iohandlers, i);
+		if (io->type == IO_FD)
+			close(io->fd);
+	}
 }

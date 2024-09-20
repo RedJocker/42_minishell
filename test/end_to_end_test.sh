@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/20 00:03:39 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/20 18:32:43 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
+    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
     if ! [[ $bash_output == $output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
@@ -475,7 +475,7 @@ printf \$?"
 printf \$?"
 }
 
-@test "test builtin echo with one >> redirect at end of command: echo next >> $file \$" {
+@test "test builtin echo with one >> redirect at end of command: echo next >> \$file" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "echo previous > $file
 cat $file
@@ -554,13 +554,13 @@ cat $file1
 "
 }
 
-@test "test builtin echo with >> and > redirects to same file: echo overwrite >> \$file1 > \$file1 " {
+@test "test builtin echo with >> and > redirects to same file: echo write over >> \$file1 > \$file1 " {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "
 echo truncable > $file1
-cat $file1
-echo overwrite >> $file1 > $file1 
-cat $file1
+cat -e $file1
+echo write over >> $file1 > $file1 
+cat -e $file1
 "
 }
 
@@ -680,21 +680,63 @@ e'ch'o hello
 }
 
 @test "test builtin echo with invalid redirect syntax: echo hello >" {
-    file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "echo hello >
 echo \$?"
 }
 
 
 @test "test builtin echo with invalid redirect syntax: echo hello >>" {
-    file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls >>
 echo \$?"
 }
 
-
 @test "test builtin echo with invalid redirect syntax: echo hello <" {
-    file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls <
 echo \$?"
 }
+
+@test "test pipe: ls | wc" {
+    assert_minishell_equal_bash "ls | wc"
+}
+
+@test "test pipe: ls -a | wc" {
+    assert_minishell_equal_bash "ls -a | wc"
+}
+
+@test "test pipe: ls | wc -c" {
+    assert_minishell_equal_bash "ls | wc -c"
+}
+
+@test "test pipe: ls > \$file1 | wc" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls > $file1 | wc"
+}
+
+@test "test pipe: ls < \$file1 | wc" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash " echo ignored > $file1
+ls < $file1 | wc"
+}
+
+@test "test pipe: ls | wc < \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash " echo 123 > $file1
+ls | cat < $file1"
+}
+
+@test "test pipe: ls | wc | cat" {
+    assert_minishell_equal_bash "ls | wc | cat"
+}
+
+@test "test pipe: ls -l | wc | cat" {
+    assert_minishell_equal_bash "ls -l | wc | cat"
+}
+
+@test "test pipe: ls | wc -c | cat" {
+    assert_minishell_equal_bash "ls | wc -c | cat"
+}
+
+@test "test pipe: ls | wc | cat -e" {
+    assert_minishell_equal_bash "ls | wc | cat -e"
+}
+

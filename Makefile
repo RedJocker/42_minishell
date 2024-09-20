@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/19 09:43:20 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/20 15:18:48 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_build.c \
 								   command_invalid.c \
 								   command_simple.c \
+								   command_pipe.c \
 								   command_util.c \
 								   io_handler.c \
 								   io_handlers.c)

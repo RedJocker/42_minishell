@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:40:47 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/20 01:47:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ t_token	*token_classify(char *str_token)
 		return (token_new(OP_REDIRECT_OUT_TRUNC, str_token));
 	else if (ft_strncmp("<", str_token, 2) == 0)
 		return (token_new(OP_REDIRECT_IN, str_token));
+	else if (ft_strncmp("|", str_token, 2) == 0)
+		return (token_new(OP_PIPE, str_token));
 	else if (token_is_invalid_quote(str_token))
 		return (token_new(INVALID, "newline"));
 	return (token_new(WORD, str_token));
