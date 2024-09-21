@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 15:10:43 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:22:58 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,7 @@ int			command_debug_id(void);
 int			command_token_precedence(t_token_type token_type);
 t_command   command_pipe_new(t_command cmd_before, t_command cmd_after);
 void        command_pipe_destroy(t_command cmd);
+t_command	command_eof_new();
+void		command_eof_destroy(t_command cmd);
 
 #endif

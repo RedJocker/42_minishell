@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 16:38:49 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:43:04 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "ft_util.h"
 #include "stringbuilder.h"
 #include "internal/env/envp.h"
+#include "internal/env/env.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/runner.h"
@@ -281,6 +282,13 @@ int	runner(t_command cmd, int last_cmd_status)
 	int			status;
 	int			i;
 
+	if (cmd->type == CMD_EOF)
+	{
+		command_destroy(cmd);
+		ft_putendl("exit");
+		env_destroy();
+		exit(last_cmd_status);
+	}
 	pids = ft_arraylist_new(free);
 	status = runner_cmd(cmd, &pids, last_cmd_status);
 	pids_len = ft_arraylist_len(pids);

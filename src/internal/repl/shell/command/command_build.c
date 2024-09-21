@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 15:18:15 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:33:15 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,8 @@ t_command	command_build(t_token **tokens, int tokens_len)
 {
 	int	cmd_operator_idx;
 
-	// TODO: handle with private builtin to exit printing exit
 	if (tokens_len == 1 && tokens[0]->type == OP_EOF)
-	{
-		tokens_destroy(tokens);
-		printf("exit\n");
-		env_destroy();
-		exit(signal_status(DEFAULT, GET));
-	}
+		return command_eof_new();
 	cmd_operator_idx = command_operator_idx(tokens, tokens_len);
 	if (cmd_operator_idx < 0 || tokens[cmd_operator_idx]->type == OP_NEWLINE)
 		return (command_build_simple(tokens, tokens_len));

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 17:08:42 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:20:51 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ void	command_destroy(t_command cmd)
 {
 	if (cmd->type == CMD_SIMPLE)
 		command_simple_destroy(cmd);
+	else if (cmd->type == CMD_PIPE)
+		command_pipe_destroy(cmd);
+	else if (cmd->type == CMD_EOF)
+		command_eof_destroy(cmd);
 	else if (cmd->type == CMD_INVALID)
 		command_invalid_destroy(cmd);
 }
