@@ -6,13 +6,51 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 16:38:48 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:14:47 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef IO_HANDLER_H
 # define IO_HANDLER_H
 
 # include "internal/repl/shell/command/command.h"
+
+typedef enum e_io_handler_type
+{
+	IO_NONE,
+	IO_FD,
+	IO_PATH,
+	IO_HEREDOC,
+	IO_ERROR,
+}	t_io_handler_type;
+
+typedef enum e_io_direction
+{
+	IO_IN,
+	IO_OUT,
+}	t_io_direction;
+
+typedef struct s_io_handler
+{
+	t_io_handler_type	type;
+	t_io_direction		direction;
+	union
+	{
+		int		fd;
+		struct
+		{
+			char	*path;
+			int		flags;
+			int		mode;
+		};
+		char	*heredoc_limiter;
+		struct
+		{
+			int		error_status;
+			char	*error;
+		};
+	};
+}	t_io_handler;
 
 void	io_handler_set_path(
 			t_io_handler *io,

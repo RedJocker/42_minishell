@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 15:43:03 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:13:55 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,43 +15,6 @@
 
 # include "collection/ft_arraylist.h"
 # include "internal/repl/shell/token/token.h"
-
-typedef enum e_io_handler_type
-{
-	IO_NONE,
-	IO_FD,
-	IO_PATH,
-	IO_HEREDOC,
-	IO_ERROR,
-}	t_io_handler_type;
-
-typedef enum e_io_direction
-{
-	IO_IN,
-	IO_OUT,
-}	t_io_direction;
-
-typedef struct s_io_handler
-{
-	t_io_handler_type	type;
-	t_io_direction		direction;
-	union
-	{
-		int		fd;
-		struct
-		{
-			char	*path;
-			int		flags;
-			int		mode;
-		};
-		char	*heredoc_limiter;
-		struct
-		{
-			int		error_status;
-			char	*error;
-		};
-	};
-}	t_io_handler;
 
 typedef struct s_command	*t_command;
 
@@ -73,8 +36,6 @@ typedef struct s_command_invalid
 {
 	char	*msg;
 }	t_command_invalid;
-
-
 
 typedef enum e_command_type
 {
