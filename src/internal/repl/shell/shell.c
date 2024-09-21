@@ -6,14 +6,16 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 21:46:26 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:29:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "internal/default.h"
 #include <readline/readline.h>
 #include "internal/repl/shell/shell_internal/shell_internal.h"
 #include "internal/repl/shell/shell.h"
 #include "internal/signal/signal.h"
+#include "internal/repl/shell/runner/runner.h"
 
 void	shell_set_input(t_shell *shell)
 {
@@ -26,9 +28,16 @@ void	shell_set_input(t_shell *shell)
 	signals_initializer(should_redisplay);
 }
 
+void	shell_run(t_shell *shell)
+{
+	shell->status = runner(shell->command, shell->status);
+	signal_status(shell->status, SET);
+	command_destroy(shell->command);
+}
+
 void	shell_command(t_shell *shell)
 {
 	shell_build_token(shell);
 	shell_build_command(shell);
-	shell_build_runner(shell);
+	shell_run(shell);
 }

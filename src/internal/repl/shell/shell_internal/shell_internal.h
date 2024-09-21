@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:15:17 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 21:46:00 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:28:24 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,6 @@
 
 void	shell_build_token(t_shell *shell);
 void	shell_build_command(t_shell *shell);
-void	shell_build_runner(t_shell *shell);
+void	shell_run(t_shell *shell);
 
 #endif
