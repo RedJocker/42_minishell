@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 09:15:50 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 09:46:13 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:29:44 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,17 @@
 #include "internal/repl/shell/shell_internal/shell_internal.h"
 #include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
+#include "internal/repl/shell/shell.h"
 
-t_shell	*shell(void)
+void	shell_build_token(t_shell *shell)
 {
-	static t_shell	shell;
-
-	return (&shell);
+	shell->str_tokens = parse(shell->input);
+	shell->tokens = tokens_classify(shell->str_tokens, \
+						&shell->tokens_len);
 }
 
-void	shell_build_token(void)
+void	shell_build_command(t_shell *shell)
 {
-	shell()->str_tokens = parse(shell()->input);
-	shell()->tokens = tokens_classify(shell()->str_tokens, \
-						&shell()->tokens_len);
-}
-
-void	shell_build_command(void)
-{
-	shell()->command = command_build(shell()->tokens, shell()->tokens_len);
-	tokens_destroy(shell()->tokens);
-}
-
-void	shell_build_runner(void)
-{
-	shell()->status = runner(shell()->command, shell()->status);
-	signal_status(shell()->status, SET);
-	command_destroy(shell()->command);
+	shell->command = command_build(shell->tokens, shell->tokens_len);
+	tokens_destroy(shell->tokens);
 }

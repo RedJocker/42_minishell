@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_util.c                                     :+:      :+:    :+:   */
+/*   command_eof.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 16:56:15 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 01:33:51 by maurodri         ###   ########.fr       */
+/*   Created: 2024/09/21 17:18:25 by maurodri          #+#    #+#             */
+/*   Updated: 2024/09/21 17:42:23 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+#include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
+#include "ft_util.h"
+#include "ft_memlib.h"
 
-int	command_debug_id(void)
+t_command	command_eof_new()
 {
-	static int	id = 0;
+	t_command	cmd;
 
-	return (id++);
+	cmd = command_new(CMD_EOF, "CMD_EOF");
+	if (!cmd)
+		return (NULL);
+	return (cmd);
 }
 
-int	command_token_precedence(t_token_type token_type)
+void	command_eof_destroy(t_command cmd)
 {
-	if (token_type == WORD)
-		return (10);
-	else if (token_type == OP_EOF)
-		return (9);
-	else if (token_type == OP_NEWLINE)
-		return (8);
-	else if (token_type == OP_PIPE)
-		return (7);
-	return (11);
+	command_free(cmd);
 }

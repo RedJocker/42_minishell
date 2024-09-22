@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:39:24 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:14:29 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "ft_stdio.h"
 #include "ft_string.h"
 #include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/io_handler.h"
 
 void	io_handler_destroy(t_io_handler *io)
 {
@@ -81,4 +82,5 @@ void	io_handler_redirect(t_io_handler *io, char **out_errmsg)
 		ft_asprintf(out_errmsg, "bash: %s", strerror(errno));
 		io_handler_set_error(io, errno, *out_errmsg);
 	}
+	close(io->fd);
 }

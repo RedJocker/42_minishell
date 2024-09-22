@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/14 05:09:54 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/20 18:32:43 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -131,12 +131,10 @@ pwd"
     assert_minishell_equal_bash /usr/bin/ls
 }
 
-# FIX: if you use different files in the root of the project, this test not working.
 @test "test simple command with one arg: ls -l" {
     assert_minishell_equal_bash ls -l
 }
 
-# FIX: if you use different files in the root of the project, this test not working.
 @test "test simple command with two args: ls -l -a" {
     assert_minishell_equal_bash ls -l -a
 }
@@ -476,3 +474,269 @@ printf \$?"
     assert_minishell_equal_bash "ls <
 printf \$?"
 }
+
+@test "test builtin echo with one >> redirect at end of command: echo next >> \$file" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo previous > $file
+cat $file
+echo next >> $file
+cat $file
+"
+}
+
+@test "test builtin echo with one >> redirect at middle of command: echo hello  >> \$file there" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo previous > $file
+cat $file
+echo hello >> $file there
+cat $file
+"
+}
+
+@test "test builtin echo with one >> redirect at start of command: >> \$file echo next" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo previous > $file
+cat $file
+>> $file echo next
+cat $file
+"
+}
+
+@test "test builtin echo invalid redirect syntax > >>" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo hello > >> $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax >> >" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo hello >> > $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax >> >>" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> >> $file1
+echo \$?"
+}
+
+@test "test builtin echo with >> redirection to file without permission " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "printf protected >> $file1
+chmod 444 $file1
+echo 'should not write' >> $file1
+echo \$?
+cat $file1
+"
+}
+
+@test "test builtin echo with two >> redirects to different files: echo append only file2 >> \$file1 >> \$file2 " {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "
+echo should not append > $file1
+echo should append > $file2
+cat $file1
+cat $file2
+echo append only file2 >> $file1 >> $file2 
+cat $file1
+cat $file2
+"
+}
+
+@test "test builtin echo with two >> redirects to same file: echo append once >> \$file1 >> \$file1 " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+echo 'content ' > $file1
+cat $file1
+echo append once >> $file1 >> $file1 
+cat $file1
+"
+}
+
+@test "test builtin echo with >> and > redirects to same file: echo write over >> \$file1 > \$file1 " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+echo truncable > $file1
+cat -e $file1
+echo write over >> $file1 > $file1 
+cat -e $file1
+"
+}
+
+@test "test builtin echo with > and >> redirects to same file: echo overwrite > \$file1 >> \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+echo truncable > $file1
+cat $file1
+echo overwrite > $file1 >> $file1
+cat $file1
+"
+}
+
+@test "test builtin echo with < redirection at end: echo ignore input < $file1" {
+    file1="$temp_dir/input.txt"
+    assert_minishell_equal_bash "printf input > $file1
+echo ignore input < $file1 
+"
+}
+
+@test "test builtin echo with invalid redirect syntax > <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail > < $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax < >" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail < > $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax >> <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail >> < $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax < >>" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail < >> $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax < <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail < < $file1
+echo \$?"
+}
+
+@test "test builtin echo with < redirection from file without permission " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo protected >> $file1
+chmod 000 $file1
+< $file1 echo should deny
+echo \$?
+"
+}
+
+@test "test builtin echo with < redirection from file that does not exist" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo excludable > $file1
+rm $file1
+< $file1 echo does not exist
+echo \$?
+"
+}
+
+@test "test builtin echo with < and > redirects to same file: echo ignore input and write < \$file1 > \$file1 " {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+echo clonable > $file1
+cat $file1
+echo ignore input and write < $file1 > $file1 
+cat $file1
+"
+}
+
+@test "test builtin echo with < and >> redirects to same file: ls -a \$temp_dir -H < \$file1 >> \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+echo duplicate > $file1
+cat $file1
+echo fail < $file1 >> $file1 
+cat $file1
+"
+}
+
+@test "test builtin echo with single quote on args: echo 'hello'" {
+    assert_minishell_equal_bash "
+echo 'hello'
+"
+}
+
+@test "test builtin echo with single quote on invocation: 'echo' hello" {
+    assert_minishell_equal_bash "
+'echo' hello
+"
+}
+
+@test "test builtin echo with single quote on arg with space: echo 'hello there'" {
+    assert_minishell_equal_bash "
+echo 'hello there' 
+"
+}
+
+@test "test builtin echo with single quote on middle of arg: echo he'll'o" {
+    assert_minishell_equal_bash "
+echo he'll'o 
+"
+}
+
+@test "test builtin echo with single quote on middle of invocation: e'ch'o hello" {
+    assert_minishell_equal_bash "
+e'ch'o hello 
+"
+}
+
+@test "test builtin echo with invalid redirect syntax: echo hello >" {
+    assert_minishell_equal_bash "echo hello >
+echo \$?"
+}
+
+
+@test "test builtin echo with invalid redirect syntax: echo hello >>" {
+    assert_minishell_equal_bash "ls >>
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax: echo hello <" {
+    assert_minishell_equal_bash "ls <
+echo \$?"
+}
+
+@test "test pipe: ls | wc" {
+    assert_minishell_equal_bash "ls | wc"
+}
+
+@test "test pipe: ls -a | wc" {
+    assert_minishell_equal_bash "ls -a | wc"
+}
+
+@test "test pipe: ls | wc -c" {
+    assert_minishell_equal_bash "ls | wc -c"
+}
+
+@test "test pipe: ls > \$file1 | wc" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls > $file1 | wc"
+}
+
+@test "test pipe: ls < \$file1 | wc" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash " echo ignored > $file1
+ls < $file1 | wc"
+}
+
+@test "test pipe: ls | wc < \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash " echo 123 > $file1
+ls | cat < $file1"
+}
+
+@test "test pipe: ls | wc | cat" {
+    assert_minishell_equal_bash "ls | wc | cat"
+}
+
+@test "test pipe: ls -l | wc | cat" {
+    assert_minishell_equal_bash "ls -l | wc | cat"
+}
+
+@test "test pipe: ls | wc -c | cat" {
+    assert_minishell_equal_bash "ls | wc -c | cat"
+}
+
+@test "test pipe: ls | wc | cat -e" {
+    assert_minishell_equal_bash "ls | wc | cat -e"
+}
+

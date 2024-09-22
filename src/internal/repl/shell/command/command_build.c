@@ -6,28 +6,31 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:38:44 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:33:15 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include "ft_stdio.h"
 #include "internal/default.h"
 #include "internal/env/env.h"
+#include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
+#include "ft_memlib.h"
+#include "ft_util.h"
+#include "command_internal.h"
 
 t_command	command_build_simple(
-	t_token **tokens, int fst_token_idx, int endtoken_idx)
+	t_token **tokens, int endtoken_idx)
 {
 	t_command	cmd;
 	char		*err_msg;
 	t_token		*err_tkn;
 	const char	*err_template = "bash: syntax error near unexpected token `%s'";
 
-	if (command_simple_is_invalid(tokens, fst_token_idx, &endtoken_idx))
+	if (command_simple_is_invalid(tokens, &endtoken_idx))
 	{
 		err_tkn = tokens[endtoken_idx];
 		ft_asprintf(&err_msg, err_template, err_tkn->content);
@@ -36,43 +39,44 @@ t_command	command_build_simple(
 		return (cmd);
 	}
 	else
-		return (command_simple_new(tokens, fst_token_idx, endtoken_idx));
+		return (command_simple_new(tokens, endtoken_idx));
+}
+
+t_command command_build_pipe(
+	t_token **tokens, int cmd_operator_idx, int tokens_len)
+{
+	t_command	cmd_before;
+	t_command	cmd_after;
+
+	cmd_before = command_build(tokens, cmd_operator_idx);
+	if (!cmd_before || cmd_before->type == CMD_INVALID)
+		return (cmd_before);
+	cmd_after = command_build(
+		tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
+	if (!cmd_after || cmd_before->type == CMD_INVALID)
+	{
+		free(cmd_before);
+		return (cmd_after);
+	}
+	return command_pipe_new(cmd_before, cmd_after);
 }
 
 t_command	command_build(t_token **tokens, int tokens_len)
 {
 	int	cmd_operator_idx;
 
-	// TODO: handle with private builtin to exit printing exit
 	if (tokens_len == 1 && tokens[0]->type == OP_EOF)
-	{
-		tokens_destroy(tokens);
-		printf("exit\n");
-		env_destroy();
-		exit(signal_status(DEFAULT, GET));
-	}
+		return command_eof_new();
 	cmd_operator_idx = command_operator_idx(tokens, tokens_len);
-	if (tokens[cmd_operator_idx]->type == OP_NEWLINE)
-		return (command_build_simple(tokens, 0, tokens_len));
+	if (cmd_operator_idx < 0 || tokens[cmd_operator_idx]->type == OP_NEWLINE)
+		return (command_build_simple(tokens, tokens_len));
+	else if (tokens[cmd_operator_idx]->type == OP_PIPE)
+		return (command_build_pipe(tokens, cmd_operator_idx, tokens_len));
 	return (command_invalid_new("temporarily unnexpected"));
 }
 
 /*
 
-t_command	command_build_pipe()
-{
-	cmd_before = command_build(tokens, cmd_operator_idx);
-	if (!cmd_before || invalid(cmd_before))
-		return (cmd_before);
-	cmd_after = command_build(
-		tokens + cmd_operator_idx, tokens_len - cmd_operator_idx);
-	if (!cmd_after || invalid(cmd_after))
-	{
-		free(cmd_before);
-		return (cmd_after);
-	}
-	return pipe_new(cmd_before, cmd_after);
-}
 
 Simple()
 Pipe()

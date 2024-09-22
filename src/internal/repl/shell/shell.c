@@ -6,35 +6,38 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 09:35:52 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:29:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "internal/default.h"
 #include <readline/readline.h>
-#include <stdbool.h>
 #include "internal/repl/shell/shell_internal/shell_internal.h"
 #include "internal/repl/shell/shell.h"
+#include "internal/signal/signal.h"
+#include "internal/repl/shell/runner/runner.h"
 
-bool	shell_get_redisplay_status(void)
+void	shell_set_input(t_shell *shell)
 {
-	return (shell()->redisplay_status);
+	int	should_redisplay;
+
+	should_redisplay = 1;
+	signals_initializer(should_redisplay);
+	shell->input = readline("RedWillShell$ ");
+	should_redisplay = 0;
+	signals_initializer(should_redisplay);
 }
 
-char	*shell_get_input(void)
+void	shell_run(t_shell *shell)
 {
-	return (shell()->input);
+	shell->status = runner(shell->command, shell->status);
+	signal_status(shell->status, SET);
+	command_destroy(shell->command);
 }
 
-void	shell_set_input(void)
+void	shell_command(t_shell *shell)
 {
-	shell()->redisplay_status = true;
-	shell()->input = readline("RedWillShell$ ");
-	shell()->redisplay_status = false;
-}
-
-void	shell_command(void)
-{
-	shell_build_token();
-	shell_build_command();
-	shell_build_runner();
+	shell_build_token(shell);
+	shell_build_command(shell);
+	shell_run(shell);
 }
