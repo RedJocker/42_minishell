@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:32:34 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 10:13:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/23 10:49:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_shell
 {
 	t_command		command;
 	t_token			**tokens;
-	bool			redisplay_status;
 	sig_atomic_t	status;
 	int				tokens_len;
 	char			**str_tokens;
