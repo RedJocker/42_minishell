@@ -6,10 +6,11 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/21 17:43:04 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/23 09:50:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include "collection/ft_arraylist.h"
@@ -42,7 +43,7 @@ t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 	return (NOT_BUILTIN);
 }
 
-int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
+sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 {
 	(void) pids;
 	if (builtin == BUILTIN_ECHO)
@@ -52,7 +53,7 @@ int	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
 	return (0);
 }
 
-void runner_cmd_simple_panic(t_command cmd, char *msg, int status_code)
+void runner_cmd_simple_panic(t_command cmd, char *msg, sig_atomic_t status_code)
 {
 
 	ft_puterrl(msg);
@@ -61,10 +62,10 @@ void runner_cmd_simple_panic(t_command cmd, char *msg, int status_code)
 	exit(status_code);
 }
 
-int	runner_cmd_simple_execve(t_command cmd)
+sig_atomic_t	runner_cmd_simple_execve(t_command cmd)
 {
-	int		status_code;
-	char	*err_msg;
+	sig_atomic_t	status_code;
+	char			*err_msg;
 
 	execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, cmd->simple->cmd_envp);
 	status_code = 1;
@@ -76,10 +77,10 @@ int	runner_cmd_simple_execve(t_command cmd)
 void command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
 
 // pipe_fds[0] read, pipe_fds[1] write
-int	runner_cmd_pipe(t_command cmd, t_arraylist *pids, int last_status_code)
+sig_atomic_t	runner_cmd_pipe(t_command cmd, t_arraylist *pids, sig_atomic_t last_status_code)
 {
-	int			status;
-	int			pipe_fds[2];
+	sig_atomic_t	status;
+	int				pipe_fds[2];
 
 	ft_assert(cmd->type == CMD_PIPE, "expected only cmd_pipe");
 	status = 0;
@@ -92,12 +93,12 @@ int	runner_cmd_pipe(t_command cmd, t_arraylist *pids, int last_status_code)
 }
 
 
-int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
+sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
-	pid_t		*pid;
-	int			status;
-	char		*err_msg;
-	t_builtin	maybe_builtin;
+	pid_t			*pid;
+	sig_atomic_t	status;
+	char			*err_msg;
+	t_builtin		maybe_builtin;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
 	pid = malloc(sizeof(pid_t));
@@ -133,7 +134,7 @@ int	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	return (status);
 }
 
-int	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
+sig_atomic_t	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
 {
 	(void) pids;
 	ft_assert(cmd->type == CMD_INVALID, "expected only invalid");
@@ -147,8 +148,8 @@ char	*env_mock(char *s)
 	return (ft_strdup("abc def"));
 }
 
-int	runner_cmd_expand_dollar(
-	char *str, t_stringbuilder *builder, int last_status_code)
+int	runner_cmd_expand_dollar(char *str, t_stringbuilder *builder, \
+		sig_atomic_t last_status_code)
 {
 	int		i;
 	char	*var_name;
@@ -179,11 +180,8 @@ int	runner_cmd_expand_dollar(
 	return (i - 1);
 }
 
-int	runner_cmd_expand_dollar_split(
-	char *str,
-	t_stringbuilder *builder,
-	t_arraylist *lst_new_args,
-	int last_status_code)
+int	runner_cmd_expand_dollar_split(char *str, t_stringbuilder *builder, \
+		t_arraylist *lst_new_args, sig_atomic_t last_status_code)
 {
 	int		i;
 	char	**split;
@@ -203,8 +201,8 @@ int	runner_cmd_expand_dollar_split(
 	return (i);
 }
 
-void	runner_cmd_expand_str(
-	char *str, int last_status_code, t_arraylist *lst_new_args)
+void	runner_cmd_expand_str(char *str, sig_atomic_t last_status_code, \
+			t_arraylist *lst_new_args)
 {
 	t_stringbuilder	builder;
 	char			*res;
@@ -239,7 +237,7 @@ void	runner_cmd_expand_str(
 	*lst_new_args = (ft_arraylist_add(*lst_new_args, res));
 }
 
-void	runner_cmd_expand(t_command cmd, int last_status_code)
+void	runner_cmd_expand(t_command cmd, sig_atomic_t last_status_code)
 {
 	t_arraylist	lst_new_args;
 	int			i;
@@ -260,9 +258,9 @@ void	runner_cmd_expand(t_command cmd, int last_status_code)
 		cmd->simple->cmd_argc++;
 }
 
-int runner_cmd(t_command cmd, t_arraylist *pids, int last_cmd_status)
+sig_atomic_t runner_cmd(t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_status)
 {
-	int			status;
+	sig_atomic_t	status;
 
 	runner_cmd_expand(cmd, last_cmd_status);
 	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
@@ -275,12 +273,12 @@ int runner_cmd(t_command cmd, t_arraylist *pids, int last_cmd_status)
 	return (status);
 }
 
-int	runner(t_command cmd, int last_cmd_status)
+sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 {
-	t_arraylist	pids;
-	int			pids_len;
-	int			status;
-	int			i;
+	t_arraylist		pids;
+	int				pids_len;
+	sig_atomic_t	status;
+	int				i;
 
 	if (cmd->type == CMD_EOF)
 	{

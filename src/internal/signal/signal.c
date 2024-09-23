@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 21:15:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/23 10:15:58 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,48 +16,27 @@
 #include "ft_memlib.h"
 #include "ft_stdio.h"
 #include "internal/default.h"
-#include "internal/repl/shell/shell.h"
 #include "internal/signal/signal.h"
+#include "internal/signal/signal_internal/signal_internal.h"
 
-static void	sigint_handler(int signal, int should_redisplay)
+static void	signals_initializer_redisplay(struct sigaction *sa_int);
+static void	signals_initializer_no_redisplay(struct sigaction *sa_int);
+
+void	signals_initializer(bool redisplay)
 {
-	signal_status(SIG_BASE + signal, SET);
-	ft_putstr_fd("\n", STDIN_FILENO);
-	rl_on_new_line();
-	rl_replace_line("", DEFAULT);
-	if (should_redisplay)
-		rl_redisplay();
-}
+	struct sigaction	sa_int;
+	struct sigaction	sa_quit;
 
-static void	sigint_handler_redisplay(int signal)
-{
-	int	should_redisplay;
-
-	should_redisplay = 1;
-	sigint_handler(signal, should_redisplay);
-}
-
-static void sigint_handler_noredisplay(int signal)
-{
-	int	should_redisplay;
-
-	should_redisplay = 0;
-	sigint_handler(signal, should_redisplay);
-}
-
-
-void	signals_initializer(int should_redisplay)
-{
-	struct sigaction	sa_shell;
-
-	ft_memset(&sa_shell, DEFAULT, sizeof(sa_shell));
-	sa_shell.sa_flags = SA_RESTART;
-	if (should_redisplay)
-		sa_shell.sa_handler = sigint_handler_redisplay;
+	ft_memset(&sa_int, DEFAULT, sizeof(sa_int));
+	ft_memset(&sa_quit, DEFAULT, sizeof(sa_quit));
+	sa_quit.sa_flags = SA_RESTART;
+	sa_quit.sa_handler = SIG_IGN;
+	if (redisplay)
+		signals_initializer_redisplay(&sa_int);
 	else
-		sa_shell.sa_handler = sigint_handler_noredisplay;
-	if (sigaction(SIGINT, &sa_shell, NULL) == FAIL
-		|| signal(SIGQUIT, SIG_IGN) == SIG_ERR)
+		signals_initializer_no_redisplay(&sa_int);
+	if (sigaction(SIGINT, &sa_int, NULL) == FAIL
+		|| sigaction(SIGQUIT, &sa_quit, NULL) == FAIL)
 	{
 		ft_putendl_fd("shell: failed signal: fail to set signals", \
 			STDERR_FILENO);
@@ -65,11 +44,23 @@ void	signals_initializer(int should_redisplay)
 	}
 }
 
-int	signal_status(int value, int type)
+sig_atomic_t	signal_status(sig_atomic_t value, t_operations type)
 {
-	static volatile int	signal_status;
+	static volatile sig_atomic_t	signal_status;
 
 	if (type == SET)
 		signal_status = value;
 	return (signal_status);
+}
+
+static void	signals_initializer_redisplay(struct sigaction *sa_int)
+{
+	sa_int->sa_flags = SA_RESTART;
+	sa_int->sa_handler = sigint_handler_redisplay;
+}
+
+static void	signals_initializer_no_redisplay(struct sigaction *sa_int)
+{
+	sa_int->sa_flags = SA_RESTART;
+	sa_int->sa_handler = sigint_handler_no_redisplay;
 }

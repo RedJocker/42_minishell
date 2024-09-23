@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_internal.h                                   :+:      :+:    :+:   */
+/*   signal_internal.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/19 09:15:17 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/21 17:28:24 by maurodri         ###   ########.fr       */
+/*   Created: 2024/09/22 09:06:48 by dande-je          #+#    #+#             */
+/*   Updated: 2024/09/23 08:13:20 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHELL_INTERNAL_H
-# define SHELL_INTERNAL_H
+#ifndef SIGNAL_INTERNAL_H
+# define SIGNAL_INTERNAL_H
 
 # include <stdbool.h>
-# include "internal/repl/shell/command/command.h"
-# include "internal/repl/shell/token/token.h"
-# include "internal/repl/shell/shell.h"
 
-void	shell_build_token(t_shell *shell);
-void	shell_build_command(t_shell *shell);
-void	shell_run(t_shell *shell);
+void	sigint_handler(int signal, bool redisplay);
+void	sigint_handler_redisplay(int signal);
+void	sigint_handler_no_redisplay(int signal);
 
 #endif

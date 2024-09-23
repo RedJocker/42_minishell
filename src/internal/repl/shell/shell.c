@@ -6,38 +6,40 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/21 17:29:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/23 10:12:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal/default.h"
 #include <readline/readline.h>
-#include "internal/repl/shell/shell_internal/shell_internal.h"
-#include "internal/repl/shell/shell.h"
-#include "internal/signal/signal.h"
+#include "internal/default.h"
+#include "internal/repl/shell/parse/parse.h"
 #include "internal/repl/shell/runner/runner.h"
+#include "internal/repl/shell/shell.h"
+#include "internal/repl/shell/token/token.h"
+#include "internal/signal/signal.h"
+
+t_shell	*shell(void)
+{
+	static t_shell	shell;
+
+	return (&shell);
+}
 
 void	shell_set_input(t_shell *shell)
 {
-	int	should_redisplay;
-
-	should_redisplay = 1;
-	signals_initializer(should_redisplay);
+	signals_initializer(true);
 	shell->input = readline("RedWillShell$ ");
-	should_redisplay = 0;
-	signals_initializer(should_redisplay);
-}
-
-void	shell_run(t_shell *shell)
-{
-	shell->status = runner(shell->command, shell->status);
-	signal_status(shell->status, SET);
-	command_destroy(shell->command);
+	signals_initializer(false);
 }
 
 void	shell_command(t_shell *shell)
 {
-	shell_build_token(shell);
-	shell_build_command(shell);
-	shell_run(shell);
+	shell->str_tokens = parse(shell->input);
+	shell->tokens = tokens_classify(shell->str_tokens, \
+						&shell->tokens_len);
+	shell->command = command_build(shell->tokens, shell->tokens_len);
+	tokens_destroy(shell->tokens);
+	shell->status = runner(shell->command, shell->status);
+	signal_status(shell->status, SET);
+	command_destroy(shell->command);
 }

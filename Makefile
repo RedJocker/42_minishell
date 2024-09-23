@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/21 17:22:31 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/23 10:16:42 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,9 +37,9 @@ SRCS_ENV_DIR                    := $(SRCS_INTERNAL_DIR)env/
 SRCS_ENV_INTERNAL_DIR           := $(SRCS_ENV_DIR)env_internal/
 SRCS_REPL_DIR                   := $(SRCS_INTERNAL_DIR)repl/
 SRCS_SIGNAL_DIR                 := $(SRCS_INTERNAL_DIR)signal/
+SRCS_SIGNAL_INTERNAL_DIR        := $(SRCS_SIGNAL_DIR)signal_internal/
 SRCS_HISTORY_DIR                := $(SRCS_REPL_DIR)history/
 SRCS_SHELL_DIR                  := $(SRCS_REPL_DIR)shell/
-SRCS_SHELL_INTERNAL_DIR         := $(SRCS_SHELL_DIR)shell_internal/
 SRCS_COMMAND_DIR                := $(SRCS_SHELL_DIR)command/
 SRCS_PARSE_DIR                  := $(SRCS_SHELL_DIR)parse/
 SRCS_RUNNER_DIR                 := $(SRCS_SHELL_DIR)runner/
@@ -78,6 +78,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_ENV_INTERNAL_DIR), env_bui
 								   env_parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
+SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_INTERNAL_DIR), signal_handler.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TERMINAL_DIR), terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_build.c \
@@ -95,7 +96,6 @@ SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
 								   export.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
-SRCS_FILES                      += $(addprefix $(SRCS_SHELL_INTERNAL_DIR), shell_build.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
 								   tokens.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
