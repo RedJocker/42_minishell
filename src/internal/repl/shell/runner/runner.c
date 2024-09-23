@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/23 09:50:36 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/23 11:31:35 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "ft_stdio.h"
 #include "ft_string.h"
 #include "ft_util.h"
+#include "internal/default.h"
 #include "stringbuilder.h"
 #include "internal/env/envp.h"
 #include "internal/env/env.h"
@@ -262,6 +263,7 @@ sig_atomic_t runner_cmd(t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_
 {
 	sig_atomic_t	status;
 
+	status = DEFAULT;
 	runner_cmd_expand(cmd, last_cmd_status);
 	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
 	if (cmd->type == CMD_SIMPLE)
