@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/23 22:27:23 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/24 04:35:43 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,8 +92,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   io_handlers.c)
 SRCS_FILES                      += $(addprefix $(SRCS_HISTORY_DIR), history.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
-SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse_is_operator.c \
-								   parse_operator.c \
+SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse_operator.c \
 								   parse_word.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \

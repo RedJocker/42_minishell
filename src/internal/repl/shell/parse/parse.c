@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 12:44:24 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/24 04:24:48 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*parse_input_chr(char **input)
 static char	**parse_split_input(char *input)
 {
 	t_arraylist	lst_str;
-	char		*input_chr;
+	char		*chr;
 	char		**str_tokens;
 
 	lst_str = ft_arraylist_new(free);
@@ -50,16 +50,16 @@ static char	**parse_split_input(char *input)
 		return (NULL);
 	while (WAIT)
 	{
-		input_chr = parse_input_chr(&input);
-		if (!input_chr)
+		chr = parse_input_chr(&input);
+		if (!chr)
 		{
 			ft_arraylist_destroy(lst_str);
 			return (NULL);
 		}
-		lst_str = ft_arraylist_add(lst_str, input_chr);
+		lst_str = ft_arraylist_add(lst_str, chr);
 		if (!lst_str)
 			return (NULL);
-		if (ft_strncmp(input_chr, "\n", CHAR_BYTE) == 0)
+		if (ft_strncmp(chr, "\n", CHAR_BYTE) == DEFAULT)
 			break ;
 	}
 	str_tokens = ft_lststr_to_arrstr(lst_str);
