@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 10:14:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:23:07 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,20 @@
 #include "internal/repl/terminal/terminal.h"
 #include "internal/repl/history/history.h"
 #include "internal/repl/shell/shell.h"
+#include "ft_memlib.h"
+
 
 static void	repl_loop(t_shell *shell);
 
 int	repl(void)
 {
+	t_shell	shell;
+
+	ft_bzero(&shell, sizeof(t_shell));
 	env_initializer();
 	terminal_properties(false);
 	while (WAIT)
-		repl_loop(shell());
+		repl_loop(&shell);
 	env_destroy();
 	return (signal_status(DEFAULT, GET));
 }

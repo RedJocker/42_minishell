@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 11:24:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:17:42 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@
 #include "internal/repl/shell/shell.h"
 #include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
-
-t_shell	*shell(void)
-{
-	static t_shell	shell;
-
-	return (&shell);
-}
 
 void	shell_set_input(t_shell *shell)
 {
