@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 20:40:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/24 20:46:25 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:56:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,6 @@
 # include "internal/repl/shell/command/command.h"
 # include <signal.h>
 
-void	runner_cmd_expand(t_command cmd, sig_atomic_t last_status_code);
+void	expand(t_command cmd, sig_atomic_t last_status_code);
 
 #endif

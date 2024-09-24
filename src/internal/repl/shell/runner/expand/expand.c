@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 20:38:29 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/24 20:49:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:57:47 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	*env_mock(char *s)
 	return (ft_strdup("abc def"));
 }
 
-static int	runner_cmd_expand_dollar(char *str, t_stringbuilder *builder, \
+static int	expand_dollar(char *str, t_stringbuilder *builder, \
 		sig_atomic_t last_status_code)
 {
 	int		i;
@@ -57,7 +57,7 @@ static int	runner_cmd_expand_dollar(char *str, t_stringbuilder *builder, \
 	return (i - 1);
 }
 
-static int	runner_cmd_expand_dollar_split(char *str, t_stringbuilder *builder, \
+static int	expand_dollar_split(char *str, t_stringbuilder *builder, \
 		t_arraylist *lst_new_args, sig_atomic_t last_status_code)
 {
 	int		i;
@@ -65,7 +65,7 @@ static int	runner_cmd_expand_dollar_split(char *str, t_stringbuilder *builder, \
 	char	*temp;
 	int		j;
 
-	i = runner_cmd_expand_dollar(str, builder, last_status_code);
+	i = expand_dollar(str, builder, last_status_code);
 	temp = stringbuilder_build(*builder);
 	split = ft_splitfun(temp, (t_pred_int) ft_isspace);
 	free(temp);
@@ -78,7 +78,7 @@ static int	runner_cmd_expand_dollar_split(char *str, t_stringbuilder *builder, \
 	return (i);
 }
 
-static void	runner_cmd_expand_str(char *str, sig_atomic_t last_status_code, \
+static void	expand_str(char *str, sig_atomic_t last_status_code, \
 			t_arraylist *lst_new_args)
 {
 	t_stringbuilder	builder;
@@ -94,7 +94,7 @@ static void	runner_cmd_expand_str(char *str, sig_atomic_t last_status_code, \
 		if (open_quote == 0)
 		{
 			if (str[i] == '$')
-				i += runner_cmd_expand_dollar_split(str + i, &builder, lst_new_args, last_status_code);
+				i += expand_dollar_split(str + i, &builder, lst_new_args, last_status_code);
 			else if (str[i] == '\'' || str[i] == '\"')
 				open_quote = str[i];
 			else
@@ -105,7 +105,7 @@ static void	runner_cmd_expand_str(char *str, sig_atomic_t last_status_code, \
 			if (str[i] == open_quote)
 				open_quote = 0;
 			else if (open_quote == '\"' && str[i] == '$')
-				i += runner_cmd_expand_dollar(str + i, &builder, last_status_code);
+				i += expand_dollar(str + i, &builder, last_status_code);
 			else
 				builder = stringbuilder_addchar(builder, str[i]);
 		}
@@ -114,7 +114,7 @@ static void	runner_cmd_expand_str(char *str, sig_atomic_t last_status_code, \
 	*lst_new_args = (ft_arraylist_add(*lst_new_args, res));
 }
 
-void	runner_cmd_expand(t_command cmd, sig_atomic_t last_status_code)
+void	expand(t_command cmd, sig_atomic_t last_status_code)
 {
 	t_arraylist	lst_new_args;
 	int			i;
@@ -124,7 +124,7 @@ void	runner_cmd_expand(t_command cmd, sig_atomic_t last_status_code)
 	lst_new_args = ft_arraylist_new(free);
 	i = -1;
 	while (cmd->simple->cmd_argv[++i])
-		runner_cmd_expand_str(
+		expand_str(
 			cmd->simple->cmd_argv[i], last_status_code, &lst_new_args);
 	// TODO: improve allocation error handling
 	ft_strarr_free(cmd->simple->cmd_argv);

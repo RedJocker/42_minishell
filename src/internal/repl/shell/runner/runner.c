@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/24 20:51:21 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:56:21 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ sig_atomic_t runner_cmd(t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_
 	sig_atomic_t	status;
 
 	status = DEFAULT;
-	runner_cmd_expand(cmd, last_cmd_status);
+	expand(cmd, last_cmd_status);
 	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
 	if (cmd->type == CMD_SIMPLE)
 		status = runner_cmd_simple(cmd, pids);
