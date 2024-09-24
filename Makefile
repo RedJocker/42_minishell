@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/23 10:16:42 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/23 22:27:23 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS_HISTORY_DIR                := $(SRCS_REPL_DIR)history/
 SRCS_SHELL_DIR                  := $(SRCS_REPL_DIR)shell/
 SRCS_COMMAND_DIR                := $(SRCS_SHELL_DIR)command/
 SRCS_PARSE_DIR                  := $(SRCS_SHELL_DIR)parse/
+SRCS_PARSE_INTERNAL_DIR         := $(SRCS_PARSE_DIR)parse_internal/
 SRCS_RUNNER_DIR                 := $(SRCS_SHELL_DIR)runner/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_SHELL_DIR)token/
@@ -90,8 +91,10 @@ SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   io_handler.c \
 								   io_handlers.c)
 SRCS_FILES                      += $(addprefix $(SRCS_HISTORY_DIR), history.c)
-SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c \
-								   parse_operator.c)
+SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
+SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse_is_operator.c \
+								   parse_operator.c \
+								   parse_word.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
 								   export.c)

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 21:17:27 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 09:36:39 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/23 12:44:24 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,97 +15,66 @@
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
-#include "internal/repl/shell/parse/parse_internal.h"
+#include "internal/default.h"
+#include "internal/repl/shell/parse/parse_internal/parse_internal.h"
 
-int	parse_word_find_len(char *input)
+static char	*parse_input_chr(char **input)
 {
-	int	l;
+	char	chr;
 
-	l = 0;
-	// TODO: improve len count on quoted cases
-	while (1)
+	chr = input[DEFAULT][DEFAULT];
+	while (chr == '\0' || ft_isspace(chr))
 	{
-		if (input[l] == '\0'
-			|| parse_is_operator(input[l]) || ft_isspace(input[l]))
-			return (l);
-		else if (input[l] == '"')
-			while (input[++l] && input[l] != '"')
-				;
-		else if (input[l] == '\'')
-			while (input[++l] && input[l] != '\'')
-				;
-		else if (input[l] == '\\')
-			l++;
-		l += input[l] != '\0';
+		if (chr == '\0' || chr == '\n')
+		{
+			*input = (*input) + CHAR_BYTE;
+			return (ft_strdup("\n"));
+		}
+		*input = (*input) + CHAR_BYTE;
+		chr = input[DEFAULT][DEFAULT];
 	}
-}
-
-char	*parse_word(char **input)
-{
-	int		word_len;
-	char	*word;
-
-	word_len = parse_word_find_len(*input);
-	word = ft_calloc(word_len + 1, sizeof(char));
-	ft_strlcpy(word, *input, word_len + 1);
-	*input = *input + word_len;
-	return (word);
-}
-
-char	*parse_any(char **input)
-{
-	char	curr;
-
-	curr = input[0][0];
-	while (curr == '\0' || ft_isspace(curr))
-	{
-		if (curr == '\0' || curr == '\n')
-			return (parse_operator_newline(input));
-		*input = (*input) + 1;
-		curr = input[0][0];
-	}
-	if (parse_is_operator(input[0][0]))
+	if (parse_is_operator(input[DEFAULT][DEFAULT]))
 		return (parse_operator(input));
 	else
 		return (parse_word(input));
 }
 
-char	**parse_split_input(char *input)
+static char	**parse_split_input(char *input)
 {
-	t_arraylist	lst_pieces;
-	char		*input_piece;
+	t_arraylist	lst_str;
+	char		*input_chr;
 	char		**str_tokens;
 
-	lst_pieces = ft_arraylist_new(free);
-	if (!lst_pieces)
+	lst_str = ft_arraylist_new(free);
+	if (!lst_str)
 		return (NULL);
-	while (1)
+	while (WAIT)
 	{
-		input_piece = parse_any(&input);
-		if (!input_piece)
+		input_chr = parse_input_chr(&input);
+		if (!input_chr)
 		{
-			ft_arraylist_destroy(lst_pieces);
+			ft_arraylist_destroy(lst_str);
 			return (NULL);
 		}
-		lst_pieces = ft_arraylist_add(lst_pieces, input_piece);
-		if (!lst_pieces)
+		lst_str = ft_arraylist_add(lst_str, input_chr);
+		if (!lst_str)
 			return (NULL);
-		if (ft_strncmp(input_piece, "\n", 1) == 0)
+		if (ft_strncmp(input_chr, "\n", CHAR_BYTE) == 0)
 			break ;
 	}
-	str_tokens = ft_lststr_to_arrstr(lst_pieces);
-	ft_arraylist_destroy(lst_pieces);
+	str_tokens = ft_lststr_to_arrstr(lst_str);
+	ft_arraylist_destroy(lst_str);
 	return (str_tokens);
 }
 
-char	**parse(char *input)
+char	**parse_input(char *input)
 {
-	char	**arr;
+	char	**str_tokens;
 
 	if (!input)
-		arr = ft_calloc(1, sizeof(char *));
+		str_tokens = ft_calloc(CHAR_BYTE, sizeof(char *));
 	else
-		arr = parse_split_input(input);
+		str_tokens = parse_split_input(input);
 	free(input);
-	return (arr);
+	return (str_tokens);
 }

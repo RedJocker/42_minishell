@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   parse_is_operator.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/16 21:17:23 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 11:24:10 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/23 12:36:49 by dande-je          #+#    #+#             */
+/*   Updated: 2024/09/23 12:46:56 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#include <stdbool.h>
 
-char	**parse_input(char *input);
-
-#endif
+bool	parse_is_operator(char chr)
+{
+	return (chr == '>' || chr == '<' || chr == '(' \
+		|| chr == ')' || chr == '&' || chr == '{' \
+		|| chr == '|');
+}

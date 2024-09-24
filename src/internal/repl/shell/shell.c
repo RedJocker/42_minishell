@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 10:12:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/23 11:24:03 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	shell_set_input(t_shell *shell)
 
 void	shell_command(t_shell *shell)
 {
-	shell->str_tokens = parse(shell->input);
+	shell->str_tokens = parse_input(shell->input);
 	shell->tokens = tokens_classify(shell->str_tokens, \
 						&shell->tokens_len);
 	shell->command = command_build(shell->tokens, shell->tokens_len);

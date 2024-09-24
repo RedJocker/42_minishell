@@ -6,30 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 17:06:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:39:52 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/23 12:34:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_assert.h"
 #include "ft_string.h"
-#include "internal/repl/shell/parse/parse_internal.h"
+#include "internal/repl/shell/parse/parse_internal/parse_internal.h"
 
-char	*parse_operator_newline(char **input)
-{
-	*input = (*input) + 1;
-	return (ft_strdup("\n"));
-}
-
-int	parse_is_operator(char maybe_operator)
-{
-	return (maybe_operator == '>'
-		|| maybe_operator == '<'
-		|| maybe_operator == '('
-		|| maybe_operator == ')'
-		|| maybe_operator == '&'
-		|| maybe_operator == '{'
-		|| maybe_operator == '|');
-}
 
 char	*parse_operator_redirect_out(char **input)
 {
