@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/24 20:23:07 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/24 20:53:12 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include "internal/repl/history/history.h"
 #include "internal/repl/shell/shell.h"
 #include "ft_memlib.h"
-
 
 static void	repl_loop(t_shell *shell);
 
