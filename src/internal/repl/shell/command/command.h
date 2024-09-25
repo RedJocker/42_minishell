@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/21 17:17:22 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:41:36 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ struct s_command
 	union
 	{
 		t_command_simple	*simple;
-		t_command_invalid   *invalid;
+		t_command_invalid	*invalid;
 		t_command_pipe		*pipe;
 	};
 };

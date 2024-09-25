@@ -1,12 +1,12 @@
-
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/18 00:53:20 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/18 03:07:49 by dande-je         ###   ########.fr       */
+/*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
+/*   Updated: 2024/09/25 00:48:10 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,15 @@ static int	set_out_len(t_command cmd, char **arg, int *out_fd)
 		if (!io_handlers_to_fd(cmd->io_handlers, arg))
 			return (FAIL);
 		*out_fd = ((t_io_handler *)
-			ft_arraylist_get(cmd->io_handlers, out_len - 1))->fd; // TODO:Verifiy which name can be used to remove magic number.
+				ft_arraylist_get(cmd->io_handlers, out_len - 1))->fd;
 	}
 	return (true);
 }
 
 static void	export_display(t_command cmd, char **arg, int *out_fd)
 {
-	char *argc_value;
+	char	*argc_value;
+
 	ft_asprintf(&argc_value, "%d", cmd->simple->cmd_argc);
 	write(*out_fd, "argc - ", ft_strlen("argc - "));
 	write(*out_fd, argc_value, ft_strlen(argc_value));

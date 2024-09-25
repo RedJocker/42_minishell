@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/24 20:56:21 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:44:49 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 #include "internal/default.h"
 #include "internal/env/envp.h"
 #include "internal/env/env.h"
+#include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/runner.h"
 #include "internal/repl/shell/runner/builtins/builtins.h"
 #include "internal/repl/shell/runner/expand/expand.h"
 
-int runner_cmd(t_command cmd, t_arraylist *pids, int last_cmd_status);
+int	runner_cmd(t_command cmd, t_arraylist *pids, int last_cmd_status);
 
 t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 {
@@ -36,7 +37,8 @@ t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 	return (NOT_BUILTIN);
 }
 
-sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *pids)
+sig_atomic_t	runner_cmd_builtin(
+	t_builtin builtin, t_command cmd, t_arraylist *pids)
 {
 	(void) pids;
 	if (builtin == BUILTIN_ECHO)
@@ -46,9 +48,8 @@ sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, t_arraylist *p
 	return (0);
 }
 
-void runner_cmd_simple_panic(t_command cmd, char *msg, sig_atomic_t status_code)
+void	runner_cmd_simple_panic(t_command cmd, char *msg, sig_atomic_t status_code)
 {
-
 	ft_puterrl(msg);
 	free(msg);
 	command_destroy(cmd);
@@ -67,8 +68,6 @@ sig_atomic_t	runner_cmd_simple_execve(t_command cmd)
 	return (status_code);
 }
 
-void command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
-
 // pipe_fds[0] read, pipe_fds[1] write
 sig_atomic_t	runner_cmd_pipe(t_command cmd, t_arraylist *pids, sig_atomic_t last_status_code)
 {
@@ -84,7 +83,6 @@ sig_atomic_t	runner_cmd_pipe(t_command cmd, t_arraylist *pids, sig_atomic_t last
 	runner_cmd(cmd->pipe->cmd_after, pids, last_status_code);
 	return (status);
 }
-
 
 sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 {
@@ -135,7 +133,8 @@ sig_atomic_t	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
 	return (2);
 }
 
-sig_atomic_t runner_cmd(t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_status)
+sig_atomic_t	runner_cmd(
+	t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_status)
 {
 	sig_atomic_t	status;
 

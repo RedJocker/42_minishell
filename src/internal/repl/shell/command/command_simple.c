@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 15:11:43 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:33:50 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,18 @@ int	token_type_is_word(t_token *token)
 	return (token && token->type == WORD);
 }
 
+void	command_simple_add_pipe_io(
+		t_command cmd, int pipe_fd, t_io_direction dir)
+{
+	io_handlers_add_pipe(&cmd->io_handlers, pipe_fd, dir);
+}
+
 int	command_simple_is_invalid(
 	t_token **tokens, int *endtoken_idx)
 {
 	int	i;
 
-	i = - 1;
+	i = -1;
 	while (++i < *endtoken_idx)
 	{
 		if (token_type_is_redirect(tokens[i])
@@ -62,7 +68,7 @@ void	command_simple_fill(
 	int	j;
 	int	flags_mode[2];
 
-	i = - 1;
+	i = -1;
 	j = 0;
 	while (++i < endtoken_idx)
 	{
@@ -103,7 +109,7 @@ t_command	command_simple_new(t_token **tokens, int endtoken_idx)
 	cmd->simple = ft_calloc(1, sizeof(t_command_simple));
 	if (!cmd->simple)
 		return (ft_free_retnull(cmd));
-	i = - 1;
+	i = -1;
 	while (++i < endtoken_idx - 1)
 	{
 		if (token_type_is_redirect(tokens[i])
@@ -114,7 +120,7 @@ t_command	command_simple_new(t_token **tokens, int endtoken_idx)
 	}
 	cmd->simple->cmd_argv = (
 			ft_calloc(cmd->simple->cmd_argc + 1, sizeof(char *)));
-	command_simple_fill(cmd, tokens,  endtoken_idx);
+	command_simple_fill(cmd, tokens, endtoken_idx);
 	return (cmd);
 }
 
