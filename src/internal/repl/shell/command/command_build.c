@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/21 17:33:15 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:28:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_command	command_build_simple(
 		return (command_simple_new(tokens, endtoken_idx));
 }
 
-t_command command_build_pipe(
+t_command	command_build_pipe(
 	t_token **tokens, int cmd_operator_idx, int tokens_len)
 {
 	t_command	cmd_before;
@@ -52,13 +52,13 @@ t_command command_build_pipe(
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
 	cmd_after = command_build(
-		tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
+			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
 	if (!cmd_after || cmd_before->type == CMD_INVALID)
 	{
 		free(cmd_before);
 		return (cmd_after);
 	}
-	return command_pipe_new(cmd_before, cmd_after);
+	return (command_pipe_new(cmd_before, cmd_after));
 }
 
 t_command	command_build(t_token **tokens, int tokens_len)
@@ -66,7 +66,7 @@ t_command	command_build(t_token **tokens, int tokens_len)
 	int	cmd_operator_idx;
 
 	if (tokens_len == 1 && tokens[0]->type == OP_EOF)
-		return command_eof_new();
+		return (command_eof_new());
 	cmd_operator_idx = command_operator_idx(tokens, tokens_len);
 	if (cmd_operator_idx < 0 || tokens[cmd_operator_idx]->type == OP_NEWLINE)
 		return (command_build_simple(tokens, tokens_len));

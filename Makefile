@@ -6,7 +6,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/24 04:35:43 by dande-je         ###   ########.fr        #
+#    Updated: 2024/09/24 20:43:22 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRCS_COMMAND_DIR                := $(SRCS_SHELL_DIR)command/
 SRCS_PARSE_DIR                  := $(SRCS_SHELL_DIR)parse/
 SRCS_PARSE_INTERNAL_DIR         := $(SRCS_PARSE_DIR)parse_internal/
 SRCS_RUNNER_DIR                 := $(SRCS_SHELL_DIR)runner/
+SRCS_EXPAND_DIR                 := $(SRCS_RUNNER_DIR)expand/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_SHELL_DIR)token/
 SRCS_TERMINAL_DIR               := $(SRCS_REPL_DIR)terminal/
@@ -95,6 +96,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse_operator.c \
 								   parse_word.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c)
+SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
 								   export.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)

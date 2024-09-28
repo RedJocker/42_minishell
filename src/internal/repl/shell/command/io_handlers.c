@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:59:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 16:38:49 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:25:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	io_handlers_add_pipe(
 	t_io_direction io_dir)
 {
 	t_io_handler	*io;
+
 	io = ft_calloc(1, sizeof(t_io_handler));
 	io->type = IO_FD;
 	io->direction = io_dir;
@@ -80,9 +81,9 @@ void	io_handlers_add_pipe(
 
 void	io_handlers_close(t_arraylist lst_iohandlers)
 {
-	int	len;
-	int	i;
-	t_io_handler *io;
+	int				len;
+	int				i;
+	t_io_handler	*io;
 
 	len = ft_arraylist_len(lst_iohandlers);
 	i = -1;

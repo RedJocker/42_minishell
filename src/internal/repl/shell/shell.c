@@ -6,24 +6,18 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 11:24:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/24 22:37:44 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
+#include "ft_util.h"
 #include "internal/default.h"
 #include "internal/repl/shell/parse/parse.h"
 #include "internal/repl/shell/runner/runner.h"
 #include "internal/repl/shell/shell.h"
 #include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
-
-t_shell	*shell(void)
-{
-	static t_shell	shell;
-
-	return (&shell);
-}
 
 void	shell_set_input(t_shell *shell)
 {
@@ -35,8 +29,10 @@ void	shell_set_input(t_shell *shell)
 void	shell_command(t_shell *shell)
 {
 	shell->str_tokens = parse_input(shell->input);
+	//ft_strarr_printfd(shell->str_tokens, 1);
 	shell->tokens = tokens_classify(shell->str_tokens, \
 						&shell->tokens_len);
+	//tokens_print(shell->tokens);
 	shell->command = command_build(shell->tokens, shell->tokens_len);
 	tokens_destroy(shell->tokens);
 	shell->status = runner(shell->command, shell->status);

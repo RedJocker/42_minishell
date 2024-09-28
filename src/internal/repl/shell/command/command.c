@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/21 17:20:51 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/25 00:38:53 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,7 @@
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/token/token.h"
 
-void command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
-
-void command_simple_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
-{
-	io_handlers_add_pipe(&cmd->io_handlers, pipe_fd, dir);
-}
-
-void command_pipe_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
-{
-	if (dir == IO_IN)
-		command_add_pipe_io(cmd->pipe->cmd_before, pipe_fd, dir);
-	else if (dir == IO_OUT)
-		command_add_pipe_io(cmd->pipe->cmd_after, pipe_fd, dir);
-	else
-		ft_assert(0, "unexpected io_direction");
-}
-
-
-void command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
+void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 {
 	if (cmd->type == CMD_SIMPLE)
 		command_simple_add_pipe_io(cmd, pipe_fd, dir);

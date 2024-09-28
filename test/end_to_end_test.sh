@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/20 18:32:43 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/24 23:32:36 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -280,19 +280,19 @@ cat $file
 
 @test "test simple command with invalid redirect syntax > >>" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H > >> $file1
+    assert_minishell_equal_bash "ls -a $temp_dir -H > >> '$file1'
 printf \$?"
 }
 
 @test "test simple command with invalid redirect syntax >> >" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H >> > $file1
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> > '$file1'
 printf \$?"
 }
 
 @test "test simple command with invalid redirect syntax >> >>" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H >> >> $file1
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> >> '$file1'
 printf \$?"
 }
 
@@ -371,13 +371,13 @@ printf \$?"
 
 @test "test simple command with invalid redirect syntax >> <" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H >> < $file1
+    assert_minishell_equal_bash "ls -a $temp_dir -H >> < '$file1'
 printf \$?"
 }
 
 @test "test simple command with invalid redirect syntax < >>" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H < >> $file1
+    assert_minishell_equal_bash "ls -a $temp_dir -H < >> '$file1'
 printf \$?"
 }
 
@@ -739,4 +739,3 @@ ls | cat < $file1"
 @test "test pipe: ls | wc | cat -e" {
     assert_minishell_equal_bash "ls | wc | cat -e"
 }
-
