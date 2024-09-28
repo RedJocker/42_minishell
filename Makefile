@@ -40,6 +40,7 @@ SRCS_SIGNAL_INTERNAL_DIR        := $(SRCS_SIGNAL_DIR)signal_internal/
 SRCS_HISTORY_DIR                := $(SRCS_REPL_DIR)history/
 SRCS_SHELL_DIR                  := $(SRCS_REPL_DIR)shell/
 SRCS_COMMAND_DIR                := $(SRCS_SHELL_DIR)command/
+SRCS_COMMAND_INTERNAL_DIR       := $(SRCS_COMMAND_DIR)command_internal/
 SRCS_PARSE_DIR                  := $(SRCS_SHELL_DIR)parse/
 SRCS_PARSE_INTERNAL_DIR         := $(SRCS_PARSE_DIR)parse_internal/
 SRCS_RUNNER_DIR                 := $(SRCS_SHELL_DIR)runner/
@@ -91,6 +92,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_util.c \
 								   io_handler.c \
 								   io_handlers.c)
+SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_INTERNAL_DIR), command_parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_HISTORY_DIR), history.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse_operator.c \
