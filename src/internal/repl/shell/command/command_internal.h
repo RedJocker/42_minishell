@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/25 00:43:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/27 21:15:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,28 @@
 # include "internal/repl/shell/command/command.h"
 # include "internal/repl/shell/command/io_handler.h"
 
+int			command_debug_id(void);
+int			command_token_precedence(t_token_type token_type);
 t_command	command_new(t_command_type type, char *type_str);
 void		command_free(t_command cmd);
-void		command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
 int			command_operator_idx(t_token **tokens, int tokens_len);
-t_command	command_invalid_new(char *message);
+t_command	command_invalid_new(char *message, int status);
 void		command_invalid_destroy(t_command cmd);
+void		command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
+
 t_command	command_simple_new(
 				t_token **tokens, int endtoken_idx);
 void		command_simple_destroy(t_command cmd);
 int			command_simple_is_invalid(
 				t_token **tokens, int *endtoken_idx);
 void		command_simple_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
-int			command_debug_id(void);
-int			command_token_precedence(t_token_type token_type);
+
+
 t_command	command_pipe_new(t_command cmd_before, t_command cmd_after);
 void		command_pipe_destroy(t_command cmd);
 void		command_pipe_add_pipe_io(
 				t_command cmd, int pipe_fd, t_io_direction dir);
+
 t_command	command_eof_new(void);
 void		command_eof_destroy(t_command cmd);
 

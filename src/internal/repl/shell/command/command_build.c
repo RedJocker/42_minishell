@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/25 00:28:20 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/27 21:11:51 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include "ft_memlib.h"
 #include "ft_util.h"
 #include "command_internal.h"
+#include "ft_assert.h"
+
 
 t_command	command_build_simple(
 	t_token **tokens, int endtoken_idx)
@@ -34,7 +36,7 @@ t_command	command_build_simple(
 	{
 		err_tkn = tokens[endtoken_idx];
 		ft_asprintf(&err_msg, err_template, err_tkn->content);
-		cmd = command_invalid_new(err_msg);
+		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
 		free(err_msg);
 		return (cmd);
 	}
@@ -72,7 +74,8 @@ t_command	command_build(t_token **tokens, int tokens_len)
 		return (command_build_simple(tokens, tokens_len));
 	else if (tokens[cmd_operator_idx]->type == OP_PIPE)
 		return (command_build_pipe(tokens, cmd_operator_idx, tokens_len));
-	return (command_invalid_new("temporarily unnexpected"));
+	ft_assert(0, "unexpected execution at command_build");
+	return (command_invalid_new("temporarily unnexpected", -1));
 }
 
 /*

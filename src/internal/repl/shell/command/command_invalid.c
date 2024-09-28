@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:08:23 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/19 08:45:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/27 21:08:46 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "ft_string.h"
 #include "internal/repl/shell/command/command_internal.h"
 
-t_command	command_invalid_new(char *message)
+t_command	command_invalid_new(char *message, int status)
 {
 	t_command	cmd;
 
@@ -34,6 +34,7 @@ t_command	command_invalid_new(char *message)
 		command_free(cmd);
 		return (NULL);
 	}
+	cmd->invalid->status = status;
 	return (cmd);
 }
 

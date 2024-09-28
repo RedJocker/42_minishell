@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/24 23:32:36 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/28 00:04:06 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
+    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
     if ! [[ $bash_output == $output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
@@ -709,7 +709,16 @@ echo \$?"
 
 @test "test pipe: ls > \$file1 | wc" {
     file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls > $file1 | wc"
+    assert_minishell_equal_bash "ls > $file1 | wc
+cat $file1"
+}
+
+@test "test pipe: ls | wc > \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "
+ls | wc > $file1
+cat $file1
+"
 }
 
 @test "test pipe: ls < \$file1 | wc" {
@@ -738,4 +747,34 @@ ls | cat < $file1"
 
 @test "test pipe: ls | wc | cat -e" {
     assert_minishell_equal_bash "ls | wc | cat -e"
+}
+
+@test "test invalid_command does not exist" {
+    file1="$temp_dir/does_not_exist"
+    assert_minishell_equal_bash "
+rm -rf $file1 2> /dev/null
+$file1
+echo \$?"
+}
+
+@test "test invalid_command is not executable" {
+    file1="$temp_dir/text"
+    assert_minishell_equal_bash "
+echo 'some text' > $file1 
+$file1
+echo \$?"
+}
+
+@test "test invalid_command is directory with execute permission" {
+    assert_minishell_equal_bash "
+chmod 777 $temp_dir
+$temp_dir
+echo \$?"
+}
+
+@test "test invalid_command is directory without execute permission" {
+    assert_minishell_equal_bash "
+chmod 000 $temp_dir
+$temp_dir
+echo \$?"
 }
