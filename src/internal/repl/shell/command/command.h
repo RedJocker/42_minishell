@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/25 00:41:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/27 21:14:12 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_command_pipe
 typedef struct s_command_invalid
 {
 	char	*msg;
+	int		status;
 }	t_command_invalid;
 
 typedef enum e_command_type
