@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/27 21:11:51 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 00:08:36 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 #include "ft_util.h"
 #include "command_internal.h"
 #include "ft_assert.h"
-
 
 t_command	command_build_simple(
 	t_token **tokens, int endtoken_idx)

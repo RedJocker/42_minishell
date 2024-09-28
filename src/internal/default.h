@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/27 22:49:19 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 00:07:49 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ enum e_operations
 	SUB,
 };
 
-
 typedef enum e_exit_code
 {
 	EXIT_OK = 0,
@@ -43,6 +42,6 @@ typedef enum e_exit_code
 	EXIT_TEMPORARY = 111,
 	EXIT_COMMAND_NOT_EXECUTABLE = 126,
 	EXIT_COMMAND_NOT_FOUND = 127,
-} t_exit_code;
+}	t_exit_code;
 
 #endif

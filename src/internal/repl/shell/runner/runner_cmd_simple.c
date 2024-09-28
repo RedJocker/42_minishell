@@ -6,10 +6,9 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/27 23:51:11 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 00:21:40 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "ft_assert.h"
 #include "ft_stdio.h"
@@ -25,7 +24,8 @@
 #include <sys/stat.h>
 #include "builtins/builtins.h"
 
-void	runner_cmd_simple_panic(t_command cmd, char *msg, sig_atomic_t status_code)
+void	runner_cmd_simple_panic(
+	t_command cmd, char *msg, sig_atomic_t status_code)
 {
 	ft_puterrl(msg);
 	free(msg);
@@ -56,53 +56,59 @@ sig_atomic_t	runner_cmd_builtin(
 	return (0);
 }
 
-static void runner_cmd_simple_execve_error_eacces(t_command cmd, int err_num)
+static void	runner_cmd_simple_execve_error_eacces(t_command cmd, int err_num)
 {
 	char		*msg;
 	struct stat	path_stat;
 
 	if (cmd->simple->cmd_argv[0][0] == '\0')
 	{
-		ft_asprintf(&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
+		ft_asprintf(
+			&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
 	}
 	stat(cmd->simple->cmd_argv[0], &path_stat);
 	if (S_ISDIR(path_stat.st_mode))
 	{
-		if (ft_strchr(cmd->simple->cmd_path, '/')) {
-			ft_asprintf(&msg, "bash: %s: Is a directory", cmd->simple->cmd_argv[0]);
+		if (ft_strchr(cmd->simple->cmd_path, '/'))
+		{
+			ft_asprintf(
+				&msg, "bash: %s: Is a directory", cmd->simple->cmd_argv[0]);
 			runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_EXECUTABLE);
 		}
 		else
 		{
-			ft_asprintf(&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
+			ft_asprintf(
+				&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
 			runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
 		}
 	}
 	else
 	{
-		
-		ft_asprintf(&msg, "bash: %s: %s", cmd->simple->cmd_argv[0], strerror(err_num));
+		ft_asprintf(
+			&msg, "bash: %s: %s",
+			cmd->simple->cmd_argv[0], strerror(err_num));
 		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_EXECUTABLE);
 	}
 }
 
 static void	runner_cmd_simple_execve_error_enoent(t_command cmd)
 {
-	char 		*msg;
-	
+	char	*msg;
+
 	if (ft_strchr(cmd->simple->cmd_path, '/'))
 	{
-		ft_asprintf(&msg, "bash: %s: No such file or directory", cmd->simple->cmd_argv[0]);
+		ft_asprintf(&msg, "bash: %s: No such file or directory",
+			cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
 	}
 	else
 	{
-		ft_asprintf(&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
+		ft_asprintf(&msg, "bash: %s: command not found",
+			cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
 	}
 }
-
 
 static void	runner_cmd_simple_execve_error(t_command cmd, int err_num)
 {
@@ -112,10 +118,10 @@ static void	runner_cmd_simple_execve_error(t_command cmd, int err_num)
 		return (runner_cmd_simple_execve_error_enoent(cmd));
 	else if (err_num == EACCES)
 		return (runner_cmd_simple_execve_error_eacces(cmd, err_num));
-	ft_asprintf(&msg, "bash: %s: %s", cmd->simple->cmd_argv[0], strerror(err_num));
+	ft_asprintf(&msg, "bash: %s: %s",
+		cmd->simple->cmd_argv[0], strerror(err_num));
 	return (runner_cmd_simple_panic(cmd, msg, err_num));
 }
-
 
 sig_atomic_t	runner_cmd_simple_execve(t_command cmd)
 {	
@@ -142,8 +148,8 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	{
 		free(pid);
 		cmd->simple->cmd_envp = __environ; // TODO: change to get_envp
-		cmd->simple->cmd_path = (
-				envp_find_bin_by_name(cmd->simple->cmd_argv[0], cmd->simple->cmd_envp));
+		cmd->simple->cmd_path = (envp_find_bin_by_name(cmd->simple->cmd_argv[0],
+					cmd->simple->cmd_envp));
 		ft_arraylist_destroy(*pids);
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 			runner_cmd_simple_panic(cmd, ft_strdup(err_msg), 1);

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/27 23:59:38 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 00:19:34 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ sig_atomic_t	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
 }
 
 // pipe_fds[0] read, pipe_fds[1] write
-sig_atomic_t	runner_cmd_pipe(t_command cmd, t_arraylist *pids, sig_atomic_t last_status_code)
+sig_atomic_t	runner_cmd_pipe(
+	t_command cmd, t_arraylist *pids, sig_atomic_t last_status_code)
 {
 	sig_atomic_t	status;
 	int				pipe_fds[2];
