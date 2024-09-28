@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/28 00:04:06 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/28 03:49:13 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
+    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
     if ! [[ $bash_output == $output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
@@ -748,6 +748,18 @@ ls | cat < $file1"
 @test "test pipe: ls | wc | cat -e" {
     assert_minishell_equal_bash "ls | wc | cat -e"
 }
+
+@test "test pipe: ls > \$file1 | wc > \$file2 | cat -e > \$file3" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    file3="$temp_dir/c.txt"
+    assert_minishell_equal_bash "ls > $file1 | wc > $file2 | cat -e > $file3
+cat $file1
+cat $file2
+cat $file3
+"
+}
+
 
 @test "test invalid_command does not exist" {
     file1="$temp_dir/does_not_exist"

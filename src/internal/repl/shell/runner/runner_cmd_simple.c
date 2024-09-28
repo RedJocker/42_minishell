@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 00:21:40 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 03:49:40 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,8 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	{
 		free(pid);
 		cmd->simple->cmd_envp = __environ; // TODO: change to get_envp
-		cmd->simple->cmd_path = (envp_find_bin_by_name(cmd->simple->cmd_argv[0],
-					cmd->simple->cmd_envp));
+		cmd->simple->cmd_path = (get_bin_path_with_envp(cmd->simple->cmd_argv[0],
+						get_envp()));
 		ft_arraylist_destroy(*pids);
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 			runner_cmd_simple_panic(cmd, ft_strdup(err_msg), 1);
