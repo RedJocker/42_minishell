@@ -5,17 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/20 01:47:57 by maurodri         ###   ########.fr       */
+/*   Created: 2024/09/01 16:22:24 by maurodri          #+#    #+#             */
+/*   Updated: 2024/09/28 01:17:22 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include "ft_memlib.h"
-#include "ft_string.h"
-#include "internal/repl/shell/token/token.h"
+#include "ft_util.h"
+#include "internal/default.h"
+#include "internal/repl/shell/token/token_internal/token_internal.h"
 
+void	tokens_destroy(t_token **tokens)
+{
+	int	i;
+
+	i = DEFAULT_INIT;
+	while (tokens[++i])
+		token_destroy(tokens[i]);
+	free(tokens);
+}
+
+t_token	**tokens_classify(char **arr_str_tokens, int *out_len)
+{
+	int		i;
+	t_token	**arr_tokens;
+
+	*out_len = DEFAULT;
+	while (arr_str_tokens[*out_len])
+		(*out_len)++;
+	*out_len = (*out_len == DEFAULT) * CHAR_BYTE \
+		+ (*out_len != NULL_BYTE) * *out_len;
+	arr_tokens = ft_calloc(*out_len + NULL_BYTE, sizeof(t_token *));
+	if (!arr_tokens)
+		return (NULL);
+	i = DEFAULT_INIT;
+	while (++i < *out_len)
+	{
+		arr_tokens[i] = token_classify(arr_str_tokens[i]);
+		if (!arr_tokens[i])
+		{
+			tokens_destroy(arr_tokens);
+			return (NULL);
+		}
+	}
+	ft_strarr_free(arr_str_tokens);
+	return (arr_tokens);
+}
+
+// TODO: Remove after finish the project
+#include <stdio.h>
+#include "ft_string.h"
+// TODO: Remove after finish the project
 void	token_type_string(char out_str[23], t_token_type type)
 {
 	if (type == OP_REDIRECT_OUT_TRUNC)
@@ -38,6 +79,7 @@ void	token_type_string(char out_str[23], t_token_type type)
 		ft_strlcpy(out_str, "INVALID", 8);
 }
 
+// TODO: Remove after finish the project
 void	token_print(t_token *token)
 {
 	char	type_str[23];
@@ -46,62 +88,17 @@ void	token_print(t_token *token)
 	printf("Token(type: %s, content: %s)", type_str, token->content);
 }
 
-t_token	*token_new(t_token_type type, char *content)
+void	tokens_print(t_token **tokens)
 {
-	t_token	*token;
+	int	i;
 
-	token = ft_calloc(1, sizeof(t_token));
-	if (!token)
-		return (NULL);
-	token->type = type;
-	token->content = ft_strdup(content);
-	if (!token->content)
-	{
-		free(token);
-		return (NULL);
-	}
-	return (token);
-}
-
-void	token_destroy(t_token *token)
-{
-	free(token->content);
-	free(token);
-}
-
-bool	token_is_invalid_quote(char *str_token)
-{
-	char	open_quote;
-	int		i;
-
-	open_quote = 0;
 	i = -1;
-	while (str_token[++i])
+	printf("{\n");
+	while (tokens[++i])
 	{
-		if (open_quote > 0)
-			open_quote = (str_token[i] != open_quote) * open_quote;
-		else if (str_token[i] == '\'' || str_token[i] == '\"')
-			open_quote = str_token[i];
+		printf("\t");
+		token_print(tokens[i]);
+		printf("\n");
 	}
-	return (open_quote > 0);
-}
-
-// TODO: classify remaining operators
-t_token	*token_classify(char *str_token)
-{
-	if (!str_token)
-		return (token_new(OP_EOF, "OP_EOF"));
-	else if (ft_strncmp("\n", str_token, 2) == 0)
-		return (token_new(OP_NEWLINE, "newline"));
-	else if (ft_strncmp(">>", str_token, 3) == 0)
-		return (token_new(OP_REDIRECT_OUT_APPND, str_token));
-	else if (ft_strncmp(">", str_token, 2) == 0)
-		return (token_new(OP_REDIRECT_OUT_TRUNC, str_token));
-	else if (ft_strncmp("<", str_token, 2) == 0)
-		return (token_new(OP_REDIRECT_IN, str_token));
-	else if (ft_strncmp("|", str_token, 2) == 0)
-		return (token_new(OP_PIPE, str_token));
-	else if (token_is_invalid_quote(str_token))
-		return (token_new(INVALID, "newline"));
-	return (token_new(WORD, str_token));
+	printf("}\n");
 }

@@ -5,8 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 00:19:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 01:06:13 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +13,9 @@
 #include "ft_assert.h"
 #include "ft_stdio.h"
 #include "internal/default.h"
-#include "internal/env/envp.h"
 #include "internal/env/env.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/expand/expand.h"
 #include "runner.h"

@@ -6,20 +6,15 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 00:08:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 01:28:45 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "ft_stdio.h"
 #include "internal/default.h"
-#include "internal/env/env.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/token/token.h"
-#include "internal/signal/signal.h"
-#include "ft_memlib.h"
-#include "ft_util.h"
 #include "command_internal.h"
 #include "ft_assert.h"
 

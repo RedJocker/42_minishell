@@ -5,8 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/08/15 04:50:16 by dande-je          #+#    #+#              #
-#    Updated: 2024/09/27 22:00:30 by maurodri         ###   ########.fr        #
+#    Updated: 2024/09/28 00:55:25 by dande-je         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +46,7 @@ SRCS_RUNNER_DIR                 := $(SRCS_SHELL_DIR)runner/
 SRCS_EXPAND_DIR                 := $(SRCS_RUNNER_DIR)expand/
 SRCS_BUILTINS_DIR               := $(SRCS_RUNNER_DIR)builtins/
 SRCS_TOKEN_DIR                  := $(SRCS_SHELL_DIR)token/
+SRCS_TOKEN_INTERNAL_DIR         := $(SRCS_TOKEN_DIR)token_internal/
 SRCS_TERMINAL_DIR               := $(SRCS_REPL_DIR)terminal/
 INCS                            := src/ lib/libftx/includes/
 BUILD_DIR                       := build/
@@ -101,8 +101,10 @@ SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
 								   export.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
-SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
-								   tokens.c)
+SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)
+SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_INTERNAL_DIR), token_build.c \
+								   token_classify.c \
+								   token_destroy.c)
 OBJS                            += $(SRCS_FILES:%.c=$(BUILD_DIR)%.o)
 
 DEPS                            += $(OBJS:.o=.d)

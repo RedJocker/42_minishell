@@ -6,12 +6,11 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/25 00:38:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 01:28:55 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
-#include "ft_assert.h"
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"

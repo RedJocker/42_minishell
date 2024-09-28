@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 00:52:37 by maurodri          #+#    #+#             */
-/*   Updated: 2024/08/27 20:01:21 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/09/28 01:18:24 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ typedef struct s_token
 
 t_token	**tokens_classify(char **arr_str_tokens, int *out_len);
 void	tokens_destroy(t_token **tokens);
-void	tokens_print(t_token **tokens);
+void	tokens_print(t_token **tokens); // TODO: Remove after finish the project.
 
 #endif
