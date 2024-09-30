@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 03:41:36 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/16 05:52:22 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 04:51:23 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ char	*env_parse(char *env_var, t_type_env_var type)
 {
 	int		key_len;
 
-	key_len = DEFAULT;
+	// key_len = DEFAULT;
+	key_len = get_key_len(env_var);
 	if (type == KEY)
 	{
-		key_len = get_key_len(env_var);
 		return (ft_substr(env_var, DEFAULT, key_len));
 	}
 	else if (type == VALUE)
