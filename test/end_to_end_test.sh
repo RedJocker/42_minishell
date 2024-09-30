@@ -18,6 +18,7 @@ setup_file() {
 
 setup() {
     #echo "START TEST METHOD" 1>&3
+	# export LANG=pt_BR.UTF-8 LC_ALL=pt_BR.UTF-8 LANGUAGE=en
     temp_dir="./test/temp$$"
 }
 
@@ -41,13 +42,15 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    LANGUAGE="en_US.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+    LC_ALL="pt_BR.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+    # LANG="pt_BR.UTF-8" LANGUAGE="en" LC_ALL="pt_BR.UTF-8" LC_TIME="pt_BR.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     delete_temp_folder
 }
 
 minishell_execute() {
     create_temp_folder
     ./minishell <<< "$@"
+    # LANG="pt_BR.UTF-8" LANGUAGE="en" LC_ALL="pt_BR.UTF-8" LC_TIME="pt_BR.UTF-8" ./minishell <<< "$@"
     delete_temp_folder
 }
 
@@ -99,6 +102,10 @@ assert_minishell_equal_bash() {
 }
 
 # TEST BEGIN
+
+@test "test environment variables" {
+    assert_minishell_equal_bash "echo LANG=\$LANG LC_ALL=\$LC_ALL LANGUAGE=\$LANGUAGE"
+}
 
 @test "test empty" {
     assert_minishell_equal_bash ""
