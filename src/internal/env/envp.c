@@ -6,20 +6,38 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:12:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/28 05:43:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 05:51:23 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_memlib.h"
+#include "ft_stdio.h"
 #include "ft_string.h"
+#include "internal/default.h"
 #include "internal/env/env_internal/env_internal.h"
 
 char	**get_envp(void)
 {
 	t_env_var	*env_vars;
+	char		*env_var;
+	char		**envp;
+	int			i;
 
-	env_vars = env_parse_key("PATH");
+	env_vars = env()->env_var;
 	if (env_vars)
-		return (ft_split(env_vars->value, ':'));
+	{
+		i = DEFAULT_INIT;
+		envp = ft_calloc(env()->env_size + NULL_BYTE, sizeof(char *));
+		while (env_vars)
+		{
+			ft_asprintf(&env_var, "%s%s", env_vars->key, env_vars->value);
+			envp[++i] = ft_strdup(env_var);
+			free(env_var);
+			env_vars = env_vars->next;
+		}
+		envp[i] = NULL;
+		return (envp);
+	}
 	else
 		return (NULL);
 }

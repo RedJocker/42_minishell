@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 06:04:38 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 02:29:33 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 #include "ft_stdio.h"
 #include "ft_string.h"
 #include "internal/default.h"
-// #include "internal/env/envp.h"
-// #include "internal/env/env.h"
+#include "internal/env/envp.h"
 #include "internal/repl/shell/command/command_internal/command_internal.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "runner.h"
@@ -148,7 +147,7 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	if (*pid == 0)
 	{
 		free(pid);
-		cmd->simple->cmd_envp = __environ; // TODO: change to get_envp
+		cmd->simple->cmd_envp = get_envp(); // TODO: change to get_envp
 		cmd->simple->cmd_path = parse_bin_path(cmd->simple->cmd_argv[DEFAULT]); // TODO: Check if the name of the parse_bin_path make sense.
 		// cmd->simple->cmd_path = (get_bin_path_with_envp(cmd->simple->cmd_argv[0],
 		// 				get_envp()));
