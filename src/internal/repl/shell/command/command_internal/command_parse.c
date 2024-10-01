@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 04:51:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/28 05:38:00 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/01 04:05:46 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*parse_bin_path(char *bin)
 
 	if (access(bin, X_OK | F_OK | R_OK) == DEFAULT)
 		return (ft_strdup(bin));
-	if (*bin == '.' || *bin == '/' || *bin == '~')
+	if (*bin == '.' || *bin == '/')
 		return (ft_strdup(bin));
 	env_path = get_env_path();
 	bin_path = build_bin_with_path(bin, env_path);

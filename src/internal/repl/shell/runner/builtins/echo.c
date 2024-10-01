@@ -6,10 +6,11 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:55:24 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/20 00:07:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/01 02:34:39 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <stdbool.h>
 #include <unistd.h>
 #include "ft_string.h"
@@ -19,7 +20,7 @@
 
 
 // TODO handle echo -n case
-int	runner_cmd_builtin_echo(t_command cmd)
+sig_atomic_t	runner_cmd_builtin_echo(t_command cmd)
 {
 	char		*arg;
 	int			len_arg;

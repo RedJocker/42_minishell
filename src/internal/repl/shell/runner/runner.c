@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Updated: 2024/09/30 22:42:54 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/01 03:15:49 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include <sys/wait.h>
 #include "ft_assert.h"
 #include "ft_stdio.h"
@@ -43,13 +44,13 @@ sig_atomic_t	runner_cmd_pipe(
 	pipe(pipe_fds);
 	command_add_pipe_io(cmd->pipe->cmd_before, pipe_fds[1], IO_OUT);
 	command_add_pipe_io(cmd->pipe->cmd_after, pipe_fds[0], IO_IN);
-	runner_cmd(cmd->pipe->cmd_before, pids, last_status_code);
-	runner_cmd(cmd->pipe->cmd_after, pids, last_status_code);
+	runner_cmd(cmd->pipe->cmd_before, pids, last_status_code, true);
+	runner_cmd(cmd->pipe->cmd_after, pids, last_status_code, true);
 	return (status);
 }
 
 sig_atomic_t	runner_cmd(
-	t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_status)
+	t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_status, bool should_fork)
 {
 	sig_atomic_t	status;
 
@@ -57,7 +58,7 @@ sig_atomic_t	runner_cmd(
 	expand(cmd, last_cmd_status);
 	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
 	if (cmd->type == CMD_SIMPLE)
-		status = runner_cmd_simple(cmd, pids);
+		status = runner_cmd_simple(cmd, pids, should_fork);
 	else if (cmd->type == CMD_INVALID)
 		status = runner_cmd_invalid(cmd, pids);
 	else if (cmd->type == CMD_PIPE)
@@ -82,6 +83,7 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	sig_atomic_t	status;
 	int				i;
 
+	status = EXIT_OK;
 	if (cmd->type == CMD_EOF)
 	{
 		command_destroy(cmd);
@@ -90,7 +92,8 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 		exit(last_cmd_status);
 	}
 	pids = ft_arraylist_new(free);
-	status = runner_cmd(cmd, &pids, last_cmd_status);
+	status = runner_cmd(cmd, &pids, last_cmd_status, 0);
+	status = status << 8;
 	pids_len = ft_arraylist_len(pids);
 	i = -1;
 	while (++i < pids_len - 1)
