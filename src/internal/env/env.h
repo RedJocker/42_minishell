@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/18 00:10:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/01 03:34:52 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,8 @@
 
 void	env_initializer(void);
 void	env_destroy(void);
+char	*env_get_bin(char * pathname);
+char	*env_get_value(char *key);
+void	env_set_value(char * key, char *value);
 
 #endif
