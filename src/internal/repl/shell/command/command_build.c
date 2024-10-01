@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 01:28:45 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 23:49:45 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_command	command_build_simple(
 	{
 		err_tkn = tokens[endtoken_idx];
 		ft_asprintf(&err_msg, err_template, err_tkn->content);
-		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR  << 8);
 		free(err_msg);
 		return (cmd);
 	}

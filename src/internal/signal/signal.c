@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 10:15:58 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 23:19:09 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,21 @@ void	signals_initializer(bool redisplay)
 		signals_initializer_no_redisplay(&sa_int);
 	if (sigaction(SIGINT, &sa_int, NULL) == FAIL
 		|| sigaction(SIGQUIT, &sa_quit, NULL) == FAIL)
+	{
+		ft_putendl_fd("shell: failed signal: fail to set signals", \
+			STDERR_FILENO);
+		exit (EXIT_FAILURE);
+	}
+}
+
+void	signals_afterfork(void)
+{
+	struct sigaction	sa_quit;
+
+	ft_memset(&sa_quit, DEFAULT, sizeof(sa_quit));
+	sa_quit.sa_flags = SA_RESTART;
+	sa_quit.sa_handler = sigquit_handler;
+	if (sigaction(SIGQUIT, &sa_quit, NULL) == FAIL)
 	{
 		ft_putendl_fd("shell: failed signal: fail to set signals", \
 			STDERR_FILENO);

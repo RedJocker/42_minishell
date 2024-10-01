@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/28 03:49:13 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/01 01:41:59 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,14 +42,14 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    LC_ALL="pt_BR.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+    LC_ALL="en_US.UTF-8" LANGUAGE="pt-BR" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     # LANG="pt_BR.UTF-8" LANGUAGE="en" LC_ALL="pt_BR.UTF-8" LC_TIME="pt_BR.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     delete_temp_folder
 }
 
 minishell_execute() {
     create_temp_folder
-    ./minishell <<< "$@"
+    LC_ALL="en_US.UTF-8" LANGUAGE="pt-BR" PS1='RedWillShell$ ' ./minishell <<< "$@"
     # LANG="pt_BR.UTF-8" LANGUAGE="en" LC_ALL="pt_BR.UTF-8" LC_TIME="pt_BR.UTF-8" ./minishell <<< "$@"
     delete_temp_folder
 }
@@ -138,12 +138,12 @@ pwd"
     assert_minishell_equal_bash /usr/bin/ls
 }
 
-@test "test simple command with one arg: ls -l" {
-    assert_minishell_equal_bash ls -l
+@test "test simple command with one arg: ls -H" {
+    assert_minishell_equal_bash ls -H
 }
 
-@test "test simple command with two args: ls -l -a" {
-    assert_minishell_equal_bash ls -l -a
+@test "test simple command with two args: ls -H -a" {
+    assert_minishell_equal_bash ls -H -a
 }
 
 @test "test simple command with one > redirect at end of command: ls -a \$temp_dir -H > \$file" {

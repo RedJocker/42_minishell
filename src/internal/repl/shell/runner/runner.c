@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Updated: 2024/09/28 01:06:13 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 22:42:54 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/expand/expand.h"
+#include "internal/signal/signal.h"
 #include "runner.h"
 
 void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
@@ -64,6 +65,16 @@ sig_atomic_t	runner_cmd(
 	return (status);
 }
 
+int	runner_exit_signal(int	status)
+{
+	int	signal_num;
+
+	signal_num = WTERMSIG(status);
+	if (signal_num == SIGQUIT)
+		ft_putstr("Quit\n");
+	return (SIG_BASE + signal_num);
+}
+
 sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 {
 	t_arraylist		pids;
@@ -89,5 +100,8 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	ft_arraylist_destroy(pids);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	return (status);
+	else if (WIFSIGNALED(status))
+		return (runner_exit_signal(status));
+	ft_assert(0, "unexpected line execution");
+	return (0);
 }

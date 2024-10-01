@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/28 00:09:41 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 23:12:03 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,5 @@ void	shell_command(t_shell *shell)
 	shell->command = command_build(shell->tokens, shell->tokens_len);
 	tokens_destroy(shell->tokens);
 	shell->status = runner(shell->command, shell->status);
-	signal_status(shell->status, SET);
 	command_destroy(shell->command);
 }
