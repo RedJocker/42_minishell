@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/30 02:29:33 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/01 01:43:23 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 			runner_cmd_simple_panic(cmd, ft_strdup(err_msg), 1);
 		maybe_builtin = runner_maybe_cmd_builtin(cmd);
+		signals_afterfork();
 		if (maybe_builtin)
 		{
 			status = runner_cmd_builtin(maybe_builtin, cmd, pids);

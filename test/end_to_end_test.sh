@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/09/28 03:49:13 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/01 01:41:59 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -139,12 +139,12 @@ pwd"
     assert_minishell_equal_bash /usr/bin/ls
 }
 
-@test "test simple command with one arg: ls -l" {
-    assert_minishell_equal_bash ls -l
+@test "test simple command with one arg: ls -H" {
+    assert_minishell_equal_bash ls -H
 }
 
-@test "test simple command with two args: ls -l -a" {
-    assert_minishell_equal_bash ls -l -a
+@test "test simple command with two args: ls -H -a" {
+    assert_minishell_equal_bash ls -H -a
 }
 
 @test "test simple command with one > redirect at end of command: ls -a \$temp_dir -H > \$file" {

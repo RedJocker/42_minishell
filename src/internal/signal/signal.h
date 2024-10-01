@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:20 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 08:50:57 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/09/30 23:06:36 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ enum e_signal
 
 sig_atomic_t	signal_status(sig_atomic_t value, t_operations type);
 void			signals_initializer(bool redisplay);
+void			sigquit_handler(sig_atomic_t signal);
+void			signals_afterfork(void);
 
 #endif
