@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/01 01:43:23 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/01 04:17:13 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "internal/env/envp.h"
 #include "internal/repl/shell/command/command_internal/command_internal.h"
 #include "internal/repl/shell/command/io_handler.h"
+#include "internal/signal/signal.h"
 #include "runner.h"
 #include <fcntl.h>
 #include <errno.h>
