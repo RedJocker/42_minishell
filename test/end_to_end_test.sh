@@ -18,7 +18,6 @@ setup_file() {
 
 setup() {
     #echo "START TEST METHOD" 1>&3
-	# export LANG=pt_BR.UTF-8 LC_ALL=pt_BR.UTF-8 LANGUAGE=en
     temp_dir="./test/temp$$"
 }
 
@@ -42,15 +41,13 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    LC_ALL="pt_BR.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
-    # LANG="pt_BR.UTF-8" LANGUAGE="en" LC_ALL="pt_BR.UTF-8" LC_TIME="pt_BR.UTF-8" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+    VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     delete_temp_folder
 }
 
 minishell_execute() {
     create_temp_folder
-    ./minishell <<< "$@"
-    # LANG="pt_BR.UTF-8" LANGUAGE="en" LC_ALL="pt_BR.UTF-8" LC_TIME="pt_BR.UTF-8" ./minishell <<< "$@"
+    VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
     delete_temp_folder
 }
 
@@ -81,7 +78,7 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
+    # echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
     if ! [[ $bash_output == $output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
@@ -105,6 +102,10 @@ assert_minishell_equal_bash() {
 
 @test "test environment variables" {
     assert_minishell_equal_bash "echo LANG=\$LANG LC_ALL=\$LC_ALL LANGUAGE=\$LANGUAGE"
+}
+
+@test "test environment variables that exist from outside" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE\"\$VARIABLE_FROM_OUTSIDE\"xxx"
 }
 
 @test "test empty" {
