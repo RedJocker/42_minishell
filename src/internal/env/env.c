@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/02 04:55:39 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/02 06:08:09 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,14 @@ char	*env_get_bin(char *bin)
 
 char	*env_get_value(char *key)
 {
-	size_t		env_key_len;
-
-	env_key_len = DEFAULT;
+	t_env_var	*env_var;
 	if (!key || env()->env_size == DEFAULT_BEGIN)
 		return (NULL);
-	return (env_get_key(key, env()->env_var, env_key_len)->value);
+	env_var = env_get_key(key, env()->env_var);
+	if (env_var)
+		return (env_var->value);
+	else
+		return (NULL);
 }
 
 void	env_destroy(void)
