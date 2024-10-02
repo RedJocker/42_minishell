@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/02 06:08:09 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/02 06:39:59 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char	*env_get_bin(char *bin)
 char	*env_get_value(char *key)
 {
 	t_env_var	*env_var;
+
 	if (!key || env()->env_size == DEFAULT_BEGIN)
 		return (NULL);
 	env_var = env_get_key(key, env()->env_var);
@@ -63,6 +64,30 @@ char	*env_get_value(char *key)
 		return (env_var->value);
 	else
 		return (NULL);
+}
+
+void	env_set_value(char *key, char *value)
+{
+	size_t		key_len;
+	t_env_var	*env_var;
+
+	if (key)
+	{
+		env_var = env_get_key(key, env()->env_var);
+		if (!env_var)
+			env_var_add_back(&env()->env_var, \
+				env_var_new(ft_strdup(key), ft_strdup(value)));
+		else
+		{
+			env_var->value = ft_strdup(value);
+			key_len = ft_strlen(env_var->key);
+			if (!env_var->key[key_len - CHAR_BYTE])
+			{
+				free(env_var->key);
+				env_var->key = ft_strjoin(key, "=");
+			}
+		}
+	}
 }
 
 void	env_destroy(void)
