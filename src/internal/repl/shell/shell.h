@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:32:34 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 10:49:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/02 05:00:23 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define SHELL_H
 
 # include <signal.h>
-# include <stdbool.h>
 # include "internal/repl/shell/command/command.h"
 
 typedef struct s_shell
@@ -27,7 +26,6 @@ typedef struct s_shell
 	char			*input;
 }	t_shell;
 
-t_shell	*shell(void);
 void	shell_set_input(t_shell *shell);
 void	shell_command(t_shell *shell);
 

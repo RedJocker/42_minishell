@@ -6,12 +6,11 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/30 23:12:03 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/02 04:59:46 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
-#include "internal/default.h"
 #include "internal/repl/shell/parse/parse.h"
 #include "internal/repl/shell/runner/runner.h"
 #include "internal/repl/shell/shell.h"
