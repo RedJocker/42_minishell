@@ -41,13 +41,13 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     delete_temp_folder
 }
 
 minishell_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
     delete_temp_folder
 }
 
@@ -106,6 +106,14 @@ assert_minishell_equal_bash() {
 
 @test "test environment variables that exist from outside" {
     assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE\"\$VARIABLE_FROM_OUTSIDE\"xxx"
+}
+
+@test "test environment variables that exist from outside more spaces" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"xxx"
+}
+
+@test "test simple expand invalid enviroment variable: echo \$INVALID_VARIABLE" {
+    assert_minishell_equal_bash echo $INVALID_VARIABLE
 }
 
 @test "test empty" {

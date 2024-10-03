@@ -6,56 +6,50 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 20:38:29 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/25 00:20:01 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/02 06:59:16 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expand.h"
-#include "ft_string.h"
-#include "internal/repl/shell/runner/expand/expand_internal.h"
-#include "stringbuilder.h"
-#include "ft_ctype.h"
 #include "ft_assert.h"
+#include "ft_ctype.h"
+#include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
-#include "internal/ft_extension.h"
+#include "internal/default.h"
+#include "stringbuilder.h"
+#include "internal/env/env.h"
+#include "internal/repl/shell/runner/expand/expand.h"
+#include "internal/repl/shell/runner/expand/expand_internal.h"
 
-static char	*env_mock(char *s)
-{
-	(void) s;
-	return (ft_strdup("abc def"));
-}
-
-static int	expand_dollar(
-	char *str, t_stringbuilder *builder, sig_atomic_t last_status_code)
+#include "internal/ft_extension.h" // TODO: Remove this after finish the project.
+static int	expand_dollar(char *str, t_stringbuilder *builder, \
+				sig_atomic_t last_status_code)
 {
 	int		i;
-	char	*var_name;
-	char	*var_value;
+	char	*env_key;
+	char	*env_value;
 
-	ft_assert(ft_strncmp(str, "$", 1) == 0, "expected $");
-	if (ft_strncmp(str, "$?", 2) == 0)
+	ft_assert(ft_strncmp(str, "$", CHAR_BYTE) == DEFAULT, "expected $");
+	if (ft_strncmp(str, "$?", CHAR_BYTE + CHAR_BYTE) == DEFAULT)
 	{
-		var_value = ft_itoa(last_status_code);
-		stringbuilder_addstr(builder, var_value);
-		free(var_value);
-		return (1);
+		env_value = ft_itoa(last_status_code);
+		stringbuilder_addstr(builder, env_value);
+		free(env_value);
+		return (1); // TODO: is it a bool?
 	}
-	i = 0;
+	i = DEFAULT;
 	if (ft_isalpha(str[++i]) || str[i] == '_')
 		while (ft_isalnum(str[i]) || str[i] == '_')
 			i++;
-	var_name = ft_calloc(i, sizeof(char));
-	ft_strlcpy(var_name, str + 1, i);
-	var_value = env_mock(var_name); // TODO: look expansion on env
-	free(var_name);
-	stringbuilder_addstr(builder, var_value);
-	free(var_value);
-	return (i - 1);
+	env_key = ft_calloc(i, sizeof(char));
+	ft_strlcpy(env_key, str + NULL_BYTE, i);
+	env_value = env_get_value(env_key);
+	stringbuilder_addstr(builder, env_value);
+	return (i - NULL_BYTE);
 }
 
-static int	expand_dollar_split(
-	char *str, t_expansion_state *state, sig_atomic_t last_status_code)
+static int	expand_dollar_split(char *str, t_expansion_state *state, \
+				sig_atomic_t last_status_code)
 {
 	int		i;
 	char	**split;

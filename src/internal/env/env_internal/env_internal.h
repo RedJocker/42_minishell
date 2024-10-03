@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 02:29:58 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/16 05:33:46 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/02 06:03:12 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ t_env		*env(void);
 t_env_var	*env_var_new(char *key, char *value);
 t_env_var	*env_var_last(t_env_var *env_var);
 void		env_var_add_back(t_env_var **env_var, t_env_var *env_var_new);
-void		env_set_vars_size(t_operations type);
 void		env_vars_destroy(t_env_var *env_var);
+void		env_set_vars_size(t_operations type);
+t_env_var	*env_get_key(char *key, t_env_var *env_var);
 char		*env_parse(char *env_var, t_type_env_var type);
-t_env_var	*env_parse_key(char	*key);
+char		**get_env_path(void);
+char		*build_bin_with_path(char *bin, char **env_path);
 
 #endif
