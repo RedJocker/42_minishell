@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:18:39 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 01:29:02 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/03 01:36:01 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	command_pipe_destroy(t_command cmd)
 {
 	command_destroy(cmd->pipe->cmd_before);
 	command_destroy(cmd->pipe->cmd_after);
+	free(cmd->pipe);
 	command_free(cmd);
 }
 

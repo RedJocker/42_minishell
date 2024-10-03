@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/02 23:12:08 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/03 01:29:13 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,18 +70,22 @@ sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, t_command cmd)
 	int 			copy_fds[2];
 	sig_atomic_t	status;
 	char 			*err_msg;
-
 	
 	copy_fds[0] = dup(STDIN_FILENO);
 	copy_fds[1] = dup(STDOUT_FILENO);
+	cmd->simple->cmd_envp = get_envp();
 	if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 	{
+		close(copy_fds[0]);
+		close(copy_fds[1]);
 		runner_cmd_simple_panic(cmd, ft_strdup(err_msg), EXIT_REDIRECT_FAIL, false);
 		return (EXIT_REDIRECT_FAIL);
 	}
 	status = runner_cmd_builtin(builtin, cmd, false);
 	dup2(copy_fds[0], STDIN_FILENO);
 	dup2(copy_fds[1], STDOUT_FILENO);
+	close(copy_fds[0]);
+	close(copy_fds[1]);
 	return (status);
 }
 
@@ -180,9 +184,9 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_for
 	if (*pid == 0)
 	{
 		free(pid);
+		ft_arraylist_destroy(*pids);
 		cmd->simple->cmd_envp = get_envp();
 		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
-		ft_arraylist_destroy(*pids);
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
 			runner_cmd_simple_panic(cmd, ft_strdup(err_msg), EXIT_REDIRECT_FAIL, true);
 		signals_afterfork();

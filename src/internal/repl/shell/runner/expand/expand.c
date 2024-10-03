@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 20:38:29 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/02 06:59:16 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/03 02:13:34 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@
 #include "internal/repl/shell/runner/expand/expand_internal.h"
 
 #include "internal/ft_extension.h" // TODO: Remove this after finish the project.
-static int	expand_dollar(char *str, t_stringbuilder *builder, \
+
+// return len parsed
+static int	expand_dollar(char *str, t_stringbuilder *builder,	\
 				sig_atomic_t last_status_code)
 {
 	int		i;
@@ -35,7 +37,7 @@ static int	expand_dollar(char *str, t_stringbuilder *builder, \
 		env_value = ft_itoa(last_status_code);
 		stringbuilder_addstr(builder, env_value);
 		free(env_value);
-		return (1); // TODO: is it a bool?
+		return (1);
 	}
 	i = DEFAULT;
 	if (ft_isalpha(str[++i]) || str[i] == '_')
@@ -44,10 +46,15 @@ static int	expand_dollar(char *str, t_stringbuilder *builder, \
 	env_key = ft_calloc(i, sizeof(char));
 	ft_strlcpy(env_key, str + NULL_BYTE, i);
 	env_value = env_get_value(env_key);
+	free(env_key);
+	if (!env_value)
+		return (i - NULL_BYTE);
 	stringbuilder_addstr(builder, env_value);
+	free(env_value);
 	return (i - NULL_BYTE);
 }
 
+// return len parsed
 static int	expand_dollar_split(char *str, t_expansion_state *state, \
 				sig_atomic_t last_status_code)
 {
@@ -55,17 +62,19 @@ static int	expand_dollar_split(char *str, t_expansion_state *state, \
 	char	**split;
 	char	*temp;
 	int		j;
-
+	
 	i = expand_dollar(str, &state->builder, last_status_code);
 	temp = stringbuilder_build(state->builder);
 	split = ft_splitfun(temp, (t_pred_int) ft_isspace);
 	free(temp);
 	j = -1;
-	while (split[++j + 1])
-		state->lst_new_args = ft_arraylist_add(
-				state->lst_new_args, ft_strdup(split[j]));
+	if (split[0] != NULL)
+		while (split[++j + 1])
+			state->lst_new_args = ft_arraylist_add(
+					state->lst_new_args, ft_strdup(split[j]));
 	state->builder = stringbuilder_new();
-	stringbuilder_addstr(&state->builder, split[j]);
+	if (split[0] != NULL)
+		stringbuilder_addstr(&state->builder, split[j]);
 	ft_strarr_free(split);
 	return (i);
 }

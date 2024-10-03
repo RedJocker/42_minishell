@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/02 23:24:47 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/03 02:14:41 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -101,22 +101,6 @@ assert_minishell_equal_bash() {
 }
 
 # TEST BEGIN
-
-@test "test environment variables" {
-    assert_minishell_equal_bash "echo LANG=\$LANG LC_ALL=\$LC_ALL LANGUAGE=\$LANGUAGE"
-}
-
-@test "test environment variables that exist from outside" {
-    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE\"\$VARIABLE_FROM_OUTSIDE\"xxx"
-}
-
-@test "test environment variables that exist from outside more spaces" {
-    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"xxx"
-}
-
-@test "test simple expand invalid enviroment variable: echo \$INVALID_VARIABLE" {
-    assert_minishell_equal_bash echo $INVALID_VARIABLE
-}
 
 @test "test empty" {
     assert_minishell_equal_bash ""
@@ -807,4 +791,20 @@ echo \$?"
 chmod 000 $temp_dir
 $temp_dir
 echo \$?"
+}
+
+@test "test environment variables" {
+    assert_minishell_equal_bash "echo LANG=\$LANG LC_ALL=\$LC_ALL LANGUAGE=\$LANGUAGE"
+}
+
+@test "test environment variables that exist from outside" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE\"\$VARIABLE_FROM_OUTSIDE\"xxx"
+}
+
+@test "test environment variables that exist from outside more spaces" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"xxx"
+}
+
+@test "test simple expand invalid enviroment variable: echo \$INVALID_VARIABLE" {
+    assert_minishell_equal_bash echo "\$INVALID_VARIABLE"
 }

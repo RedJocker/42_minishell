@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 01:29:11 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/03 00:29:34 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	io_handler_path_to_fd(t_io_handler *io, char **out_errmsg)
 	if (fd < 0)
 	{
 		ft_asprintf(out_errmsg, "bash: %s: %s", io->path, strerror(errno));
+		free(io->path);
 		io_handler_set_error(io, errno, *out_errmsg);
 		return ;
 	}
