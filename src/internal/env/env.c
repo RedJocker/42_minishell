@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/02 23:49:55 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/05 07:55:16 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	env_initializer(void)
 	int			i;
 
 	i = DEFAULT_INIT;
-	env_var_add_back(&env()->env_var, env_var_new(NULL, NULL));
-	env_set_vars_size(ADD);
 	if (environ)
 	{
 		while (environ[++i])
@@ -44,7 +42,7 @@ char	*env_get_bin(char *bin)
 
 	if (access(bin, X_OK | F_OK | R_OK) == DEFAULT)
 		return (ft_strdup(bin));
-	if (*bin == '.' || *bin == '/' || *bin == '~')
+	if (*bin == '.' || *bin == '/')
 		return (ft_strdup(bin));
 	env_path = get_env_path();
 	bin_path = build_bin_with_path(bin, env_path);
