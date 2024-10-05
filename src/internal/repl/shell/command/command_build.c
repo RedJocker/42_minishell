@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/30 23:49:45 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/03 01:28:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_command	command_build_simple(
 	{
 		err_tkn = tokens[endtoken_idx];
 		ft_asprintf(&err_msg, err_template, err_tkn->content);
-		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR  << 8);
+		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
 		free(err_msg);
 		return (cmd);
 	}
@@ -64,7 +64,9 @@ t_command	command_build(t_token **tokens, int tokens_len)
 	if (tokens_len == 1 && tokens[0]->type == OP_EOF)
 		return (command_eof_new());
 	cmd_operator_idx = command_operator_idx(tokens, tokens_len);
-	if (cmd_operator_idx < 0 || tokens[cmd_operator_idx]->type == OP_NEWLINE)
+	if (cmd_operator_idx < 0)
+		return (command_build_simple(tokens, tokens_len + 1));
+	else if (tokens[cmd_operator_idx]->type == OP_NEWLINE)
 		return (command_build_simple(tokens, tokens_len));
 	else if (tokens[cmd_operator_idx]->type == OP_PIPE)
 		return (command_build_pipe(tokens, cmd_operator_idx, tokens_len));

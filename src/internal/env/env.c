@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/02 06:39:59 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/02 23:49:55 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,12 @@ char	*env_get_value(char *key)
 		return (NULL);
 	env_var = env_get_key(key, env()->env_var);
 	if (env_var)
-		return (env_var->value);
+	{
+		if (env_var->value)
+			return (ft_strdup(env_var->value));
+		else
+			return (NULL);
+	}
 	else
 		return (NULL);
 }

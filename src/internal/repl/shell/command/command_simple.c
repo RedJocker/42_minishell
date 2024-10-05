@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/25 00:33:50 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/02 23:42:47 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,11 @@ t_command	command_simple_new(t_token **tokens, int endtoken_idx)
 void	command_simple_destroy(t_command cmd)
 {
 	ft_strarr_free(cmd->simple->cmd_argv);
+	if (cmd->simple->cmd_envp)
+		ft_strarr_free(cmd->simple->cmd_envp);
 	if (cmd->simple->cmd_path)
 		free(cmd->simple->cmd_path);
 	free(cmd->simple);
-	//TODO: free envp after change out of __environ
-	//ft_strarr_free(cmd->simple->cmd_envp);
+	
 	command_free(cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:12:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/30 05:51:23 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/03 00:06:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,10 @@ char	**get_envp(void)
 		while (env_vars)
 		{
 			ft_asprintf(&env_var, "%s%s", env_vars->key, env_vars->value);
-			envp[++i] = ft_strdup(env_var);
-			free(env_var);
+			envp[++i] = env_var;
 			env_vars = env_vars->next;
 		}
-		envp[i] = NULL;
+		envp[++i] = NULL;
 		return (envp);
 	}
 	else

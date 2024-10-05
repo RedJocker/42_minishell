@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/02 04:26:05 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/03 01:29:13 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,27 @@
 #include "internal/default.h"
 #include "internal/env/envp.h"
 #include "internal/env/env.h"
-// #include "internal/repl/shell/command/command_internal/command_internal.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/signal/signal.h"
 #include "runner.h"
 #include <fcntl.h>
 #include <errno.h>
+#include <signal.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include "builtins/builtins.h"
 
 void	runner_cmd_simple_panic(
-	t_command cmd, char *msg, sig_atomic_t status_code)
+	t_command cmd, char *msg, sig_atomic_t status_code, bool should_exit)
 {
 	ft_puterrl(msg);
 	free(msg);
-	command_destroy(cmd);
-	exit(status_code);
+	if (should_exit)
+	{
+		command_destroy(cmd);
+		exit(status_code);
+	}
 }
 
 t_builtin	runner_maybe_cmd_builtin(t_command cmd)
@@ -47,16 +51,44 @@ t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 	return (NOT_BUILTIN);
 }
 
-sig_atomic_t	runner_cmd_builtin(
-	t_builtin builtin, t_command cmd, t_arraylist *pids)
+sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, bool shoul_exit)
 {
-	(void) pids;
+	sig_atomic_t	status;
+	char 			*msg;
+
+	msg = NULL;
+	status = EXIT_OK;
 	if (builtin == BUILTIN_ECHO)
-		runner_cmd_builtin_echo(cmd);
-	// TODO: check need for return status_code 
-	exit(0);
-	return (0);
+		status = runner_cmd_builtin_echo(cmd);
+	if (status != EXIT_OK)
+		runner_cmd_simple_panic(cmd, msg, status, shoul_exit);
+	return (status);
 }
+
+sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, t_command cmd)
+{
+	int 			copy_fds[2];
+	sig_atomic_t	status;
+	char 			*err_msg;
+	
+	copy_fds[0] = dup(STDIN_FILENO);
+	copy_fds[1] = dup(STDOUT_FILENO);
+	cmd->simple->cmd_envp = get_envp();
+	if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
+	{
+		close(copy_fds[0]);
+		close(copy_fds[1]);
+		runner_cmd_simple_panic(cmd, ft_strdup(err_msg), EXIT_REDIRECT_FAIL, false);
+		return (EXIT_REDIRECT_FAIL);
+	}
+	status = runner_cmd_builtin(builtin, cmd, false);
+	dup2(copy_fds[0], STDIN_FILENO);
+	dup2(copy_fds[1], STDOUT_FILENO);
+	close(copy_fds[0]);
+	close(copy_fds[1]);
+	return (status);
+}
+
 
 static void	runner_cmd_simple_execve_error_eacces(t_command cmd, int err_num)
 {
@@ -67,7 +99,7 @@ static void	runner_cmd_simple_execve_error_eacces(t_command cmd, int err_num)
 	{
 		ft_asprintf(
 			&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
-		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
+		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND, true);
 	}
 	stat(cmd->simple->cmd_argv[0], &path_stat);
 	if (S_ISDIR(path_stat.st_mode))
@@ -76,13 +108,13 @@ static void	runner_cmd_simple_execve_error_eacces(t_command cmd, int err_num)
 		{
 			ft_asprintf(
 				&msg, "bash: %s: Is a directory", cmd->simple->cmd_argv[0]);
-			runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_EXECUTABLE);
+			runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_EXECUTABLE, true);
 		}
 		else
 		{
 			ft_asprintf(
 				&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
-			runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
+			runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND, true);
 		}
 	}
 	else
@@ -90,7 +122,7 @@ static void	runner_cmd_simple_execve_error_eacces(t_command cmd, int err_num)
 		ft_asprintf(
 			&msg, "bash: %s: %s",
 			cmd->simple->cmd_argv[0], strerror(err_num));
-		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_EXECUTABLE);
+		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_EXECUTABLE, true);
 	}
 }
 
@@ -102,13 +134,13 @@ static void	runner_cmd_simple_execve_error_enoent(t_command cmd)
 	{
 		ft_asprintf(&msg, "bash: %s: No such file or directory",
 			cmd->simple->cmd_argv[0]);
-		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
+		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND, true);
 	}
 	else
 	{
 		ft_asprintf(&msg, "bash: %s: command not found",
 			cmd->simple->cmd_argv[0]);
-		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND);
+		runner_cmd_simple_panic(cmd, msg, EXIT_COMMAND_NOT_FOUND, true);
 	}
 }
 
@@ -122,7 +154,7 @@ static void	runner_cmd_simple_execve_error(t_command cmd, int err_num)
 		return (runner_cmd_simple_execve_error_eacces(cmd, err_num));
 	ft_asprintf(&msg, "bash: %s: %s",
 		cmd->simple->cmd_argv[0], strerror(err_num));
-	return (runner_cmd_simple_panic(cmd, msg, err_num));
+	return (runner_cmd_simple_panic(cmd, msg, err_num, true));
 }
 
 sig_atomic_t	runner_cmd_simple_execve(t_command cmd)
@@ -133,7 +165,7 @@ sig_atomic_t	runner_cmd_simple_execve(t_command cmd)
 	return (-1);
 }
 
-sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
+sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_fork)
 {
 	pid_t			*pid;
 	sig_atomic_t	status;
@@ -141,6 +173,9 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	t_builtin		maybe_builtin;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
+	maybe_builtin = runner_maybe_cmd_builtin(cmd);
+	if (!should_fork && maybe_builtin)
+		return (runner_cmd_builtin_nofork(maybe_builtin, cmd));
 	pid = malloc(sizeof(pid_t));
 	*pid = fork();
 	status = EXIT_OK;
@@ -149,16 +184,15 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids)
 	if (*pid == 0)
 	{
 		free(pid);
-		cmd->simple->cmd_envp = get_envp(); // TODO: change to get_envp
-		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
 		ft_arraylist_destroy(*pids);
+		cmd->simple->cmd_envp = get_envp();
+		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
-			runner_cmd_simple_panic(cmd, ft_strdup(err_msg), 1);
-		maybe_builtin = runner_maybe_cmd_builtin(cmd);
+			runner_cmd_simple_panic(cmd, ft_strdup(err_msg), EXIT_REDIRECT_FAIL, true);
 		signals_afterfork();
 		if (maybe_builtin)
 		{
-			status = runner_cmd_builtin(maybe_builtin, cmd, pids);
+			status = runner_cmd_builtin(maybe_builtin, cmd, true);
 			return (status);
 		}
 		return (runner_cmd_simple_execve(cmd));

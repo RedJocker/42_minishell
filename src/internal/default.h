@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/28 00:07:49 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/01 02:20:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ enum e_operations
 typedef enum e_exit_code
 {
 	EXIT_OK = 0,
+	EXIT_REDIRECT_FAIL = 1,
 	EXIT_SYNTAX_ERROR = 2,
 	EXIT_OUT_OF_MEMORY = 42,
 	EXIT_FORK_FAIL = 99,

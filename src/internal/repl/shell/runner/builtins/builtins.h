@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:56:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/19 08:40:00 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/01 02:04:34 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 # define BUILTINS_H
 
 # include "internal/repl/shell/command/command.h"
+# include "internal/repl/shell/runner/runner.h"
 
-int	runner_cmd_builtin_echo(t_command cmd);
-int	runner_cmd_builtin_export(t_command cmd);
+sig_atomic_t	runner_cmd_builtin_echo(t_command cmd);
+sig_atomic_t	runner_cmd_builtin_export(t_command cmd);
+sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, t_command cmd);
 
 #endif
