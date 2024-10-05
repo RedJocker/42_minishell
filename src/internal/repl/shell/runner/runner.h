@@ -6,16 +6,16 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/01 02:41:43 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/05 08:20:56 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RUNNER_H
 # define RUNNER_H
 
-# include "internal/repl/shell/command/command.h"
 # include <signal.h>
-#include <stdbool.h>
+# include <stdbool.h>
+# include "internal/repl/shell/command/command.h"
 
 typedef enum e_builtin
 {
@@ -25,15 +25,14 @@ typedef enum e_builtin
 }	t_builtin;
 
 int				runner(t_command cmd, int last_status_code);
-int				runner_cmd(
-						t_command cmd,
-						t_arraylist *pids,
-						int last_cmd_status,
-						bool should_fork);
+int				runner_cmd(t_command cmd, t_arraylist *pids, \
+					int last_cmd_status, bool should_fork);
 t_builtin		runner_maybe_cmd_builtin(t_command cmd);
-sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, bool should_exit);
-sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_fork);
-void			runner_cmd_simple_panic(
-					t_command cmd, char *msg, sig_atomic_t status_code, bool should_exit);
+sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, \
+					bool should_exit);
+sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, \
+					bool should_fork);
+void			runner_cmd_simple_panic(t_command cmd, char *msg, \
+					sig_atomic_t status_code, bool should_exit);
 
 #endif

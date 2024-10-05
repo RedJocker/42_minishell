@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   runner.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
+/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Updated: 2024/10/01 03:15:49 by maurodri         ###   ########.fr       */
+/*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
+/*   Updated: 2024/10/05 08:18:07 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <stdbool.h>
 #include <sys/wait.h>
 #include "ft_assert.h"
@@ -66,13 +68,13 @@ sig_atomic_t	runner_cmd(
 	return (status);
 }
 
-int	runner_exit_signal(int	status)
+sig_atomic_t	runner_exit_signal(sig_atomic_t	status)
 {
-	int	signal_num;
+	sig_atomic_t	signal_num;
 
 	signal_num = WTERMSIG(status);
 	if (signal_num == SIGQUIT)
-		ft_putstr("Quit\n");
+		ft_putstr("Quit (core dumped)\n");
 	return (SIG_BASE + signal_num);
 }
 
@@ -93,6 +95,7 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	}
 	pids = ft_arraylist_new(free);
 	status = runner_cmd(cmd, &pids, last_cmd_status, 0);
+	command_destroy(cmd);
 	status = status << 8;
 	pids_len = ft_arraylist_len(pids);
 	i = -1;
