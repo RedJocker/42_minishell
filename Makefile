@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/09/28 00:55:25 by dande-je         ###   ########.fr        #
+#    Updated: 2024/10/07 17:48:49 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,8 @@ SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_eof.c \
 								   command_util.c \
 								   io_handler.c \
-								   io_handlers.c)
+								   io_handlers.c\
+								   io_handler_heredoc.c)
 SRCS_FILES                      += $(addprefix $(SRCS_HISTORY_DIR), history.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse_operator.c \

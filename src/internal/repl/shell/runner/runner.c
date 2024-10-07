@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/07 16:55:48 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:55:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,26 +88,11 @@ void runner_cmd_eof(t_command cmd, sig_atomic_t last_cmd_status)
 	exit(last_cmd_status);
 }
 
-void io_handler_heredoc(t_io_handler *io)
-{
-	ft_printf("io_handler_heredoc %d\n", io->type);
-	if (io->type != IO_HEREDOC)
-		return ;
-	ft_printf("heredoc %s\n", io->heredoc_limiter);
-}
-
-
-void io_handlers_heredoc(t_arraylist ios)
-{
-	ft_printf("io_handlers_heredoc\n");
-	ft_arraylist_foreach(ios, (t_consumer) io_handler_heredoc);
-}
-
 void runner_heredoc(t_command cmd)
 {
-	ft_printf("runner heredoc %s\n", cmd->debug_id);
+	//ft_printf("runner heredoc %s\n", cmd->debug_id);
 	if (cmd->type == CMD_SIMPLE)
-		io_handlers_heredoc(cmd->io_handlers);
+		io_handlers_heredoc_to_fd(cmd->io_handlers);
 	else if (cmd->type == CMD_PIPE)
 	{
 		runner_heredoc(cmd->pipe->cmd_before);

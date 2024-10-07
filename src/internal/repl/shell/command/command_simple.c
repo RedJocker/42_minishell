@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/07 17:03:19 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:48:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,6 @@ int	command_simple_is_invalid(
 		}
 	}
 	return (0);
-}
-
-void io_handler_set_heredoc(t_io_handler *io, char *heredoc_limit)
-{
-	io->type = IO_HEREDOC;
-	io->direction = IO_IN;
-	io->heredoc_limiter = ft_strdup(heredoc_limit);
-}
-
-void io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit)
-{
-	t_io_handler	*io;
-
-	io = ft_calloc(1, sizeof(t_io_handler));
-	io_handler_set_heredoc(io, heredoc_limit);
-	*lst_ios = ft_arraylist_add(*lst_ios, io);
 }
 
 void	command_simple_fill(
