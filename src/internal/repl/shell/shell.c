@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/05 08:08:31 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:55:07 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "internal/repl/shell/shell.h"
 #include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
+#include "ft_util.h" // ft_strarr_printfd
 
 void	shell_set_input(t_shell *shell)
 {

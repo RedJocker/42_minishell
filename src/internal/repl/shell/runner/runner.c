@@ -6,15 +6,17 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/05 08:18:07 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:55:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdbool.h>
 #include <sys/wait.h>
+#include "collection/ft_arraylist.h"
 #include "ft_assert.h"
 #include "ft_stdio.h"
+#include "ft_util.h"
 #include "internal/default.h"
 #include "internal/env/env.h"
 #include "internal/repl/shell/command/command.h"
@@ -78,6 +80,30 @@ sig_atomic_t	runner_exit_signal(sig_atomic_t	status)
 	return (SIG_BASE + signal_num);
 }
 
+void runner_cmd_eof(t_command cmd, sig_atomic_t last_cmd_status)
+{
+	command_destroy(cmd);
+	ft_putendl("exit");
+	env_destroy();
+	exit(last_cmd_status);
+}
+
+void runner_heredoc(t_command cmd)
+{
+	//ft_printf("runner heredoc %s\n", cmd->debug_id);
+	if (cmd->type == CMD_SIMPLE)
+		io_handlers_heredoc_to_fd(cmd->io_handlers);
+	else if (cmd->type == CMD_PIPE)
+	{
+		runner_heredoc(cmd->pipe->cmd_before);
+		runner_heredoc(cmd->pipe->cmd_after);
+	}
+	else if (cmd->type == CMD_INVALID)
+		;
+	else
+		ft_assert(0, "runner_heerdoc unexpected cmd type");
+}
+
 sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 {
 	t_arraylist		pids;
@@ -87,12 +113,8 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 
 	status = EXIT_OK;
 	if (cmd->type == CMD_EOF)
-	{
-		command_destroy(cmd);
-		ft_putendl("exit");
-		env_destroy();
-		exit(last_cmd_status);
-	}
+		runner_cmd_eof(cmd, last_cmd_status);
+	runner_heredoc(cmd);
 	pids = ft_arraylist_new(free);
 	status = runner_cmd(cmd, &pids, last_cmd_status, 0);
 	command_destroy(cmd);

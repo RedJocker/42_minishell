@@ -6,11 +6,12 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/02 23:42:47 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:48:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
+#include "collection/ft_arraylist.h"
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
@@ -24,7 +25,8 @@ int	token_type_is_redirect(t_token *token)
 	return (token
 		&& (token->type == OP_REDIRECT_OUT_TRUNC
 			|| token->type == OP_REDIRECT_OUT_APPND
-			|| token->type == OP_REDIRECT_IN));
+			|| token->type == OP_REDIRECT_IN
+			|| token->type == OP_REDIRECT_IN_HEREDOC));
 }
 
 int	token_type_is_word(t_token *token)
@@ -95,6 +97,8 @@ void	command_simple_fill(
 				&cmd->io_handlers, tokens[++i]->content, flags_mode, IO_IN);
 			continue ;
 		}
+		else if (tokens[i]->type == OP_REDIRECT_IN_HEREDOC)
+			io_handlers_add_heredoc(&cmd->io_handlers, tokens[++i]->content);
 	}
 }
 

@@ -6,13 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 00:51:34 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:45:25 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
 #include "ft_string.h"
 #include "internal/default.h"
+#include "internal/repl/shell/token/token.h"
 #include "internal/repl/shell/token/token_internal/token_internal.h"
 
 static bool	token_is_invalid_quote(char *str_token)
@@ -43,6 +44,8 @@ t_token	*token_classify(char *str_token)
 		return (token_new(OP_REDIRECT_OUT_APPND, str_token));
 	else if (ft_strncmp(">", str_token, ft_strlen(">")) == DEFAULT)
 		return (token_new(OP_REDIRECT_OUT_TRUNC, str_token));
+	else if (ft_strncmp("<<", str_token, ft_strlen("<<")) == DEFAULT)
+		return (token_new(OP_REDIRECT_IN_HEREDOC, str_token));
 	else if (ft_strncmp("<", str_token, ft_strlen("<")) == DEFAULT)
 		return (token_new(OP_REDIRECT_IN, str_token));
 	else if (ft_strncmp("|", str_token, ft_strlen("|")) == DEFAULT)
