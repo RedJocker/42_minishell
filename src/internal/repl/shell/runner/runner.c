@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/07 18:55:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/09 04:21:15 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ sig_atomic_t	runner_cmd_invalid(t_command cmd, t_arraylist *pids)
 
 // pipe_fds[0] read, pipe_fds[1] write
 sig_atomic_t	runner_cmd_pipe(
-	t_command cmd, t_arraylist *pids, sig_atomic_t last_status_code)
+	t_command cmd, t_arraylist *pids, sig_atomic_t last_status_code, t_command cmd_base)
 {
 	sig_atomic_t	status;
 	int				pipe_fds[2];
@@ -48,13 +48,17 @@ sig_atomic_t	runner_cmd_pipe(
 	pipe(pipe_fds);
 	command_add_pipe_io(cmd->pipe->cmd_before, pipe_fds[1], IO_OUT);
 	command_add_pipe_io(cmd->pipe->cmd_after, pipe_fds[0], IO_IN);
-	runner_cmd(cmd->pipe->cmd_before, pids, last_status_code, true);
-	runner_cmd(cmd->pipe->cmd_after, pids, last_status_code, true);
+	runner_cmd(cmd->pipe->cmd_before, pids, last_status_code, true, cmd_base);
+	runner_cmd(cmd->pipe->cmd_after, pids, last_status_code, true, cmd_base);
 	return (status);
 }
 
 sig_atomic_t	runner_cmd(
-	t_command cmd, t_arraylist *pids, sig_atomic_t last_cmd_status, bool should_fork)
+	t_command cmd,
+	t_arraylist *pids,
+	sig_atomic_t last_cmd_status,
+	bool should_fork,
+	t_command base)
 {
 	sig_atomic_t	status;
 
@@ -62,11 +66,11 @@ sig_atomic_t	runner_cmd(
 	expand(cmd, last_cmd_status);
 	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
 	if (cmd->type == CMD_SIMPLE)
-		status = runner_cmd_simple(cmd, pids, should_fork);
+		status = runner_cmd_simple(cmd, pids, should_fork, base);
 	else if (cmd->type == CMD_INVALID)
 		status = runner_cmd_invalid(cmd, pids);
 	else if (cmd->type == CMD_PIPE)
-		status = runner_cmd_pipe(cmd, pids, last_cmd_status);
+		status = runner_cmd_pipe(cmd, pids, last_cmd_status, base);
 	return (status);
 }
 
@@ -116,8 +120,7 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 		runner_cmd_eof(cmd, last_cmd_status);
 	runner_heredoc(cmd);
 	pids = ft_arraylist_new(free);
-	status = runner_cmd(cmd, &pids, last_cmd_status, 0);
-	command_destroy(cmd);
+	status = runner_cmd(cmd, &pids, last_cmd_status, 0, cmd);
 	status = status << 8;
 	pids_len = ft_arraylist_len(pids);
 	i = -1;
@@ -126,6 +129,7 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	if (pids_len > 0)
 		waitpid(*((pid_t *) ft_arraylist_get(pids, i)), &status, 0);
 	ft_arraylist_destroy(pids);
+	command_destroy(cmd);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))

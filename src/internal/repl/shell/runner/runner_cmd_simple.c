@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/09 03:33:16 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/09 04:40:04 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ void	runner_cmd_simple_panic(
 	ft_puterrl(msg);
 	free(msg);
 	if (should_exit)
-	{
-		command_destroy(cmd);
-		exit(status_code);
-	}
+		runner_cmd_simple_exit_status(cmd, status_code);
 }
 
 void	runner_cmd_simple_exit_status(t_command cmd, sig_atomic_t status)
@@ -44,6 +41,7 @@ void	runner_cmd_simple_exit_status(t_command cmd, sig_atomic_t status)
 	close(STDIN_FILENO);
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
+	env_destroy();
 	command_destroy(cmd);
 	exit(status);
 }
@@ -63,23 +61,20 @@ t_builtin	runner_maybe_cmd_builtin(t_command cmd)
 sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, bool shoul_exit)
 {
 	sig_atomic_t	status;
-	char 			*msg;
 
-	msg = NULL;
+	(void) shoul_exit; //TODO: check if should_exit is needed
 	status = EXIT_OK;
 	if (builtin == BUILTIN_ECHO)
 		status = runner_cmd_builtin_echo(cmd);
-	if (status != EXIT_OK)
-		runner_cmd_simple_panic(cmd, msg, status, shoul_exit);
 	return (status);
 }
 
 sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, t_command cmd)
 {
-	int 			copy_fds[2];
+	int				copy_fds[2];
 	sig_atomic_t	status;
-	char 			*err_msg;
-	
+	char			*err_msg;
+
 	copy_fds[0] = dup(STDIN_FILENO);
 	copy_fds[1] = dup(STDOUT_FILENO);
 	cmd->simple->cmd_envp = get_envp();
@@ -168,14 +163,14 @@ static void	runner_cmd_simple_execve_error(t_command cmd, int err_num)
 }
 
 sig_atomic_t	runner_cmd_simple_execve(t_command cmd)
-{	
+{
 	execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, cmd->simple->cmd_envp);
 	runner_cmd_simple_execve_error(cmd, errno);
 	ft_assert(0, "unexpected execution");
 	return (-1);
 }
 
-sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_fork)
+sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_fork, t_command cmd_base)
 {
 	pid_t			*pid;
 	sig_atomic_t	status;
@@ -196,7 +191,7 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_for
 		free(pid);
 		ft_arraylist_destroy(*pids);
 		if (cmd->simple->cmd_argc == DEFAULT)
-			runner_cmd_simple_exit_status(cmd, EXIT_OK);
+			runner_cmd_simple_exit_status(cmd_base, EXIT_OK);
 		cmd->simple->cmd_envp = get_envp();
 		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
@@ -204,8 +199,10 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_for
 		signals_afterfork();
 		if (maybe_builtin)
 		{
+			//ft_printf("fork builtin %s %d\n", cmd->debug_id, cmd->type);
 			status = runner_cmd_builtin(maybe_builtin, cmd, true);
-			runner_cmd_simple_exit_status(cmd, status);
+			runner_cmd_simple_exit_status(cmd_base, status);
+			ft_assert(0, "unexpected line executed");
 		}
 		return (runner_cmd_simple_execve(cmd));
 	}

@@ -42,13 +42,13 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
     delete_temp_folder
 }
 
 minishell_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LC_ALL="pt_BR.UTF-8" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
     delete_temp_folder
 }
 
@@ -75,7 +75,6 @@ assert_minishell_equal_bash() {
     
     #local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0"ddd"} !/here-document at line/ { print $0 "abc"}' <<< "$output")
 
-    echo "$bash_out_norm" 1>&3
     run minishell_execute "$@"
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
