@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 04:21:54 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/05 07:06:57 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/09 03:31:53 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,15 @@
 char	**get_env_path(void)
 {
 	char	*path;
+	char	**env_path;
 
 	path = env_get_value("PATH");
 	if (path)
-		return (ft_split(path, ':'));
+	{
+		env_path = (ft_split(path, ':'));
+		free(path);
+		return (env_path);
+	}
 	else
 		return (NULL);
 }

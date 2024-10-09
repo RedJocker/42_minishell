@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/07 18:54:18 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/09 03:30:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,16 @@ void io_handler_heredoc_to_fd(t_io_handler *io)
 		free(line);
 		line = readline("> ");
 	}
-	close(tmp_fd[1]);
-	io->type = IO_FD;
-	io->fd = tmp_fd[0];
 	if (line)
 	{
 		//ft_printf("finish heredoc with %s\n", line);
 		free(line);
 	}
 	else
-		ft_putendl("warning finish heredoc with end of file");
+		ft_printf("bash: warning: here-document delimited by "
+				  "end-of-file (wanted `%s')\n", io->heredoc_limiter);
+	close(tmp_fd[1]);
+	free(io->heredoc_limiter);
+	io->type = IO_FD;
+	io->fd = tmp_fd[0];
 }
