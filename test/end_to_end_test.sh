@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/03 02:14:41 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/09 03:29:34 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ teardown() {
 teardown_file() {
     #echo "END TEST" 1>&3
     true
+    delete_temp_folder
 }
 
 create_temp_folder() {
@@ -57,7 +58,7 @@ minishell_leak_check() {
 	     -s \
 	     --show-reachable=yes \
 	     --errors-for-leak-kinds=all \
-	     --error-exitcode=1 \
+	     --error-exitcode=33 \
 	     --track-origins=yes \
 	     --track-fds=yes \
 	     --suppressions=mini.supp \
@@ -72,8 +73,9 @@ assert_minishell_equal_bash() {
     #echo $bash_status 1>&3
     #echo "$bash_output" 1>&3
     
-    #local bash_out_norm=$(awk 'NR > 2 && !/^RedWillShell\$/ { print $0}' <<< "$output")
-    
+    #local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0"ddd"} !/here-document at line/ { print $0 "abc"}' <<< "$output")
+
+    echo "$bash_out_norm" 1>&3
     run minishell_execute "$@"
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
@@ -89,18 +91,111 @@ assert_minishell_equal_bash() {
 		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
     fi
-    
+
     create_temp_folder
     run minishell_leak_check "$@"
     delete_temp_folder
     
-    if (( status != 0 )); then
+    if (( status == 33 )); then
 	echo -e "VALGRIND ERROR:\n$output"
 	false
     fi
 }
 
+
+assert_minishell_equal_bash_heredoc() {
+    run bash_execute "$@"
+    local bash_status=$status
+    local bash_output=$output
+
+    #echo $bash_status 1>&3
+    #echo "$bash_output" 1>&3
+
+    local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0} !/here-document/ { print $0}' <<< "$output")
+
+ 
+    run minishell_execute "$@"
+    #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
+
+    #echo -e "===> bash_out_norm:\n<$bash_out_norm>\n===> minishell_output:\n<$output>" 1>&3
+    if ! [[ $bash_out_norm == $output ]]; then
+		echo -e "===> bash_out_norm:\n<$bash_out_norm>\n===> minishell_output:\n<$output>"
+		false
+    fi
+
+    #echo "$output" 1>&3
+
+    if ! [[ $bash_status == $status ]]; then
+		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
+		false
+    fi
+    
+    create_temp_folder
+    run minishell_leak_check "$@"
+    delete_temp_folder
+    
+    if (( status == 33 )); then
+	echo -e "VALGRIND ERROR:\n$output"
+	false
+    fi
+}
+
+
+
 # TEST BEGIN
+
+@test "test simple command simple heredoc: eof\\nsimple heredoc\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple heredoc
+eof
+"
+}
+
+@test "test simple command heredoc C-d: eof\\nsimple heredoc\\nC-d" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple heredoc
+"
+}
+
+@test "test simple command simple heredoc: eof\\nsimple\\nheredoc\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple
+heredoc
+eof
+"
+}
+
+@test "test simple command heredoc C-d: eof\\nclose input next line\\nC-d" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple
+heredoc
+"
+}
+
+@test "test simple command simple heredoc: eof\\nwith\\n\\nempty line\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+with
+
+empty line
+eof
+"
+}
+
+@test "test simple command heredoc C-d: eof\\n\\n\\nempty line\\n\\nC-d" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+a
+empty line
+"
+}
+
+@test "test simple command heredoc C-dd: eof\\nwith\\nmany\\nlines\\dC-d" {
+    assert_minishell_equal_bash_heredoc "echo hello
+cat << eof
+with
+many
+lines
+"
+}
 
 @test "test empty" {
     assert_minishell_equal_bash ""
@@ -762,6 +857,10 @@ cat $file3
 "
 }
 
+@test "test test invalid_command: echo_heredoc" {
+    assert_minishell_equal_bash "echo_heredoc
+"
+}
 
 @test "test invalid_command does not exist" {
     file1="$temp_dir/does_not_exist"
@@ -808,3 +907,4 @@ echo \$?"
 @test "test simple expand invalid enviroment variable: echo \$INVALID_VARIABLE" {
     assert_minishell_equal_bash echo "\$INVALID_VARIABLE"
 }
+

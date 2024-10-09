@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/09 03:14:18 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/09 03:33:16 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ static void	runner_cmd_simple_execve_error(t_command cmd, int err_num)
 {
 	char	*msg;
 
+	env_destroy();
 	if (err_num == ENOENT)
 		return (runner_cmd_simple_execve_error_enoent(cmd));
 	else if (err_num == EACCES)
