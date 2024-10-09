@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/01 02:20:20 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/08 06:16:45 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ enum e_default_values
 	WAIT = 1,
 	CHAR_BYTE = 1,
 	NULL_BYTE = 1,
+	CMD_NAME = 1,
 };
 
 typedef enum e_operations	t_operations;
