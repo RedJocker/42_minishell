@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/03 01:29:13 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/09 03:14:18 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ void	runner_cmd_simple_panic(
 		command_destroy(cmd);
 		exit(status_code);
 	}
+}
+
+void	runner_cmd_simple_exit_status(t_command cmd, sig_atomic_t status)
+{
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+	command_destroy(cmd);
+	exit(status);
 }
 
 t_builtin	runner_maybe_cmd_builtin(t_command cmd)
@@ -185,6 +194,8 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_for
 	{
 		free(pid);
 		ft_arraylist_destroy(*pids);
+		if (cmd->simple->cmd_argc == DEFAULT)
+			runner_cmd_simple_exit_status(cmd, EXIT_OK);
 		cmd->simple->cmd_envp = get_envp();
 		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
 		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
@@ -193,7 +204,7 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, bool should_for
 		if (maybe_builtin)
 		{
 			status = runner_cmd_builtin(maybe_builtin, cmd, true);
-			return (status);
+			runner_cmd_simple_exit_status(cmd, status);
 		}
 		return (runner_cmd_simple_execve(cmd));
 	}

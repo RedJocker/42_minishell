@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/05 08:20:56 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/09 03:10:48 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, \
 					bool should_fork);
 void			runner_cmd_simple_panic(t_command cmd, char *msg, \
 					sig_atomic_t status_code, bool should_exit);
+void			runner_cmd_simple_exit_status(t_command cmd, sig_atomic_t status);
 
 #endif
