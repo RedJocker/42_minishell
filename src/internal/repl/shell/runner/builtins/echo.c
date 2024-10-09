@@ -6,40 +6,45 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:55:24 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/08 06:17:41 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/09 02:13:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdbool.h>
+#include <string.h>
 #include <unistd.h>
 #include "ft_string.h"
 #include "internal/default.h"
 #include "internal/repl/shell/command/command.h"
 
-// TODO handle echo -n case
+static bool	is_option(t_command cmd);
+
 sig_atomic_t	runner_cmd_builtin_echo(t_command cmd)
 {
-	char		*arg;
-	int			len_arg;
 	int			i;
+	bool		should_print_newline;
 	const char	*space_newline = " \n";
 
-	i = DEFAULT;
-	len_arg = DEFAULT;
+	should_print_newline = is_option(cmd);
+	i = DEFAULT + !should_print_newline;
 	while (++i < cmd->simple->cmd_argc - CMD_NAME) 
 	{
-		arg = cmd->simple->cmd_argv[i];
-		len_arg = ft_strlen(arg);
-		write(STDOUT_FILENO, arg, len_arg);
+		write(STDOUT_FILENO, cmd->simple->cmd_argv[i], ft_strlen(cmd->simple->cmd_argv[i]));
 		write(STDOUT_FILENO, &(space_newline[DEFAULT]), CHAR_BYTE);
 	}
 	if (i < cmd->simple->cmd_argc)
-	{
-		arg = cmd->simple->cmd_argv[i];
-		len_arg = ft_strlen(arg);
-		write(STDOUT_FILENO, arg, len_arg);
-	}
-	write(STDOUT_FILENO, &(space_newline[DEFAULT_BEGIN]), CHAR_BYTE);
+		write(STDOUT_FILENO, cmd->simple->cmd_argv[i], ft_strlen(cmd->simple->cmd_argv[i]));
+	if (should_print_newline)
+		write(STDOUT_FILENO, &(space_newline[DEFAULT_BEGIN]), CHAR_BYTE);
 	return (EXIT_OK);
+}
+
+static bool	is_option(t_command cmd)
+{
+	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
+		return (true);
+	else if (strncmp(cmd->simple->cmd_argv[CHAR_BYTE], "-n", CHAR_BYTE + CHAR_BYTE) == DEFAULT)
+		return (false);
+	return (true);
 }
