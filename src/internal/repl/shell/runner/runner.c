@@ -12,6 +12,7 @@
 
 #include <signal.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 #include "collection/ft_arraylist.h"
 #include "ft_assert.h"
@@ -41,13 +42,18 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
 	int				pipe_fds[2];
-	const t_command	cmd = run_data->cmd;
+	const t_command cmd = run_data->cmd;
+	int				*to_close;
 
 	ft_assert(cmd->type == CMD_PIPE, "expected only cmd_pipe");
 	status = EXIT_OK;
 	pipe(pipe_fds);
 	command_add_pipe_io(cmd->pipe->cmd_before, pipe_fds[1], IO_OUT);
 	command_add_pipe_io(cmd->pipe->cmd_after, pipe_fds[0], IO_IN);
+	to_close = malloc(sizeof(int));
+	*to_close = pipe_fds[0];
+	*run_data->pipes_to_close = ft_arraylist_add(
+			*run_data->pipes_to_close, to_close);
 	run_data->cmd = cmd->pipe->cmd_before;
 	runner_cmd(run_data, FORK_YES);
 	run_data->cmd = cmd->pipe->cmd_after;
@@ -109,6 +115,7 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 {
 	t_runner_data	run_data;
 	t_arraylist		pids;
+	t_arraylist		pipes_to_close;
 	int				pids_len;
 	sig_atomic_t	status;
 	int				i;
@@ -119,6 +126,8 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	run_data.cmd = cmd;
 	pids = ft_arraylist_new(free);
 	run_data.pids = &pids;
+	pipes_to_close = ft_arraylist_new(free);
+	run_data.pipes_to_close = &pipes_to_close;
 	if (cmd->type == CMD_EOF)
 		runner_cmd_eof(&run_data);
 	runner_heredoc(run_data.base_cmd);
@@ -131,6 +140,7 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	if (pids_len > 0)
 		waitpid(*((pid_t *) ft_arraylist_get(*run_data.pids, i)), &status, 0);
 	ft_arraylist_destroy(*run_data.pids);
+	ft_arraylist_destroy(*run_data.pipes_to_close);
 	command_destroy(cmd);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));

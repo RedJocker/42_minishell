@@ -14,6 +14,7 @@
 #include "ft_assert.h"
 #include "ft_stdio.h"
 #include "ft_string.h"
+#include "ft_util.h"
 #include "internal/default.h"
 #include "internal/env/envp.h"
 #include "internal/env/env.h"
@@ -37,6 +38,13 @@ void	runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 		runner_cmd_simple_exit_status(run_data, status_code);
 }
 
+
+void close_fdp(int *fdp)
+{
+	close(*fdp);
+}
+
+
 void	runner_cmd_simple_exit_status(
 	t_runner_data *runner_data, sig_atomic_t status)
 {
@@ -45,6 +53,8 @@ void	runner_cmd_simple_exit_status(
 	close(STDERR_FILENO);
 	env_destroy();
 	command_destroy(runner_data->base_cmd);
+	ft_arraylist_foreach(*runner_data->pipes_to_close, (t_consumer) close_fdp);
+	ft_arraylist_destroy(*runner_data->pipes_to_close);
 	ft_arraylist_destroy(*runner_data->pids);
 	exit(status);
 }
@@ -96,6 +106,7 @@ sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, \
 	dup2(copy_fds[1], STDOUT_FILENO);
 	close(copy_fds[0]);
 	close(copy_fds[1]);
+	ft_arraylist_foreach(*run_data->pipes_to_close, (t_consumer) close_fdp);
 	return (status);
 }
 

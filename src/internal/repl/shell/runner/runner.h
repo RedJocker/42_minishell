@@ -28,6 +28,7 @@ typedef enum e_builtin
 typedef struct s_runner_data
 {
 	t_arraylist		*pids;
+	t_arraylist		*pipes_to_close;
 	sig_atomic_t	last_cmd_status;
 	t_command		base_cmd;
 	t_command		cmd;
