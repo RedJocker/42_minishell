@@ -780,6 +780,25 @@ e'ch'o hello
 echo \$?"
 }
 
+@test "test builtin echo with only option -n: echo -n" {
+    assert_minishell_equal_bash "echo -n
+echo \$?"
+}
+
+@test "test builtin echo with option -n: echo -n hello" {
+    assert_minishell_equal_bash "echo -n hello
+echo \$?"
+}
+
+@test "test builtin echo with option -n: echo -nnnn hello" {
+    assert_minishell_equal_bash "echo -nnnn hello
+echo \$?"
+}
+
+@test "test builtin echo with option -n: echo -nnnna hello" {
+    assert_minishell_equal_bash "echo -nnnna hello
+echo \$?"
+}
 
 @test "test builtin echo with invalid redirect syntax: echo hello >>" {
     assert_minishell_equal_bash "ls >>
