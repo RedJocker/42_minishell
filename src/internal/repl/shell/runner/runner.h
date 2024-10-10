@@ -24,16 +24,31 @@ typedef enum e_builtin
 	BUILTIN_EXPORT,
 }	t_builtin;
 
+
+typedef struct s_runner_data
+{
+	t_arraylist		*pids;
+	t_arraylist		*pipes_to_close;
+	sig_atomic_t	last_cmd_status;
+	t_command		base_cmd;
+	t_command		cmd;
+}	t_runner_data;
+
+typedef enum e_fork_flag
+{
+	FORK_NOT,
+	FORK_YES
+}	t_fork_flag;
+
 int				runner(t_command cmd, int last_status_code);
-int				runner_cmd(t_command cmd, t_arraylist *pids, \
-					int last_cmd_status, bool should_fork);
+sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork);
 t_builtin		runner_maybe_cmd_builtin(t_command cmd);
 sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, \
 					bool should_exit);
-sig_atomic_t	runner_cmd_simple(t_command cmd, t_arraylist *pids, \
-					bool should_fork);
-void			runner_cmd_simple_panic(t_command cmd, char *msg, \
+sig_atomic_t	runner_cmd_simple(
+					t_runner_data *run_data, t_fork_flag should_fork);
+void			runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 					sig_atomic_t status_code, bool should_exit);
-void			runner_cmd_simple_exit_status(t_command cmd, sig_atomic_t status);
-
+void			runner_cmd_simple_exit_status(
+					t_runner_data *runner_data, sig_atomic_t status);
 #endif
