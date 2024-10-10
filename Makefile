@@ -100,7 +100,8 @@ SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c \
                                                                   runner_cmd_simple.c)
 SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c)
-SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), echo.c \
+SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), builtins.c \
+								   echo.c \
 								   export.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)

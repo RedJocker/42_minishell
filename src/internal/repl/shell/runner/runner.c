@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/09 04:21:15 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/10 04:34:43 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@
 #include "collection/ft_arraylist.h"
 #include "ft_assert.h"
 #include "ft_stdio.h"
-#include "ft_util.h"
 #include "internal/default.h"
-#include "internal/env/env.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/command/io_handler.h"

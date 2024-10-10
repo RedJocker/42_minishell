@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/09 04:40:04 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/10 05:06:18 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "internal/env/envp.h"
 #include "internal/env/env.h"
 #include "internal/repl/shell/command/io_handler.h"
+#include "internal/repl/shell/runner/builtins/builtins.h"
 #include "internal/signal/signal.h"
 #include "runner.h"
 #include <fcntl.h>
@@ -27,7 +28,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "builtins/builtins.h"
 
 void	runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 	sig_atomic_t status_code, bool should_exit)
@@ -38,12 +38,10 @@ void	runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 		runner_cmd_simple_exit_status(run_data, status_code);
 }
 
-
-void close_fdp(int *fdp)
+void close_fd_pipes(int *fd)
 {
-	close(*fdp);
+	close(*fd);
 }
-
 
 void	runner_cmd_simple_exit_status(
 	t_runner_data *runner_data, sig_atomic_t status)
@@ -53,63 +51,11 @@ void	runner_cmd_simple_exit_status(
 	close(STDERR_FILENO);
 	env_destroy();
 	command_destroy(runner_data->base_cmd);
-	ft_arraylist_foreach(*runner_data->pipes_to_close, (t_consumer) close_fdp);
+	ft_arraylist_foreach(*runner_data->pipes_to_close, (t_consumer) close_fd_pipes);
 	ft_arraylist_destroy(*runner_data->pipes_to_close);
 	ft_arraylist_destroy(*runner_data->pids);
 	exit(status);
 }
-
-t_builtin	runner_maybe_cmd_builtin(t_command cmd)
-{
-	char	*invocation;
-
-	if (cmd->type != CMD_SIMPLE || cmd->simple->cmd_argc <= 0)
-		return (0);
-	invocation = cmd->simple->cmd_argv[0];
-	if (ft_strncmp(invocation, "echo", 5) == 0)
-		return (BUILTIN_ECHO);
-	return (NOT_BUILTIN);
-}
-
-sig_atomic_t	runner_cmd_builtin(t_builtin builtin, t_command cmd, bool shoul_exit)
-{
-	sig_atomic_t	status;
-
-	(void) shoul_exit; //TODO: check if should_exit is needed
-	status = EXIT_OK;
-	if (builtin == BUILTIN_ECHO)
-		status = runner_cmd_builtin_echo(cmd);
-	return (status);
-}
-
-sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, \
-	t_runner_data *run_data)
-{
-	int				copy_fds[2];
-	sig_atomic_t	status;
-	char			*err_msg;
-	const t_command	cmd = run_data->cmd;
-
-	copy_fds[0] = dup(STDIN_FILENO);
-	copy_fds[1] = dup(STDOUT_FILENO);
-	cmd->simple->cmd_envp = get_envp();
-	if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
-	{
-		close(copy_fds[0]);
-		close(copy_fds[1]);
-		runner_cmd_simple_panic(
-			run_data, ft_strdup(err_msg), EXIT_REDIRECT_FAIL, false);
-		return (EXIT_REDIRECT_FAIL);
-	}
-	status = runner_cmd_builtin(builtin, cmd, false);
-	dup2(copy_fds[0], STDIN_FILENO);
-	dup2(copy_fds[1], STDOUT_FILENO);
-	close(copy_fds[0]);
-	close(copy_fds[1]);
-	ft_arraylist_foreach(*run_data->pipes_to_close, (t_consumer) close_fdp);
-	return (status);
-}
-
 
 static void	runner_cmd_simple_execve_error_eacces(
 	t_runner_data *run_data, int err_num)
@@ -198,7 +144,7 @@ sig_atomic_t	runner_cmd_simple(
 	pid_t			*pid;
 	sig_atomic_t	status;
 	char			*err_msg;
-	t_builtin		maybe_builtin;
+	t_builtin_id		maybe_builtin;
 	const t_command	cmd = run_data->cmd;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
@@ -224,7 +170,7 @@ sig_atomic_t	runner_cmd_simple(
 		if (maybe_builtin)
 		{
 			//ft_printf("fork builtin %s %d\n", cmd->debug_id, cmd->type);
-			status = runner_cmd_builtin(maybe_builtin, cmd, true);
+			status = runner_cmd_builtin(maybe_builtin, cmd);
 			runner_cmd_simple_exit_status(run_data, status);
 			ft_assert(0, "unexpected line executed");
 		}
