@@ -18,6 +18,6 @@
 
 sig_atomic_t	runner_cmd_builtin_echo(t_command cmd);
 sig_atomic_t	runner_cmd_builtin_export(t_command cmd);
-sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, t_command cmd);
-
+sig_atomic_t	runner_cmd_builtin_nofork(t_builtin builtin, \
+										  t_runner_data *run_data);
 #endif
