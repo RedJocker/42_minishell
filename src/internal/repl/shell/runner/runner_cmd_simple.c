@@ -51,9 +51,10 @@ void	runner_cmd_simple_exit_status(
 	close(STDERR_FILENO);
 	env_destroy();
 	command_destroy(runner_data->base_cmd);
-	ft_arraylist_foreach(*runner_data->pipes_to_close, (t_consumer) close_fd_pipes);
-	ft_arraylist_destroy(*runner_data->pipes_to_close);
-	ft_arraylist_destroy(*runner_data->pids);
+	ft_arraylist_foreach(runner_data->pipes_to_close, \
+		(t_consumer) close_fd_pipes);
+	ft_arraylist_destroy(runner_data->pipes_to_close);
+	ft_arraylist_destroy(runner_data->pids);
 	exit(status);
 }
 
@@ -179,9 +180,9 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 	else
 	{
 		//TODO: change status to function error handling
-		*run_data->pids = ft_arraylist_add(*run_data->pids, pid);
+		run_data->pids = ft_arraylist_add(run_data->pids, pid);
 		io_handlers_close(cmd->io_handlers);
-		if (!(*run_data->pids))
+		if (!(run_data->pids))
 			status = EXIT_OUT_OF_MEMORY;
 	}
 	return (status);

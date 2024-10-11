@@ -50,8 +50,8 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 	command_add_pipe_io(cmd->pipe->cmd_after, pipe_fds[0], IO_IN);
 	to_close = malloc(sizeof(int));
 	*to_close = pipe_fds[0];
-	*run_data->pipes_to_close = ft_arraylist_add(
-			*run_data->pipes_to_close, to_close);
+	run_data->pipes_to_close = ft_arraylist_add(
+			run_data->pipes_to_close, to_close);
 	run_data->cmd = cmd->pipe->cmd_before;
 	runner_cmd(run_data, FORK_YES);
 	run_data->cmd = cmd->pipe->cmd_after;
@@ -109,36 +109,38 @@ void runner_heredoc(t_command cmd)
 		ft_assert(0, "runner_heerdoc unexpected cmd type");
 }
 
+void runner_data_init(
+	t_runner_data *run_data, t_command cmd, sig_atomic_t last_cmd_status)
+{
+	run_data->last_cmd_status = last_cmd_status;
+	run_data->base_cmd = cmd;
+	run_data->cmd = cmd;
+	run_data->pids = ft_arraylist_new(free);
+	run_data->pipes_to_close = ft_arraylist_new(free);
+}
+
 sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 {
 	t_runner_data	run_data;
-	t_arraylist		pids;
-	t_arraylist		pipes_to_close;
 	int				pids_len;
 	sig_atomic_t	status;
 	int				i;
 
 	status = EXIT_OK;
-	run_data.last_cmd_status = last_cmd_status;
-	run_data.base_cmd = cmd;
-	run_data.cmd = cmd;
-	pids = ft_arraylist_new(free);
-	run_data.pids = &pids;
-	pipes_to_close = ft_arraylist_new(free);
-	run_data.pipes_to_close = &pipes_to_close;
+	runner_data_init(&run_data, cmd, last_cmd_status);
 	if (cmd->type == CMD_EOF)
 		runner_cmd_eof(&run_data);
 	runner_heredoc(run_data.base_cmd);
 	status = runner_cmd(&run_data, FORK_NOT);
 	status = status << 8;
-	pids_len = ft_arraylist_len(*run_data.pids);
+	pids_len = ft_arraylist_len(run_data.pids);
 	i = -1;
 	while (++i < pids_len - 1)
-		waitpid(*((pid_t *) ft_arraylist_get(*run_data.pids, i)), 0, 0);
+		waitpid(*((pid_t *) ft_arraylist_get(run_data.pids, i)), 0, 0);
 	if (pids_len > 0)
-		waitpid(*((pid_t *) ft_arraylist_get(*run_data.pids, i)), &status, 0);
-	ft_arraylist_destroy(*run_data.pids);
-	ft_arraylist_destroy(*run_data.pipes_to_close);
+		waitpid(*((pid_t *) ft_arraylist_get(run_data.pids, i)), &status, 0);
+	ft_arraylist_destroy(run_data.pids);
+	ft_arraylist_destroy(run_data.pipes_to_close);
 	command_destroy(cmd);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
