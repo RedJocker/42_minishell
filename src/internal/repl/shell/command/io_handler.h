@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/11 02:19:40 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:57:48 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define IO_HANDLER_H
 
 # include "internal/repl/shell/command/command.h"
+#include <stdbool.h>
 
 typedef enum e_io_handler_type
 {
@@ -46,7 +47,8 @@ typedef struct s_io_handler
 		struct
 		{
 			char	*heredoc_limiter;
-			char	*heredoc_input;
+			char    *heredoc_input;
+			bool	heredoc_should_expand;
 		};
 		struct
 		{
