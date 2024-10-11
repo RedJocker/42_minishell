@@ -43,13 +43,11 @@ delete_temp_folder() {
 bash_execute() {
     create_temp_folder
     VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
-    delete_temp_folder
 }
 
 minishell_execute() {
     create_temp_folder
     VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
-    delete_temp_folder
 }
 
 minishell_leak_check() {
@@ -67,6 +65,8 @@ minishell_leak_check() {
 
 assert_minishell_equal_bash() {
     run bash_execute "$@"
+    delete_temp_folder
+    
     local bash_status=$status
     local bash_output=$output
 
@@ -76,6 +76,8 @@ assert_minishell_equal_bash() {
     #local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0"ddd"} !/here-document at line/ { print $0 "abc"}' <<< "$output")
 
     run minishell_execute "$@"
+    delete_temp_folder
+
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
     # echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
@@ -104,6 +106,8 @@ assert_minishell_equal_bash() {
 
 assert_minishell_equal_bash_heredoc() {
     run bash_execute "$@"
+    delete_temp_folder
+
     local bash_status=$status
     local bash_output=$output
 
@@ -112,8 +116,10 @@ assert_minishell_equal_bash_heredoc() {
 
     local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0} !/here-document/ { print $0}' <<< "$output")
 
- 
+    
     run minishell_execute "$@"
+    delete_temp_folder
+    
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
     #echo -e "===> bash_out_norm:\n<$bash_out_norm>\n===> minishell_output:\n<$output>" 1>&3
@@ -187,14 +193,36 @@ empty line
 "
 }
 
-@test "test simple command heredoc C-dd: eof\\nwith\\nmany\\nlines\\dC-d" {
-    assert_minishell_equal_bash_heredoc "echo hello
-cat << eof
-with
-many
-lines
+@test "test simple command heredoc with expansion: eof\$VARIABLE_FROM_OUTSIDE\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+\$VARIABLE_FROM_OUTSIDE
+eof
 "
 }
+
+@test "test simple command heredoc C-d with expansion: eof\$VARIABLE_FROM_OUTSIDE" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+\$VARIABLE_FROM_OUTSIDE
+"
+}
+
+
+@test "test simple command heredoc with expansion: true\\ncat << eof\\n\$?\\neof" {
+    assert_minishell_equal_bash_heredoc "true
+cat << eof
+\$?
+eof
+"
+}
+
+@test "test simple command heredoc with expansion: false\\ncat << echo\\n\$?\\neof" {
+    assert_minishell_equal_bash_heredoc "false
+cat << eof
+\$?
+eof
+"
+}
+
 
 @test "test empty" {
     assert_minishell_equal_bash ""
@@ -926,3 +954,72 @@ echo \$?"
     assert_minishell_equal_bash echo "\$INVALID_VARIABLE"
 }
 
+@test "test pipe and echo: echo before pipe | wc" {
+    assert_minishell_equal_bash "echo before pipe | cat"
+}
+
+@test "test pipe and echo: ls | echo after pipe" {
+    assert_minishell_equal_bash "ls | echo after pipe"
+}
+
+@test "test pipe and echo: echo -n before without endline | wc -c" {
+    assert_minishell_equal_bash "echo -n before without endline | wc -c"
+}
+
+@test "test pipe and echo:  ls | echo -n after without endline" {
+    assert_minishell_equal_bash "ls | echo -n after without endline"
+}
+
+@test "test pipe and echo: echo redirected  > \$file1 | cat" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo to file > $file1 | cat
+echo $?
+cat $file1"
+}
+
+@test "test pipe and echo: ls | echo to file > \$file1" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "ls | echo to file > $file1
+echo $?
+cat $file1
+"
+}
+
+@test "test pipe and echo: echo piped | wc | cat" {
+    assert_minishell_equal_bash "echo piped | wc | cat"
+}
+
+@test "test pipe and echo: ls -l | echo piped | cat" {
+    assert_minishell_equal_bash "ls -l | echo piped | cat"
+}
+
+@test "test pipe and echo: ls | wc -c | echo to out" {
+    assert_minishell_equal_bash "ls | wc -c | echo to out"
+}
+
+@test "test pipe and echo: echo piped | echo piped | cat -e" {
+    assert_minishell_equal_bash "echo piped | echo piped | cat -e"
+}
+
+@test "test pipe and echo: echo piped | wc | echo to out" {
+    assert_minishell_equal_bash "echo piped | wc | echo to out"
+}
+
+@test "test pipe and echo: uname | echo piped | echo to out" {
+    assert_minishell_equal_bash "uname | echo piped | echo to out"
+}
+
+@test "test pipe and echo: echo piped | echo piped | echo to out" {
+    assert_minishell_equal_bash "echo piped | echo piped | echo to out"
+}
+
+@test "test pipe and echo: echo to file > \$file1 | echo to file > \$file2 | echo to file > \$file3" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    file3="$temp_dir/c.txt"
+    assert_minishell_equal_bash "echo to file > $file1 | echo to file > $file2 | echo to file > $file3
+cat $file1
+cat $file2
+cat $file3
+"
+}
