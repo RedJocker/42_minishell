@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/03 00:29:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:05:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	io_handler_destroy(t_io_handler *io)
 	if (io->type == IO_PATH)
 		free(io->path);
 	else if (io->type == IO_HEREDOC)
+	{
 		free(io->heredoc_limiter);
+		free(io->heredoc_input);
+	}
 	else if (io->type == IO_ERROR)
 		free(io->error);
 	free(io);

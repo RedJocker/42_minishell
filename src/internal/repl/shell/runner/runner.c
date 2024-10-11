@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/10 04:34:43 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:28:29 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,31 @@
 #include "runner.h"
 
 void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
+
+void runner_heredoc_prompt(t_command cmd)
+{
+	//ft_printf("runner heredoc %s\n", cmd->debug_id);
+	if (cmd->type == CMD_SIMPLE)
+		io_handlers_heredoc_prompt(cmd->io_handlers);
+	else if (cmd->type == CMD_PIPE)
+	{
+		runner_heredoc_prompt(cmd->pipe->cmd_before);
+		runner_heredoc_prompt(cmd->pipe->cmd_after);
+	}
+	else if (cmd->type == CMD_INVALID)
+		;
+	else
+		ft_assert(0, "runner_heerdoc unexpected cmd type");
+}
+
+
+void runner_heredoc_to_fd(t_command cmd)
+{
+	//ft_printf("runner heredoc %s\n", cmd->debug_id);
+	if (cmd->type != CMD_SIMPLE)
+		return ;
+	io_handlers_heredoc_to_fd(cmd->io_handlers);
+}
 
 sig_atomic_t	runner_cmd_invalid(t_command cmd, t_runner_data *runner_data)
 {
@@ -66,6 +91,7 @@ sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork)
 
 	status = DEFAULT;
 	expand(cmd, run_data->last_cmd_status);
+	runner_heredoc_to_fd(cmd);
 	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
 	if (cmd->type == CMD_SIMPLE)
 		status = runner_cmd_simple(run_data, should_fork);
@@ -93,22 +119,6 @@ void runner_cmd_eof(t_runner_data *run_data)
 	runner_cmd_simple_exit_status(run_data, run_data->last_cmd_status);
 }
 
-void runner_heredoc(t_command cmd)
-{
-	//ft_printf("runner heredoc %s\n", cmd->debug_id);
-	if (cmd->type == CMD_SIMPLE)
-		io_handlers_heredoc_to_fd(cmd->io_handlers);
-	else if (cmd->type == CMD_PIPE)
-	{
-		runner_heredoc(cmd->pipe->cmd_before);
-		runner_heredoc(cmd->pipe->cmd_after);
-	}
-	else if (cmd->type == CMD_INVALID)
-		;
-	else
-		ft_assert(0, "runner_heerdoc unexpected cmd type");
-}
-
 void runner_data_init(
 	t_runner_data *run_data, t_command cmd, sig_atomic_t last_cmd_status)
 {
@@ -130,7 +140,7 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	runner_data_init(&run_data, cmd, last_cmd_status);
 	if (cmd->type == CMD_EOF)
 		runner_cmd_eof(&run_data);
-	runner_heredoc(run_data.base_cmd);
+	runner_heredoc_prompt(run_data.base_cmd);
 	status = runner_cmd(&run_data, FORK_NOT);
 	status = status << 8;
 	pids_len = ft_arraylist_len(run_data.pids);
