@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:56:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/11 01:57:19 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:01:21 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ struct s_builtin
 	char				*invocation;
 	t_cmd_builtin_func	fn;
 };
-//
+
 typedef struct s_builtins	t_builtins;
 struct s_builtins
 {
