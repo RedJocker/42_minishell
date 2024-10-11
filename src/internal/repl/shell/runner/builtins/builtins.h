@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:56:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/10 05:07:40 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/11 01:57:19 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ enum e_builtin_id
 	BUILTIN_SIZE = BUILTIN_END,
 };
 
+enum e_fd_builtin
+{
+	FD_IN,
+	FD_OUT,
+	FD_SIZE,
+};
+
 typedef sig_atomic_t		(*t_cmd_builtin_func)(t_command);
 
 typedef struct s_builtin	t_builtin;
@@ -47,9 +54,9 @@ struct s_builtins
 
 sig_atomic_t	runner_cmd_builtin_echo(t_command cmd);
 sig_atomic_t	runner_cmd_builtin_export(t_command cmd);
-t_builtin_id	runner_maybe_cmd_builtin(t_command cmd);
+t_builtin_id	check_builtin(t_command cmd);
 sig_atomic_t	runner_cmd_builtin(t_builtin_id builtin, t_command cmd);
-sig_atomic_t	runner_cmd_builtin_nofork(t_builtin_id builtin, \
+sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 					t_runner_data *run_data);
 
 #endif

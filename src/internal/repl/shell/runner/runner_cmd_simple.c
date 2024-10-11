@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/10 05:06:18 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/10 23:20:40 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,19 +138,19 @@ sig_atomic_t	runner_cmd_simple_execve(t_runner_data *run_data)
 	return (-1);
 }
 
-sig_atomic_t	runner_cmd_simple(
-	t_runner_data *run_data, t_fork_flag should_fork)
+sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
+					t_fork_flag should_fork)
 {
-	pid_t			*pid;
-	sig_atomic_t	status;
-	char			*err_msg;
-	t_builtin_id		maybe_builtin;
+	pid_t				*pid;
+	sig_atomic_t		status;
+	char				*err_msg;
+	t_builtin_id		builtin;
 	const t_command	cmd = run_data->cmd;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
-	maybe_builtin = runner_maybe_cmd_builtin(cmd);
-	if (!should_fork && maybe_builtin)
-		return (runner_cmd_builtin_nofork(maybe_builtin, run_data));
+	builtin = check_builtin(cmd);
+	if (!should_fork && builtin)
+		return (runner_cmd_builtin_without_fork(builtin, run_data));
 	pid = malloc(sizeof(pid_t));
 	*pid = fork();
 	status = EXIT_OK;
@@ -167,10 +167,10 @@ sig_atomic_t	runner_cmd_simple(
 			runner_cmd_simple_panic(run_data, \
 				ft_strdup(err_msg), EXIT_REDIRECT_FAIL, true);
 		signals_afterfork();
-		if (maybe_builtin)
+		if (builtin)
 		{
 			//ft_printf("fork builtin %s %d\n", cmd->debug_id, cmd->type);
-			status = runner_cmd_builtin(maybe_builtin, cmd);
+			status = runner_cmd_builtin(builtin, cmd);
 			runner_cmd_simple_exit_status(run_data, status);
 			ft_assert(0, "unexpected line executed");
 		}
