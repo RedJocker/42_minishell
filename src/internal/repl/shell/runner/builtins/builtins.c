@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/11 01:57:25 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/11 05:11:17 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 	copy_fds[FD_IN] = dup(STDIN_FILENO);
 	copy_fds[FD_OUT] = dup(STDOUT_FILENO);
 	cmd->simple->cmd_envp = get_envp();
-	if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
+	if (!io_handlers_redirect(cmd->io_handlers))
 	{
+		err_msg = io_handlers_get_error(cmd->io_handlers);
 		close(copy_fds[FD_IN]);
 		close(copy_fds[FD_OUT]);
 		runner_cmd_simple_panic(
@@ -86,7 +87,7 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 	dup2(copy_fds[FD_OUT], STDOUT_FILENO);
 	close(copy_fds[FD_IN]);
 	close(copy_fds[FD_OUT]);
-	ft_arraylist_foreach(*run_data->pipes_to_close, \
+	ft_arraylist_foreach(run_data->pipes_to_close, \
 		(t_consumer) close_fd_pipes);
 	return (status);
 }

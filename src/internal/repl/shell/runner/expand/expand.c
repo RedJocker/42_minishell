@@ -6,22 +6,29 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 20:38:29 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/03 02:13:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/11 04:57:49 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "collection/ft_arraylist.h"
 #include "ft_assert.h"
 #include "ft_ctype.h"
 #include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
 #include "internal/default.h"
+#include "internal/repl/shell/command/io_handler.h"
 #include "stringbuilder.h"
 #include "internal/env/env.h"
 #include "internal/repl/shell/runner/expand/expand.h"
 #include "internal/repl/shell/runner/expand/expand_internal.h"
-
+#include "internal/repl/shell/command/io_handler.h"
+#include "collection/ft_arraylist.h"
+#include "ft_stdio.h"
 #include "internal/ft_extension.h" // TODO: Remove this after finish the project.
+#include <errno.h>
+#include <signal.h>
+#include <string.h>
 
 // return len parsed
 static int	expand_dollar(char *str, t_stringbuilder *builder,	\
@@ -62,7 +69,7 @@ static int	expand_dollar_split(char *str, t_expansion_state *state, \
 	char	**split;
 	char	*temp;
 	int		j;
-	
+
 	i = expand_dollar(str, &state->builder, last_status_code);
 	temp = stringbuilder_build(state->builder);
 	split = ft_splitfun(temp, (t_pred_int) ft_isspace);
@@ -118,7 +125,7 @@ static void	expand_str(
 	state->lst_new_args = (ft_arraylist_add(state->lst_new_args, state->res));
 }
 
-void	expand(t_command cmd, sig_atomic_t last_status_code)
+void	expand_argv(t_command cmd, sig_atomic_t last_status_code)
 {
 	t_expansion_state	state;
 	int					i;
@@ -136,4 +143,69 @@ void	expand(t_command cmd, sig_atomic_t last_status_code)
 	cmd->simple->cmd_argc = 0;
 	while (cmd->simple->cmd_argv[cmd->simple->cmd_argc])
 		cmd->simple->cmd_argc++;
+}
+
+void	expand_io_path(t_io_handler *io, sig_atomic_t *last_status_code)
+{
+	// TODO: expand path
+	(void) io;
+	(void) last_status_code;
+
+	t_expansion_state	state;
+	char				*errmsg;
+
+	if (io->type != IO_PATH)
+		return ft_assert(0, "unexpected io type on expand_io_path");
+	state.lst_new_args = ft_arraylist_new(free);
+	expand_str(io->path, *last_status_code, &state);
+	if (ft_arraylist_len(state.lst_new_args) != 1)
+	{
+		ft_asprintf(&errmsg, "bash: %s: ambiguous redirect", io->path);
+		free(io->path);
+		ft_arraylist_destroy(state.lst_new_args);
+		return io_handler_set_error(io, errno, errmsg);
+	}
+	free(io->path);
+	io->path = ft_strdup(ft_arraylist_get(state.lst_new_args, 0));
+	ft_arraylist_destroy(state.lst_new_args);
+}
+
+void	expand_io_heredoc(t_io_handler *io, sig_atomic_t *last_status_code)
+{
+	t_stringbuilder builder;
+	int				i;
+
+	if (!io->heredoc_should_expand)
+		return ;
+	builder = stringbuilder_new();
+	i = -1;
+	while (io->heredoc_input[++i])
+	{
+		if (io->heredoc_input[i] == '$')
+			i += expand_dollar(io->heredoc_input + i, &builder, *last_status_code);
+		else
+			builder = stringbuilder_addchar(builder, io->heredoc_input[i]);
+	}
+	free(io->heredoc_input);
+	io->heredoc_input = stringbuilder_build(builder);
+}
+
+void	expand_io_handler(t_io_handler *io, sig_atomic_t *last_status_code)
+{
+	if (io->type == IO_PATH)
+		return expand_io_path(io, last_status_code);
+	else if (io->type == IO_HEREDOC)
+		return expand_io_heredoc(io, last_status_code);
+}
+
+void	expand_io_handlers(t_command cmd, sig_atomic_t last_status_code)
+{
+	ft_arraylist_foreacharg(cmd->io_handlers, \
+		(t_biconsumer) expand_io_handler, &last_status_code);
+}
+
+void	expand(t_command cmd, sig_atomic_t last_status_code)
+{
+	expand_argv(cmd, last_status_code);
+	expand_io_handlers(cmd, last_status_code);
 }

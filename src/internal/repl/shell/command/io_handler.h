@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/07 18:01:07 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/11 02:57:48 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define IO_HANDLER_H
 
 # include "internal/repl/shell/command/command.h"
+#include <stdbool.h>
 
 typedef enum e_io_handler_type
 {
@@ -43,7 +44,12 @@ typedef struct s_io_handler
 			int		flags;
 			int		mode;
 		};
-		char	*heredoc_limiter;
+		struct
+		{
+			char	*heredoc_limiter;
+			char    *heredoc_input;
+			bool	heredoc_should_expand;
+		};
 		struct
 		{
 			int		error_status;
@@ -57,25 +63,27 @@ void	io_handler_set_path(
 			char *path,
 			int flags_mode[2],
 			t_io_direction io_dir);
-void	io_handler_redirect(t_io_handler *io, char **out_errmsg);
-int		io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg);
+void	io_handler_set_error(t_io_handler *io, int err_no, char *strerr);
+void	io_handler_to_fd(t_io_handler *io);
+void	io_handler_redirect(t_io_handler *io);
 void	io_handler_destroy(t_io_handler *io);
+char	*io_handlers_get_error(t_arraylist lst_iohandlers);
 void	io_handlers_add_path(
 			t_arraylist *lst_iohandlers,
 			char *path,
 			int flags_mode[2],
 			t_io_direction io_dir);
-void	io_handler_to_fd(t_io_handler *io, char **out_errmsg);
-int		io_handlers_to_fd(t_arraylist lst_iohandlers, char **out_errmsg);
+int		io_handlers_to_fd(t_arraylist lst_iohandlers);
 void	io_handlers_add_pipe(
 			t_arraylist *lst_iohandlers,
 			int fd,
 			t_io_direction io_dir);
 void	io_handlers_close(t_arraylist lst_iohandlers);
+int		io_handlers_redirect(t_arraylist lst_iohandlers);
 /////
 void	io_handler_heredoc_to_fd(t_io_handler *io);
 void	io_handlers_heredoc_to_fd(t_arraylist ios);
 void	io_handler_set_heredoc(t_io_handler *io, char *heredoc_limit);
 void	io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit);
-
+void	io_handlers_heredoc_prompt(t_arraylist ios);
 #endif
