@@ -144,7 +144,6 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 {
 	pid_t				*pid;
 	sig_atomic_t		status;
-	char				*err_msg;
 	t_builtin_id		builtin;
 	const t_command	cmd = run_data->cmd;
 
@@ -164,9 +163,10 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 			runner_cmd_simple_exit_status(run_data, EXIT_OK);
 		cmd->simple->cmd_envp = get_envp();
 		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
-		if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
+		if (!io_handlers_redirect(cmd->io_handlers))
 			runner_cmd_simple_panic(run_data, \
-				ft_strdup(err_msg), EXIT_REDIRECT_FAIL, true);
+				ft_strdup(io_handlers_get_error(cmd->io_handlers)), \
+					EXIT_REDIRECT_FAIL, true);
 		signals_afterfork();
 		if (builtin)
 		{

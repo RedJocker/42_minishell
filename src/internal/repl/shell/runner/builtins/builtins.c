@@ -73,8 +73,9 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 	copy_fds[FD_IN] = dup(STDIN_FILENO);
 	copy_fds[FD_OUT] = dup(STDOUT_FILENO);
 	cmd->simple->cmd_envp = get_envp();
-	if (!io_handlers_redirect(cmd->io_handlers, &err_msg))
+	if (!io_handlers_redirect(cmd->io_handlers))
 	{
+		err_msg = io_handlers_get_error(cmd->io_handlers);
 		close(copy_fds[FD_IN]);
 		close(copy_fds[FD_OUT]);
 		runner_cmd_simple_panic(

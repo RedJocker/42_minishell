@@ -63,21 +63,23 @@ void	io_handler_set_path(
 			char *path,
 			int flags_mode[2],
 			t_io_direction io_dir);
-void	io_handler_redirect(t_io_handler *io, char **out_errmsg);
-int		io_handlers_redirect(t_arraylist lst_iohandlers, char **out_errmsg);
+void	io_handler_set_error(t_io_handler *io, int err_no, char *strerr);
+void	io_handler_to_fd(t_io_handler *io);
+void	io_handler_redirect(t_io_handler *io);
 void	io_handler_destroy(t_io_handler *io);
+char	*io_handlers_get_error(t_arraylist lst_iohandlers);
 void	io_handlers_add_path(
 			t_arraylist *lst_iohandlers,
 			char *path,
 			int flags_mode[2],
 			t_io_direction io_dir);
-void	io_handler_to_fd(t_io_handler *io, char **out_errmsg);
-int		io_handlers_to_fd(t_arraylist lst_iohandlers, char **out_errmsg);
+int		io_handlers_to_fd(t_arraylist lst_iohandlers);
 void	io_handlers_add_pipe(
 			t_arraylist *lst_iohandlers,
 			int fd,
 			t_io_direction io_dir);
 void	io_handlers_close(t_arraylist lst_iohandlers);
+int		io_handlers_redirect(t_arraylist lst_iohandlers);
 /////
 void	io_handler_heredoc_to_fd(t_io_handler *io);
 void	io_handlers_heredoc_to_fd(t_arraylist ios);

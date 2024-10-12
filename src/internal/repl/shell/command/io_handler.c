@@ -49,16 +49,17 @@ void	io_handler_set_path(
 	io->direction = io_dir;
 }
 
-void	io_handler_path_to_fd(t_io_handler *io, char **out_errmsg)
+void	io_handler_path_to_fd(t_io_handler *io)
 {
 	int		fd;
+	char	*errmsg;
 
 	fd = open(io->path, io->flags, io->mode);
 	if (fd < 0)
 	{
-		ft_asprintf(out_errmsg, "bash: %s: %s", io->path, strerror(errno));
+		ft_asprintf(&errmsg, "bash: %s: %s", io->path, strerror(errno));
 		free(io->path);
-		io_handler_set_error(io, errno, *out_errmsg);
+		io_handler_set_error(io, errno, errmsg);
 		return ;
 	}
 	free(io->path);
@@ -66,24 +67,25 @@ void	io_handler_path_to_fd(t_io_handler *io, char **out_errmsg)
 	io->fd = fd;
 }
 
-void	io_handler_to_fd(t_io_handler *io, char **out_errmsg)
+void	io_handler_to_fd(t_io_handler *io)
 {
 	if (io->type == IO_PATH)
-		io_handler_path_to_fd(io, out_errmsg);
+		io_handler_path_to_fd(io);
 }
 
-void	io_handler_redirect(t_io_handler *io, char **out_errmsg)
+void	io_handler_redirect(t_io_handler *io)
 {
-	int	fd_target;
+	int		fd_target;
+	char	*errmsg;
 
 	fd_target = (int) io->direction;
-	io_handler_to_fd(io, out_errmsg);
+	io_handler_to_fd(io);
 	if (io->type != IO_FD)
 		return ;
 	if (dup2(io->fd, fd_target) < 0)
 	{
-		ft_asprintf(out_errmsg, "bash: %s", strerror(errno));
-		io_handler_set_error(io, errno, *out_errmsg);
+		ft_asprintf(&errmsg, "bash: %s", strerror(errno));
+		io_handler_set_error(io, errno, errmsg);
 	}
 	close(io->fd);
 }
