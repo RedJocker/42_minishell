@@ -22,9 +22,13 @@
 #include "internal/env/env.h"
 #include "internal/repl/shell/runner/expand/expand.h"
 #include "internal/repl/shell/runner/expand/expand_internal.h"
-
+#include "internal/repl/shell/command/io_handler.h"
+#include "collection/ft_arraylist.h"
+#include "ft_stdio.h"
 #include "internal/ft_extension.h" // TODO: Remove this after finish the project.
+#include <errno.h>
 #include <signal.h>
+#include <string.h>
 
 // return len parsed
 static int	expand_dollar(char *str, t_stringbuilder *builder,	\
@@ -65,7 +69,7 @@ static int	expand_dollar_split(char *str, t_expansion_state *state, \
 	char	**split;
 	char	*temp;
 	int		j;
-	
+
 	i = expand_dollar(str, &state->builder, last_status_code);
 	temp = stringbuilder_build(state->builder);
 	split = ft_splitfun(temp, (t_pred_int) ft_isspace);
@@ -146,13 +150,31 @@ void	expand_io_path(t_io_handler *io, sig_atomic_t *last_status_code)
 	// TODO: expand path
 	(void) io;
 	(void) last_status_code;
+
+	t_expansion_state	state;
+	char				*errmsg;
+
+	if (io->type != IO_PATH)
+		return ft_assert(0, "unexpected io type on expand_io_path");
+	state.lst_new_args = ft_arraylist_new(free);
+	expand_str(io->path, *last_status_code, &state);
+	if (ft_arraylist_len(state.lst_new_args) != 1)
+	{
+		ft_asprintf(&errmsg, "bash: %s: ambiguous redirect", io->path);
+		free(io->path);
+		ft_arraylist_destroy(state.lst_new_args);
+		return io_handler_set_error(io, errno, errmsg);
+	}
+	free(io->path);
+	io->path = ft_strdup(ft_arraylist_get(state.lst_new_args, 0));
+	ft_arraylist_destroy(state.lst_new_args);
 }
 
 void	expand_io_heredoc(t_io_handler *io, sig_atomic_t *last_status_code)
 {
 	t_stringbuilder builder;
 	int				i;
-	
+
 	if (!io->heredoc_should_expand)
 		return ;
 	builder = stringbuilder_new();
@@ -167,7 +189,6 @@ void	expand_io_heredoc(t_io_handler *io, sig_atomic_t *last_status_code)
 	free(io->heredoc_input);
 	io->heredoc_input = stringbuilder_build(builder);
 }
-
 
 void	expand_io_handler(t_io_handler *io, sig_atomic_t *last_status_code)
 {

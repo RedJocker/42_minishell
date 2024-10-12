@@ -28,13 +28,11 @@
 // removes quotes and set heredoc_should_expand
 static void set_heredoc_delim(t_io_handler *io, char *heredoc_limit)
 {
-	int				quoted_delim_len;
 	int				i;
-	char    		open_quote;
+	char			open_quote;
 	t_stringbuilder builder;
 
 	io->heredoc_should_expand = true;
-	quoted_delim_len = ft_strlen(heredoc_limit);
 	i = -1;
 	builder = stringbuilder_new();
 	open_quote = 0;

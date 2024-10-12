@@ -80,7 +80,7 @@ assert_minishell_equal_bash() {
 
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    # echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
+    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
     if ! [[ $bash_output == $output ]]; then
 		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
 		false
@@ -148,6 +148,24 @@ assert_minishell_equal_bash_heredoc() {
 
 
 # TEST BEGIN
+
+@test "test simple command expand filename: ls > ./temp_dir/\$LANGUAGE" {
+    assert_minishell_equal_bash "
+echo \$LANGUAGE
+ls > $temp_dir/\$LANGUAGE 
+ls $temp_dir
+cat < $temp_dir/\$LANGUAGE"
+}
+
+
+@test "test simple command expand filename ambiguous: ls > ./temp_dir/\$VARIABLE_FROM_OUTSIDE" {
+    assert_minishell_equal_bash "
+echo \$VARIABLE_FROM_OUTSIDE
+ls > $temp_dir/\$VARIABLE_FROM_OUTSIDE 
+ls $temp_dir
+cat < $temp_dir/\$VARIABLE_FROM_OUTSIDE"
+}
+
 
 @test "test simple command simple heredoc: eof\\nsimple heredoc\\neof" {
     assert_minishell_equal_bash_heredoc "cat << eof
