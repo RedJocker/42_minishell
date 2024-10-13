@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/11 03:42:26 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/13 02:01:40 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	export_without_args(void)
 {
 	char	**envp;
 
-	envp = get_envp();
+	envp = get_envp(ENVP_EXPORT);
 	export_sort_vars(envp);
 	export_print_vars(envp);
 	if (envp)
