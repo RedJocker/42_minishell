@@ -73,6 +73,7 @@ NAME                            = minishell
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), ft_splitfun.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c \
+								   env_properties.c \
 								   envp.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_INTERNAL_DIR), env_build.c \
 								   env_destroy.c \

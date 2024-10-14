@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:12:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/13 18:55:00 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/14 04:31:15 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ char	**get_envp(t_envp_type	type)
 		return (NULL);
 }
 
+#include <stdio.h>
 static char	**build_envp(t_env_var *env_vars, char *env_var, int i, t_envp_type type)
 {
 	char		**envp;
@@ -46,7 +47,11 @@ static char	**build_envp(t_env_var *env_vars, char *env_var, int i, t_envp_type 
 		if (type == ENVP_EXPORT && !(ft_strncmp(env_vars->key, "_=", ft_strlen("_=")) \
 			== DEFAULT))
 		{
-			ft_asprintf(&env_var, "%s\"%s\"", env_vars->key, env_vars->value);
+			if (*ft_strrchr(env_vars->key, '=') == '=')
+				ft_asprintf(&env_var, "%s\"%s\"", env_vars->key, env_vars->value);
+			else
+				ft_asprintf(&env_var, "%s", env_vars->key);
+			printf("envp var = %s\n", env_vars->key);
 			envp[++i] = env_var;
 		}
 		else if (type == ENVP_DEFAULT)
