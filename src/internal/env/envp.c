@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:12:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/14 04:31:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/15 05:44:56 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 #include "internal/env/envp.h"
 #include "internal/env/env_internal/env_internal.h"
 
-static char	**build_envp(t_env_var *env_vars, char *env_var, int i, t_envp_type type);
+static char	**build_envp(t_env_var *env_vars, char *env_var, int i, \
+				t_envp_type type);
 
 char	**get_envp(t_envp_type	type)
 {
@@ -36,22 +37,24 @@ char	**get_envp(t_envp_type	type)
 		return (NULL);
 }
 
-#include <stdio.h>
-static char	**build_envp(t_env_var *env_vars, char *env_var, int i, t_envp_type type)
+static char	**build_envp(t_env_var *env_vars, char *env_var, int i, \
+				t_envp_type type)
+
 {
-	char		**envp;
+	char	**envp;
+	size_t	key_len;
 
 	envp = ft_calloc(env()->env_size + NULL_BYTE, sizeof(char *));
 	while (env_vars)
 	{
-		if (type == ENVP_EXPORT && !(ft_strncmp(env_vars->key, "_=", ft_strlen("_=")) \
-			== DEFAULT))
+		if (type == ENVP_EXPORT && \
+			!(ft_strncmp(env_vars->key, "_=", ft_strlen("_=")) == DEFAULT))
 		{
-			if (*ft_strrchr(env_vars->key, '=') == '=')
-				ft_asprintf(&env_var, "%s\"%s\"", env_vars->key, env_vars->value);
-			else
+			key_len = ft_strlen(env_vars->key) - CHAR_BYTE;
+			if (env_vars->key[key_len] != '=')
 				ft_asprintf(&env_var, "%s", env_vars->key);
-			printf("envp var = %s\n", env_vars->key);
+			else if (env_vars->key[key_len] == '=')
+				ft_asprintf(&env_var, "%s\"%s\"", env_vars->key, env_vars->value);
 			envp[++i] = env_var;
 		}
 		else if (type == ENVP_DEFAULT)

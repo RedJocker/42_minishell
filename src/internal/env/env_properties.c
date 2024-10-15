@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 03:15:18 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/14 04:27:27 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/15 04:59:27 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	env_get_key_len(char *env_var)
 	return (i);
 }
 
-#include <stdio.h>
 void	env_set_value(char *key, char *value)
 {
 	size_t		key_len;
@@ -74,7 +73,6 @@ void	env_set_value(char *key, char *value)
 		env_var = env_get_key(key, env()->env_var);
 		if (!env_var)
 		{
-			printf("env_Var null\n key = |%s| | value = |%s|\n", key, value);
 			env_var_add_back(&env()->env_var, \
 				env_var_new(ft_strdup(key), ft_strdup(value)));
 			env_set_vars_size(ADD);
@@ -84,10 +82,10 @@ void	env_set_value(char *key, char *value)
 			free(env_var->value);
 			env_var->value = ft_strdup(value);
 			key_len = ft_strlen(env_var->key);
-			if (!env_var->key[key_len - CHAR_BYTE])
+			if (env_var->key[key_len - CHAR_BYTE] != '=')
 			{
 				free(env_var->key);
-				env_var->key = ft_strjoin(key, "=");
+				env_var->key = ft_strdup(key);
 			}
 		}
 	}

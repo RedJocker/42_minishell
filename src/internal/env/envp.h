@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 00:09:21 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/13 02:00:53 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/15 05:43:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ enum e_envp_type
 {
 	ENVP_DEFAULT,
 	ENVP_EXPORT,
-	ENVP_ENV,
 };
 
 char	**get_envp(t_envp_type	type);
