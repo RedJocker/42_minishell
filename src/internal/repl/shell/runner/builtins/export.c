@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/15 07:24:49 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 02:37:53 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include "ft_stdio.h"
 #include "ft_util.h"
 #include "internal/default.h"
-#include "internal/env/env_internal/env_internal.h"
 #include "internal/env/env.h"
 #include "internal/env/envp.h"
 #include "internal/repl/shell/command/command.h"
@@ -26,7 +25,7 @@ static void			export_without_args(void);
 static void			export_sort_vars(char **envp);
 static void			export_print_vars(char **envp);
 
-int	runner_cmd_builtin_export(t_command cmd)
+sig_atomic_t	runner_cmd_builtin_export(t_command cmd)
 {
 	int				i;
 	sig_atomic_t	status;
