@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 02:37:53 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 06:45:51 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "ft_util.h"
 #include "internal/default.h"
 #include "internal/env/env.h"
+#include "internal/env/env_internal/env_internal.h"
 #include "internal/env/envp.h"
 #include "internal/repl/shell/command/command.h"
 
@@ -54,7 +55,7 @@ static sig_atomic_t	export_args(char *cmd, sig_atomic_t status)
 	error_msg = NULL;
 	if (*cmd != '=')
 	{
-		key = ft_substr(cmd, DEFAULT, ft_strlen(cmd));
+		key = env_parse(cmd, KEY);
 		value = env_parse(cmd, VALUE);
 		env_set_value(key, value);
 		free(key);

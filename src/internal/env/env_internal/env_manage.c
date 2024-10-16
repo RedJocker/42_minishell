@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:25:56 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/15 04:55:27 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 06:49:57 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,16 @@ static bool	check_key(char *key, t_env_var *env_var)
 {
 	size_t	key_len;
 
-	key_len = ft_strlen(env_var->key) - CHAR_BYTE;
-	if (env_var->key[key_len] == '=')
+	key_len = ft_strlen(env_var->key);
+	if (ft_strlen(key) + CHAR_BYTE == key_len)
 	{
-		if (!ft_strncmp(env_var->key, key, ft_strlen(key)))
+		if (env_var->key[key_len - CHAR_BYTE] == '=' \
+			&& !ft_strncmp(env_var->key, key, key_len - CHAR_BYTE))
 			return (true);
 	}
-	else if (env_var->key[key_len] != '=')
+	else if (ft_strlen(key) == key_len)
 	{
-		if (!ft_strncmp(env_var->key, key, ft_strlen(key) - CHAR_BYTE))
+		if (!ft_strncmp(env_var->key, key, ft_strlen(key) + NULL_BYTE))
 			return (true);
 	}
 	return (false);

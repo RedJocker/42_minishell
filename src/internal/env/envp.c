@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:12:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/15 05:44:56 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 06:52:59 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static char	**build_envp(t_env_var *env_vars, char *env_var, int i, \
 
 {
 	char	**envp;
-	size_t	key_len;
 
 	envp = ft_calloc(env()->env_size + NULL_BYTE, sizeof(char *));
 	while (env_vars)
@@ -50,11 +49,11 @@ static char	**build_envp(t_env_var *env_vars, char *env_var, int i, \
 		if (type == ENVP_EXPORT && \
 			!(ft_strncmp(env_vars->key, "_=", ft_strlen("_=")) == DEFAULT))
 		{
-			key_len = ft_strlen(env_vars->key) - CHAR_BYTE;
-			if (env_vars->key[key_len] != '=')
+			if (env_vars->key[ft_strlen(env_vars->key) - CHAR_BYTE] != '=')
 				ft_asprintf(&env_var, "%s", env_vars->key);
-			else if (env_vars->key[key_len] == '=')
-				ft_asprintf(&env_var, "%s\"%s\"", env_vars->key, env_vars->value);
+			else if (env_vars->key[ft_strlen(env_vars->key) - CHAR_BYTE] == '=')
+				ft_asprintf(&env_var, "%s\"%s\"", env_vars->key, \
+					env_vars->value);
 			envp[++i] = env_var;
 		}
 		else if (type == ENVP_DEFAULT)
