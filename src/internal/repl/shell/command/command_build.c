@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/03 01:28:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:08:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,47 @@ t_command	command_build_pipe(
 	return (command_pipe_new(cmd_before, cmd_after));
 }
 
+t_command	command_build_and(
+	t_token **tokens, int cmd_operator_idx, int tokens_len)
+{
+	t_command	cmd_before;
+	t_command	cmd_after;
+
+	cmd_before = command_build(tokens, cmd_operator_idx);
+	if (!cmd_before || cmd_before->type == CMD_INVALID)
+		return (cmd_before);
+	cmd_after = command_build(
+			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
+	if (!cmd_after || cmd_before->type == CMD_INVALID)
+	{
+		free(cmd_before);
+		return (cmd_after);
+	}
+	return (command_and_new(cmd_before, cmd_after));
+}
+
+
+t_command	command_build_or(
+	t_token **tokens, int cmd_operator_idx, int tokens_len)
+{
+	t_command	cmd_before;
+	t_command	cmd_after;
+
+	cmd_before = command_build(tokens, cmd_operator_idx);
+	if (!cmd_before || cmd_before->type == CMD_INVALID)
+		return (cmd_before);
+	cmd_after = command_build(
+			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
+	if (!cmd_after || cmd_before->type == CMD_INVALID)
+	{
+		free(cmd_before);
+		return (cmd_after);
+	}
+	return (command_or_new(cmd_before, cmd_after));
+}
+
+
+
 t_command	command_build(t_token **tokens, int tokens_len)
 {
 	int	cmd_operator_idx;
@@ -70,6 +111,10 @@ t_command	command_build(t_token **tokens, int tokens_len)
 		return (command_build_simple(tokens, tokens_len));
 	else if (tokens[cmd_operator_idx]->type == OP_PIPE)
 		return (command_build_pipe(tokens, cmd_operator_idx, tokens_len));
+	else if (tokens[cmd_operator_idx]->type == OP_AND)
+		return (command_build_and(tokens, cmd_operator_idx, tokens_len));
+	else if (tokens[cmd_operator_idx]->type == OP_OR)
+		return (command_build_or(tokens, cmd_operator_idx, tokens_len));
 	ft_assert(0, "unexpected execution at command_build");
 	return (command_invalid_new("temporarily unnexpected", -1));
 }

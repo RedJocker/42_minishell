@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/27 21:14:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:10:08 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@ typedef struct s_command_pipe
 	t_command	cmd_after;
 }	t_command_pipe;
 
+typedef struct s_command_and
+{
+	t_command	cmd_before;
+	t_command	cmd_after;
+}	t_command_and;
+
+typedef struct s_command_or
+{
+	t_command	cmd_before;
+	t_command	cmd_after;
+}	t_command_or;
+
 typedef struct s_command_invalid
 {
 	char	*msg;
@@ -43,6 +55,8 @@ typedef enum e_command_type
 	CMD_SIMPLE,
 	CMD_INVALID,
 	CMD_PIPE,
+	CMD_AND,
+	CMD_OR,
 	CMD_EOF,
 }	t_command_type;
 
@@ -55,7 +69,9 @@ struct s_command
 	{
 		t_command_simple	*simple;
 		t_command_invalid	*invalid;
-		t_command_pipe		*pipe;
+		t_command_pipe      *pipe;
+		t_command_and		*and;
+		t_command_or		*or;
 	};
 };
 

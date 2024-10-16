@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:43:30 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/14 09:46:19 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:58:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,20 @@ void	runner_heredoc_prompt(t_command cmd)
 		runner_heredoc_prompt(cmd->pipe->cmd_before);
 		runner_heredoc_prompt(cmd->pipe->cmd_after);
 	}
+	else if (cmd->type == CMD_AND)
+	{
+		runner_heredoc_prompt(cmd->and->cmd_before);
+		runner_heredoc_prompt(cmd->and->cmd_after);
+	}
+	else if (cmd->type == CMD_OR)
+	{
+		runner_heredoc_prompt(cmd->or->cmd_before);
+		runner_heredoc_prompt(cmd->or->cmd_after);
+	}
 	else if (cmd->type == CMD_INVALID)
 		;
 	else
-		ft_assert(0, "runner_heerdoc unexpected cmd type");
+		ft_assert(0, "runner_heredoc unexpected cmd type");
 }
 
 void	runner_heredoc_to_fd(t_command cmd)
