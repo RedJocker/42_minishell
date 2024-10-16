@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/10 23:20:40 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/13 02:01:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 		free(pid);
 		if (cmd->simple->cmd_argc == DEFAULT)
 			runner_cmd_simple_exit_status(run_data, EXIT_OK);
-		cmd->simple->cmd_envp = get_envp();
+		cmd->simple->cmd_envp = get_envp(ENVP_DEFAULT);
 		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
 		if (!io_handlers_redirect(cmd->io_handlers))
 			runner_cmd_simple_panic(run_data, \

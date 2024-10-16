@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/10/14 09:47:35 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/16 11:44:00 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,11 +73,11 @@ NAME                            = minishell
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
 SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), ft_splitfun.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c \
+								   env_properties.c \
 								   envp.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_INTERNAL_DIR), env_build.c \
 								   env_destroy.c \
 								   env_manage.c \
-								   env_parse.c \
 								   env_path.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
@@ -104,7 +104,8 @@ SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c \
 SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), builtins.c \
 								   echo.c \
-								   export.c)
+								   export.c \
+								   unset.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_INTERNAL_DIR), token_build.c \
@@ -131,7 +132,7 @@ COMP_MESSAGE                    = Building C object
 #******************************************************************************#
 
 CC                             := cc
-CFLAGS                         = -Wall -Wextra -g3 #-Werror -Ofast
+CFLAGS                         = -Wall -Wextra -Werror -g3# -Ofast
 CPPFLAGS                       := $(addprefix -I,$(INCS)) -MMD -MP
 DFLAGS                         := -Wall -Wextra -Werror -g3
 LFLAGS                         := -march=native

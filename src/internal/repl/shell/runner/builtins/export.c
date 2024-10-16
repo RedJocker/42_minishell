@@ -6,34 +6,77 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/11 03:42:26 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 06:45:51 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <unistd.h>
 #include "ft_string.h"
 #include "ft_stdio.h"
 #include "ft_util.h"
 #include "internal/default.h"
+#include "internal/env/env.h"
+#include "internal/env/env_internal/env_internal.h"
 #include "internal/env/envp.h"
 #include "internal/repl/shell/command/command.h"
 
-static void	export_without_args(void);
-static void	export_sort_vars(char **envp);
-static void	export_print_vars(char **envp);
+static sig_atomic_t	export_args(char *cmd, sig_atomic_t status);
+static void			export_without_args(void);
+static void			export_sort_vars(char **envp);
+static void			export_print_vars(char **envp);
 
-int	runner_cmd_builtin_export(t_command cmd)
+sig_atomic_t	runner_cmd_builtin_export(t_command cmd)
 {
+	int				i;
+	sig_atomic_t	status;
+
+	i = DEFAULT;
+	status = EXIT_OK;
 	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
 		export_without_args();
-	return (EXIT_OK);
+	else
+	{
+		while (cmd->simple->cmd_argv[++i])
+			if (export_args(cmd->simple->cmd_argv[i], status) == EXIT_FAILURE)
+				status = EXIT_FAILURE;
+	}
+	return (status);
+}
+
+static sig_atomic_t	export_args(char *cmd, sig_atomic_t status)
+{
+	char	*key;
+	char	*value;
+	char	*error_msg;
+
+	key = NULL;
+	value = NULL;
+	error_msg = NULL;
+	if (*cmd != '=')
+	{
+		key = env_parse(cmd, KEY);
+		value = env_parse(cmd, VALUE);
+		env_set_value(key, value);
+		free(key);
+		free(value);
+	}
+	else
+	{
+		status = EXIT_FAILURE;
+		ft_asprintf(&error_msg, \
+			"bash: export: %s: not a valid identifier\n", cmd); // TODO: change the name of program to minishell instead of bash.
+		write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
+		free(error_msg);
+	}
+	return (status);
 }
 
 static void	export_without_args(void)
 {
 	char	**envp;
 
-	envp = get_envp();
+	envp = get_envp(ENVP_EXPORT);
 	export_sort_vars(envp);
 	export_print_vars(envp);
 	if (envp)
