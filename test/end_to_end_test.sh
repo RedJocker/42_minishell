@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/09 03:29:34 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/16 13:09:58 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -149,98 +149,10 @@ assert_minishell_equal_bash_heredoc() {
 
 # TEST BEGIN
 
-@test "test simple command expand filename: ls > ./temp_dir/\$LANGUAGE" {
-    assert_minishell_equal_bash "
-echo \$LANGUAGE
-ls > $temp_dir/\$LANGUAGE 
-ls $temp_dir
-cat < $temp_dir/\$LANGUAGE"
+@test "test invalid command invalid: eof" {
+    assert_minishell_equal_bash "eof
+echo \$?"
 }
-
-
-@test "test simple command expand filename ambiguous: ls > ./temp_dir/\$VARIABLE_FROM_OUTSIDE" {
-    assert_minishell_equal_bash "
-echo \$VARIABLE_FROM_OUTSIDE
-ls > $temp_dir/\$VARIABLE_FROM_OUTSIDE 
-ls $temp_dir
-cat < $temp_dir/\$VARIABLE_FROM_OUTSIDE"
-}
-
-
-@test "test simple command simple heredoc: eof\\nsimple heredoc\\neof" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-simple heredoc
-eof
-"
-}
-
-@test "test simple command heredoc C-d: eof\\nsimple heredoc\\nC-d" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-simple heredoc
-"
-}
-
-@test "test simple command simple heredoc: eof\\nsimple\\nheredoc\\neof" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-simple
-heredoc
-eof
-"
-}
-
-@test "test simple command heredoc C-d: eof\\nclose input next line\\nC-d" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-simple
-heredoc
-"
-}
-
-@test "test simple command simple heredoc: eof\\nwith\\n\\nempty line\\neof" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-with
-
-empty line
-eof
-"
-}
-
-@test "test simple command heredoc C-d: eof\\n\\n\\nempty line\\n\\nC-d" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-a
-empty line
-"
-}
-
-@test "test simple command heredoc with expansion: eof\$VARIABLE_FROM_OUTSIDE\\neof" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-\$VARIABLE_FROM_OUTSIDE
-eof
-"
-}
-
-@test "test simple command heredoc C-d with expansion: eof\$VARIABLE_FROM_OUTSIDE" {
-    assert_minishell_equal_bash_heredoc "cat << eof
-\$VARIABLE_FROM_OUTSIDE
-"
-}
-
-
-@test "test simple command heredoc with expansion: true\\ncat << eof\\n\$?\\neof" {
-    assert_minishell_equal_bash_heredoc "true
-cat << eof
-\$?
-eof
-"
-}
-
-@test "test simple command heredoc with expansion: false\\ncat << echo\\n\$?\\neof" {
-    assert_minishell_equal_bash_heredoc "false
-cat << eof
-\$?
-eof
-"
-}
-
 
 @test "test empty" {
     assert_minishell_equal_bash ""
@@ -260,13 +172,13 @@ eof
     assert_minishell_equal_bash ls
 }
 
-@test "test simple commands: pwd" {
-    assert_minishell_equal_bash pwd
+@test "test simple commands: uname" {
+    assert_minishell_equal_bash uname
 }
 
-@test "test two simple commands in two lines of input: pwd\npwd" {
-    assert_minishell_equal_bash "pwd
-pwd"
+@test "test two simple commands in two lines of input: uname\nuname" {
+    assert_minishell_equal_bash "uname
+uname"
 }
 
 @test "test simple command absolute path: /usr/bin/ls" {
@@ -888,6 +800,7 @@ cat $file1
 ls < $file1 | wc"
 }
 
+
 @test "test pipe: ls | wc < \$file1" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash " echo 123 > $file1
@@ -921,7 +834,106 @@ cat $file3
 "
 }
 
-@test "test test invalid_command: echo_heredoc" {
+@test "test pipe: ls > \$file1| wc > $file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "ls > $file1 | wc > $file2
+    echo \$?
+    cat $file1 $file2 
+"
+}
+
+@test "test pipe: > \$file1 ls | > $file2 wc" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "> $file1 ls | > $file2 wc
+    echo \$?
+    cat $file1 $file2 
+"
+}
+
+@test "test pipe: ls > \$file1 -a | wc > $file2 -c" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "ls > $file1 -a | wc > $file2 -c
+    echo \$?
+    cat $file1 $file2 
+"
+}
+
+@test "test pipe: ls -a > \$file1 -H | wc -w > $file2 -c" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "ls -a > $file1 -H | wc -w > $file2 -c
+    echo \$?
+    cat $file1 $file2
+"
+}
+
+@test "test pipe: < \$file1 cat | < \$file2 cat  " {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "ls -a > $file1 -H | wc -w > $file2 -c
+    echo \$?
+    < $file1 cat | < $file2 cat  
+"
+}
+
+@test "test pipe: <\$file1 cat<$file1|<\$file2 cat<$file2  " {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "ls -a>$file1 -H | wc -w>$file2 -c
+    echo \$?
+    <$file1 cat|<$file2 cat  
+"
+}
+
+@test "test pipe heredoc: cat << eof | wc" {
+    assert_minishell_equal_bash "cat << eof | wc
+some heredoc
+text
+eof
+"
+}
+
+@test "test pipe heredoc: ls | wc << eof" {
+   
+    assert_minishell_equal_bash "ls | wc -l << eof
+some heredoc
+text
+eof
+"
+}
+
+@test "test pipe heredoc: ls << eof | wc -l << eof" {
+    assert_minishell_equal_bash "ls << eof | wc -l << eof
+some heredoc
+text
+eof
+another
+different
+text
+with more
+lines
+eof
+"
+}
+
+@test "test pipe heredoc: << eof ls | << eof wc -l" {
+    assert_minishell_equal_bash "<< eof ls | << eof wc -l
+some heredoc
+text
+eof
+another
+different
+text
+with more
+lines
+eof
+"
+}
+
+@test "test invalid command: echo_heredoc" {
     assert_minishell_equal_bash "echo_heredoc
 "
 }
@@ -1039,5 +1051,97 @@ cat $file1
 cat $file1
 cat $file2
 cat $file3
+"
+}
+
+@test "test simple command expand filename: ls > ./temp_dir/\$LANGUAGE" {
+    assert_minishell_equal_bash "
+echo \$LANGUAGE
+ls > $temp_dir/\$LANGUAGE 
+ls $temp_dir
+cat < $temp_dir/\$LANGUAGE"
+}
+
+
+@test "test simple command expand filename ambiguous: ls > ./temp_dir/\$VARIABLE_FROM_OUTSIDE" {
+    assert_minishell_equal_bash "
+echo \$VARIABLE_FROM_OUTSIDE
+ls > $temp_dir/\$VARIABLE_FROM_OUTSIDE 
+ls $temp_dir
+cat < $temp_dir/\$VARIABLE_FROM_OUTSIDE"
+}
+
+
+@test "test simple command simple heredoc: eof\\nsimple heredoc\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple heredoc
+eof
+"
+}
+
+@test "test simple command heredoc C-d: eof\\nsimple heredoc\\nC-d" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple heredoc
+"
+}
+
+@test "test simple command simple heredoc: eof\\nsimple\\nheredoc\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple
+heredoc
+eof
+"
+}
+
+@test "test simple command heredoc C-d: eof\\nclose input next line\\nC-d" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+simple
+heredoc
+"
+}
+
+@test "test simple command simple heredoc: eof\\nwith\\n\\nempty line\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+with
+
+empty line
+eof
+"
+}
+
+@test "test simple command heredoc C-d: eof\\n\\n\\nempty line\\n\\nC-d" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+a
+empty line
+"
+}
+
+@test "test simple command heredoc with expansion: eof\$VARIABLE_FROM_OUTSIDE\\neof" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+\$VARIABLE_FROM_OUTSIDE
+eof
+"
+}
+
+@test "test simple command heredoc C-d with expansion: eof\$VARIABLE_FROM_OUTSIDE" {
+    assert_minishell_equal_bash_heredoc "cat << eof
+\$VARIABLE_FROM_OUTSIDE
+"
+}
+
+
+@test "test simple command heredoc with expansion: true\\ncat << eof\\n\$?\\neof" {
+    assert_minishell_equal_bash_heredoc "true
+cat << eof
+\$?
+eof
+"
+}
+
+@test "test simple command heredoc with expansion: false\\ncat << echo\\n\$?\\neof" {
+    assert_minishell_equal_bash_heredoc "false
+cat << eof
+\$?
+eof
 "
 }
