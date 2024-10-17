@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:56:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/16 02:16:08 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 19:17:31 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ enum e_builtin_id
 	BUILTIN_ECHO,
 	BUILTIN_EXPORT,
 	BUILTIN_UNSET,
+	BUILTIN_ENV,
 	BUILTIN_END,
 	BUILTIN_BEGIN = DEFAULT_BEGIN,
 	BUILTIN_SIZE = BUILTIN_END,
@@ -56,6 +57,7 @@ struct s_builtins
 sig_atomic_t	runner_cmd_builtin_echo(t_command cmd);
 sig_atomic_t	runner_cmd_builtin_export(t_command cmd);
 sig_atomic_t	runner_cmd_builtin_unset(t_command cmd);
+sig_atomic_t	runner_cmd_builtin_env(t_command cmd);
 t_builtin_id	check_builtin(t_command cmd);
 sig_atomic_t	runner_cmd_builtin(t_builtin_id builtin, t_command cmd);
 sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \

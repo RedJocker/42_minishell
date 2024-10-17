@@ -104,6 +104,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c \
 SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), builtins.c \
 								   echo.c \
+								   env.c \
 								   export.c \
 								   unset.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
