@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/13 02:01:14 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:20:27 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,9 @@ void	runner_cmd_simple_exit_status(
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
 	env_destroy();
-	command_destroy(runner_data->base_cmd);
 	ft_arraylist_foreach(runner_data->pipes_to_close, \
 		(t_consumer) close_fd_pipes);
-	ft_arraylist_destroy(runner_data->pipes_to_close);
-	ft_arraylist_destroy(runner_data->pids);
+	runner_data_clean(runner_data);
 	exit(status);
 }
 

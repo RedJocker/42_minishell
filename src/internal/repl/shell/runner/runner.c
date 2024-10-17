@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 16:03:59 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:22:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
-	t_arraylist		original_pids = run_data->pids;
 	const t_command cmd = run_data->cmd;
 	int				pids_len;
 	int				i;
 
 	ft_assert(cmd->type == CMD_AND, "expected only cmd_and");
+	run_data->backup_pids = run_data->pids;
 	run_data->pids = ft_arraylist_new((t_consumer) free);
 	run_data->cmd = cmd->and->cmd_before;
 	status = runner_cmd(run_data, FORK_NOT);
@@ -90,15 +90,15 @@ sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 	if (pids_len > 0)
 		waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), &status, 0);
 	ft_arraylist_destroy(run_data->pids);
-	run_data->pids = original_pids;
+	run_data->pids = run_data->backup_pids;
+	run_data->backup_pids = NULL;
 	if (WIFSIGNALED(status))
 			return (runner_exit_signal(status));
 	if (WIFEXITED(status))
 		run_data->last_cmd_status = (WEXITSTATUS(status));
 	if (run_data->last_cmd_status != 0)
-		return (status);
+		return (run_data->last_cmd_status);
 	run_data->cmd = cmd->and->cmd_after;
-	//ft_assert(0, "TODO: implement runner_cmd_and");
 	return (runner_cmd(run_data, FORK_NOT));
 }
 
