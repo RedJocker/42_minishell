@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/17 16:22:05 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/17 16:40:29 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -168,6 +168,90 @@ assert_minishell_equal_bash_heredoc() {
 
 @test "test command and: uname && \" \"" {
     assert_minishell_equal_bash "uname && \" \""
+}
+
+@test "test command and: ls || uname" {
+    assert_minishell_equal_bash "ls || uname"
+}
+
+@test "test command and: false || uname" {
+    assert_minishell_equal_bash "false || uname"
+}
+
+@test "test command and: true || uname" {
+    assert_minishell_equal_bash "true || uname"
+}
+
+@test "test command and: \" \" || uname" {
+    assert_minishell_equal_bash "\" \" || uname"
+}
+
+@test "test command and: uname || \" \"" {
+    assert_minishell_equal_bash "uname || \" \""
+}
+
+@test "test command pipe with and: ls && uname | cat - e" {
+    assert_minishell_equal_bash "ls && uname | cat -e"
+}
+
+@test "test command pipe with and: ls | cat - e && uname" {
+    assert_minishell_equal_bash "ls | cat - e && uname"
+}
+
+@test "test command pipe with and: false && uname | cat - e" {
+    assert_minishell_equal_bash "false && uname | cat - e"
+}
+
+@test "test command pipe with and: false | cat - e && uname" {
+    assert_minishell_equal_bash "false | cat - e && uname"
+}
+
+@test "test command pipe with and: true && uname | cat - e" {
+    assert_minishell_equal_bash "true && uname | cat - e"
+}
+
+@test "test command pipe with and: true | cat - e && uname" {
+    assert_minishell_equal_bash "true | cat - e && uname"
+}
+
+@test "test command pipe with and: \" \" | cat - e && uname" {
+    assert_minishell_equal_bash "\" \" | cat - e && uname"
+}
+
+@test "test command  pipe with and: uname && \" \"" {
+    assert_minishell_equal_bash "uname && \" \"" 
+}
+
+@test "test command pipe with or: ls || uname | cat - e" {
+    assert_minishell_equal_bash "ls || uname | cat -e"
+}
+
+@test "test command pipe with or: ls | cat - e || uname" {
+    assert_minishell_equal_bash "ls | cat - e || uname"
+}
+
+@test "test command pipe with or: false || uname | cat - e" {
+    assert_minishell_equal_bash "false || uname | cat - e"
+}
+
+@test "test command pipe with or: false | cat - e || uname" {
+    assert_minishell_equal_bash "false | cat - e || uname"
+}
+
+@test "test command pipe with or: true || uname | cat - e" {
+    assert_minishell_equal_bash "true || uname | cat - e"
+}
+
+@test "test command pipe with or: true | cat - e || uname" {
+    assert_minishell_equal_bash "true | cat - e || uname"
+}
+
+@test "test command pipe with or: \" \" | cat - e || uname" {
+    assert_minishell_equal_bash "\" \" | cat - e || uname"
+}
+
+@test "test command  pipe with or: uname || \" \"" {
+    assert_minishell_equal_bash "uname || \" \"" 
 }
 
 @test "test invalid command: eof" {
