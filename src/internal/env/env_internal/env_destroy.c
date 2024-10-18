@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 02:33:40 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/16 02:27:38 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/18 04:51:55 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,5 @@ void	env_var_destroy(t_env_var *env_var)
 	if (env_var_temp->value)
 		free(env_var_temp->value);
 	free(env_var_temp);
+	env_set_vars_size(SUB);
 }

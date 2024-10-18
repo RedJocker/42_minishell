@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 03:15:18 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/16 02:35:37 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/18 03:35:00 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	env_get_key_len(char *env_var)
 
 void	env_set_value(char *key, char *value)
 {
-	size_t		key_len;
 	t_env_var	*env_var;
 
 	if (key)
@@ -79,10 +78,12 @@ void	env_set_value(char *key, char *value)
 		}
 		else
 		{
-			free(env_var->value);
-			env_var->value = ft_strdup(value);
-			key_len = ft_strlen(env_var->key);
-			if (env_var->key[key_len - CHAR_BYTE] != '=')
+			if (*value)
+			{
+				free(env_var->value);
+				env_var->value = ft_strdup(value);
+			}
+			if (env_var->key[ft_strlen(env_var->key) - CHAR_BYTE] != '=')
 			{
 				free(env_var->key);
 				env_var->key = ft_strdup(key);
