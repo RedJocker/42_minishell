@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:18:39 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/03 01:36:01 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:12:13 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,55 @@
 #include "internal/repl/shell/command/command_internal.h"
 #include "ft_memlib.h"
 #include "ft_assert.h"
+
+// TODO: Move to command_and.c
+t_command	command_and_new(t_command cmd_before, t_command cmd_after)
+{
+	t_command	cmd;
+
+	cmd = command_new(CMD_AND, "CMD_AND");
+	if (!cmd)
+		return (NULL);
+	cmd->pipe = ft_calloc(1, sizeof(t_command_and));
+	if (!cmd->and)
+		return (ft_free_retnull(cmd));
+	cmd->and->cmd_before = cmd_before;
+	cmd->and->cmd_after = cmd_after;
+	return (cmd);
+}
+
+void	command_and_destroy(t_command cmd)
+{
+	command_destroy(cmd->and->cmd_before);
+	command_destroy(cmd->and->cmd_after);
+	free(cmd->and);
+	command_free(cmd);
+}
+
+// TODO: Move to command_or.c
+t_command	command_or_new(t_command cmd_before, t_command cmd_after)
+{
+	t_command	cmd;
+
+	cmd = command_new(CMD_OR, "CMD_OR");
+	if (!cmd)
+		return (NULL);
+	cmd->or = ft_calloc(1, sizeof(t_command_or));
+	if (!cmd->or)
+		return (ft_free_retnull(cmd));
+	cmd->or->cmd_before = cmd_before;
+	cmd->or->cmd_after = cmd_after;
+	return (cmd);
+}
+
+void	command_or_destroy(t_command cmd)
+{
+	command_destroy(cmd->or->cmd_before);
+	command_destroy(cmd->or->cmd_after);
+	free(cmd->or);
+	command_free(cmd);
+}
+
 
 t_command	command_pipe_new(t_command cmd_before, t_command cmd_after)
 {

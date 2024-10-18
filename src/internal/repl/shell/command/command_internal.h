@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 00:09:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:06:16 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,9 @@ void		command_pipe_add_pipe_io(
 t_command	command_eof_new(void);
 void		command_eof_destroy(t_command cmd);
 
+t_command	command_and_new(t_command cmd_before, t_command cmd_after);
+void        command_and_destroy(t_command cmd);
+
+t_command	command_or_new(t_command cmd_before, t_command cmd_after);
+void		command_or_destroy(t_command cmd);
 #endif

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 01:28:55 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:01:29 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 		command_simple_add_pipe_io(cmd, pipe_fd, dir);
 	else if (cmd->type == CMD_PIPE)
 		command_pipe_add_pipe_io(cmd, pipe_fd, dir);
+	// TODO: command_and_add_pipe.....command_or_add_pipe
 }
 
 void	command_destroy(t_command cmd)
@@ -33,6 +34,10 @@ void	command_destroy(t_command cmd)
 		command_simple_destroy(cmd);
 	else if (cmd->type == CMD_PIPE)
 		command_pipe_destroy(cmd);
+	else if (cmd->type == CMD_AND)
+		command_and_destroy(cmd);
+	else if (cmd->type == CMD_OR)
+		command_or_destroy(cmd);
 	else if (cmd->type == CMD_EOF)
 		command_eof_destroy(cmd);
 	else if (cmd->type == CMD_INVALID)

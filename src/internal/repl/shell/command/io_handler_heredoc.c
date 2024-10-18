@@ -84,7 +84,7 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 	delim_len = ft_strlen(io->heredoc_limiter);
 	builder = stringbuilder_new();
 	line = readline("> ");
-	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len) != 0)
+	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len + 1) != 0)
 	{
 		//ft_printf("heredoc %s %s\n", io->heredoc_limiter, line);
 		stringbuilder_addstr(&builder, line);

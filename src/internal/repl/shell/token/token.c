@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:22:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/28 01:17:22 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:02:19 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "ft_memlib.h"
 #include "ft_util.h"
 #include "internal/default.h"
+#include "internal/repl/shell/token/token.h"
 #include "internal/repl/shell/token/token_internal/token_internal.h"
 
 void	tokens_destroy(t_token **tokens)
@@ -69,6 +70,10 @@ void	token_type_string(char out_str[23], t_token_type type)
 		ft_strlcpy(out_str, "OP_REDIRECT_IN_HEREDOC", 23);
 	else if (type == OP_PIPE)
 		ft_strlcpy(out_str, "OP_PIPE", 8);
+	else if (type == OP_AND)
+		ft_strlcpy(out_str, "OP_AND", 7);
+	else if (type == OP_OR)
+		ft_strlcpy(out_str, "OP_OR", 6);
 	else if (type == OP_NEWLINE)
 		ft_strlcpy(out_str, "OP_NEW_LINE", 12);
 	else if (type == WORD)

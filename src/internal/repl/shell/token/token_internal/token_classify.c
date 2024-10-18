@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/07 16:45:25 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/16 15:14:00 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,12 @@ t_token	*token_classify(char *str_token)
 		return (token_new(OP_REDIRECT_IN_HEREDOC, str_token));
 	else if (ft_strncmp("<", str_token, ft_strlen("<")) == DEFAULT)
 		return (token_new(OP_REDIRECT_IN, str_token));
+	else if (ft_strncmp("||", str_token, ft_strlen("||")) == DEFAULT)
+		return (token_new(OP_OR, str_token));
 	else if (ft_strncmp("|", str_token, ft_strlen("|")) == DEFAULT)
 		return (token_new(OP_PIPE, str_token));
+	else if (ft_strncmp("&&", str_token, ft_strlen("|")) == DEFAULT)
+		return (token_new(OP_AND, str_token));
 	else if (token_is_invalid_quote(str_token))
 		return (token_new(INVALID, "newline"));
 	return (token_new(WORD, str_token));
