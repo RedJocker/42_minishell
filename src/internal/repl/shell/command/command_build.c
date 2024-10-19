@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 15:08:22 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/19 16:59:14 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,36 @@ t_command	command_build_pipe(
 	t_token **tokens, int cmd_operator_idx, int tokens_len)
 {
 	t_command	cmd_before;
-	t_command	cmd_after;
+	t_command   cmd_after;
+	char		*err_msg;
+	const char	*err_template = "bash: syntax error near unexpected token `%s'";
 
 	cmd_before = command_build(tokens, cmd_operator_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
+	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0)
+	{
+		command_destroy(cmd_before);
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
+		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd_before);
+	}
 	cmd_after = command_build(
 			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
-	if (!cmd_after || cmd_before->type == CMD_INVALID)
+	if (!cmd_after || cmd_after->type == CMD_INVALID)
 	{
-		free(cmd_before);
+		command_destroy(cmd_before);
 		return (cmd_after);
+	}
+	else if (cmd_before->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0)
+	{
+		command_destroy(cmd_after);
+		command_destroy(cmd_before);
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx + 1]->content);
+		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd_before);
 	}
 	return (command_pipe_new(cmd_before, cmd_after));
 }
@@ -61,17 +80,36 @@ t_command	command_build_and(
 	t_token **tokens, int cmd_operator_idx, int tokens_len)
 {
 	t_command	cmd_before;
-	t_command	cmd_after;
+	t_command   cmd_after;
+	char		*err_msg;
+	const char	*err_template = "bash: syntax error near unexpected token `%s'";
 
 	cmd_before = command_build(tokens, cmd_operator_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
+	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0)
+	{
+		command_destroy(cmd_before);
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
+		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd_before);
+	}
 	cmd_after = command_build(
 			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
 	if (!cmd_after || cmd_before->type == CMD_INVALID)
 	{
 		free(cmd_before);
 		return (cmd_after);
+	}
+	else if (cmd_before->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0)
+	{
+		command_destroy(cmd_after);
+		command_destroy(cmd_before);
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx + 1]->content);
+		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd_before);
 	}
 	return (command_and_new(cmd_before, cmd_after));
 }
@@ -81,17 +119,36 @@ t_command	command_build_or(
 	t_token **tokens, int cmd_operator_idx, int tokens_len)
 {
 	t_command	cmd_before;
-	t_command	cmd_after;
+	t_command   cmd_after;
+	char		*err_msg;
+	const char	*err_template = "bash: syntax error near unexpected token `%s'";
 
 	cmd_before = command_build(tokens, cmd_operator_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
+	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0)
+	{
+		command_destroy(cmd_before);
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
+		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd_before);
+	}
 	cmd_after = command_build(
 			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
 	if (!cmd_after || cmd_before->type == CMD_INVALID)
 	{
 		free(cmd_before);
 		return (cmd_after);
+	}
+	else if (cmd_before->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0)
+	{
+		command_destroy(cmd_after);
+		command_destroy(cmd_before);
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx + 1]->content);
+		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd_before);
 	}
 	return (command_or_new(cmd_before, cmd_after));
 }
