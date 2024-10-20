@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/17 17:17:46 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/19 17:33:21 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,10 +80,13 @@ assert_minishell_equal_bash() {
 
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3
+    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
     if ! [[ $bash_output == $output ]]; then
-		echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
-		false
+	        
+	# echo "$bash_output" > "./test/bash_$BATS_TEST_NAME.txt"
+	# echo "$output" > "./test/mini_$BATS_TEST_NAME.txt"
+	echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
+	false
     fi
 
     #echo "$output" 1>&3
@@ -107,7 +110,7 @@ assert_minishell_equal_bash() {
 assert_minishell_equal_bash_heredoc() {
     run bash_execute "$@"
     delete_temp_folder
-
+    
     local bash_status=$status
     local bash_output=$output
 
@@ -148,8 +151,6 @@ assert_minishell_equal_bash_heredoc() {
 
 
 # TEST BEGIN
-
-
 
 @test "test empty" {
     assert_minishell_equal_bash ""
@@ -1365,4 +1366,277 @@ eof
 @test "test command pipe with or: uname || \" \"" {
     assert_minishell_equal_bash "uname || \" \"" 
 }
+
+@test "test expand unknown variable: \$DOES_NOT_EXIST" {
+    assert_minishell_equal_bash "\$DOES_NOT_EXIST$$
+"
+}
+
+@test "test expand file unknown variable: ls > \$DOES_NOT_EXIST" {
+    assert_minishell_equal_bash "ls > \$DOES_NOT_EXIST$$
+"
+}
+
+@test "test expand file unknown variable: cat < \$DOES_NOT_EXIST" {
+    assert_minishell_equal_bash "cat < \$DOES_NOT_EXIST$$
+"
+}
+
+@test "test export update env variable value" {
+    assert_minishell_equal_bash "echo \$HELLO
+export HELLO=123
+echo \$HELLO
+export HELLO=\"beautiful world\"
+echo \$HELLO
+"
+}
+
+@test "invalid command followed by empty input keeps the exit code" {
+    assert_minishell_equal_bash "doesntexist
+
+echo \$?
+"
+}
+
+@test "invalid command followed by expansion of non set variable keeps the exit code" {
+    assert_minishell_equal_bash "doesntexist
+$EMPTY
+echo \$?
+"
+}
+
+@test "test_syntax: |" {
+    assert_minishell_equal_bash "
+|
+"
+}
+
+@test "test_syntax: | ls" {
+    assert_minishell_equal_bash "
+| ls
+"
+}
+
+@test "test_syntax: | |" {
+    assert_minishell_equal_bash "
+| |
+"
+}
+
+@test "test_syntax: | \$" {
+    assert_minishell_equal_bash "
+| \$
+"
+}
+
+@test "test_syntax: | >" {
+    assert_minishell_equal_bash "
+| >
+"
+}
+
+@test "test_syntax: >" {
+    assert_minishell_equal_bash "
+>
+"
+}
+
+@test "test_syntax: >>" {
+    assert_minishell_equal_bash "
+>>
+"
+}
+
+@test "test_syntax: >>>" {
+    assert_minishell_equal_bash "
+>>>
+"
+}
+
+@test "test_syntax: <" {
+    assert_minishell_equal_bash "
+<
+"
+}
+
+@test "test_syntax: <<" {
+    assert_minishell_equal_bash "
+<<
+"
+}
+
+@test "test_syntax: ls <" {
+    assert_minishell_equal_bash "
+ls <
+"
+}
+
+@test "test_syntax: cat  < | ls" {
+    assert_minishell_equal_bash "
+cat  < | ls
+"
+}
+
+@test "test_syntax: ls | >" {
+    assert_minishell_equal_bash "
+ls | >
+"
+}
+
+@test "test_syntax: ls | > >>" {
+    assert_minishell_equal_bash "
+ls | > >>
+"
+}
+
+@test "test_syntax: ls | < |" {
+    assert_minishell_equal_bash "
+ls | < |
+"
+}
+
+@test "test_syntax: ls |   |" {
+    assert_minishell_equal_bash "
+ls |   |
+"
+}
+
+@test "test_syntax: ls |  \"|\"" {
+    assert_minishell_equal_bash "
+ls |  \"|\"
+"
+}
+
+@test "test_syntax: ls | ls | |" {
+    assert_minishell_equal_bash "
+ls | ls | | 
+"
+}
+
+@test "test_syntax: ls | ls | &&" {
+    assert_minishell_equal_bash "
+ls | ls | &&
+"
+}
+
+
+@test "test_syntax: ls | ls | ||" {
+    assert_minishell_equal_bash "
+ls | ls | ||
+"
+}
+
+@test "test_syntax: &&" {
+    assert_minishell_equal_bash "
+&&
+"
+}
+
+@test "test_syntax: && ls" {
+    assert_minishell_equal_bash "
+&& ls
+"
+}
+
+@test "test_syntax: ||" {
+    assert_minishell_equal_bash "
+||
+"
+}
+
+@test "test_syntax: || ls" {
+    assert_minishell_equal_bash "
+|| ls
+"
+}
+
+@test "test_invocations: \$PWD" {
+    assert_minishell_equal_bash "
+\$PWD
+"
+}
+
+@test "test_invocations: \$EMPTY" {
+    assert_minishell_equal_bash "
+\$EMPTY
+"
+}
+
+@test "test_invocations: \$EMPTY echo hi" {
+    assert_minishell_equal_bash "
+\$EMPTY echo hi
+"
+}
+
+@test "test_invocations: ./missing.out" {
+    assert_minishell_equal_bash "
+./missing.out
+"
+}
+
+@test "test_invocations: missing.out" {
+    assert_minishell_equal_bash "
+missing.out
+"
+}
+
+@test "test_invocations: \"aaa\"" {
+    assert_minishell_equal_bash "
+\"aaa\"
+"
+}
+
+@test "test_invocations: \$" {
+    assert_minishell_equal_bash "
+\$
+"
+}
+
+@test "test_invocations: \$?" {
+    assert_minishell_equal_bash "
+\$?
+"
+}
+
+
+
+
+
+# @test "test export no args" {
+#     assert_minishell_equal_bash "
+# echo \$BASH_FUNC_bats_readlinkf%%
+# unset _
+# unset BATS_BEGIN_CODE_QUOTE
+# export
+# "
+# }
+
+
+# # keep track of OLDPWD
+# cd obj
+# echo $PWD $OLDPWD
+
+# #invalid command, followed by empty variable, should clear the exit code
+ # doesntexist
+# $EMPTY
+# echo $?
+
+# # Check if there isn't a zombie process called `cat`
+# echo "hi" | cat | cat | cat | cat | cat | cat | cat
+# ps -a
+
+# # Should skip the empty argument, and print hello after spaces
+# echo - "" "  " hello
+
+# # Neither of these unsets should break the shell, and you should still be able to call `/bin/ls`
+# unset USER
+# unset PATH
+# unset PWD
+# /bin/ls
+
+# # This should not change the current directory
+# cd .. hi
+
+# # Empty `cd` moves to home
+# cd"
 

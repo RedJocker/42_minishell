@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 20:38:29 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/11 04:57:49 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/19 17:16:07 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ static int	expand_dollar(char *str, t_stringbuilder *builder,	\
 	if (ft_isalpha(str[++i]) || str[i] == '_')
 		while (ft_isalnum(str[i]) || str[i] == '_')
 			i++;
+	else
+	{
+		*builder = stringbuilder_addchar(*builder, '$');
+		return (i - NULL_BYTE);
+	}
 	env_key = ft_calloc(i, sizeof(char));
 	ft_strlcpy(env_key, str + NULL_BYTE, i);
 	env_value = env_get_value(env_key);
@@ -93,7 +98,10 @@ static void	expand_str_noquote(
 		state->cur_ch += expand_dollar_split(
 				str + state->cur_ch, state, last_status_code);
 	else if (str[state->cur_ch] == '\'' || str[state->cur_ch] == '\"')
+	{
 		state->open_quote = str[state->cur_ch];
+		state->had_quote = 1;
+	}
 	else
 		state->builder = stringbuilder_addchar(
 				state->builder, str[state->cur_ch]);
@@ -122,7 +130,11 @@ static void	expand_str(
 		}
 	}
 	state->res = stringbuilder_build(state->builder);
-	state->lst_new_args = (ft_arraylist_add(state->lst_new_args, state->res));
+	if (!state->had_quote && ft_strlen(state->res) == 0)
+		free(state->res);
+	else
+		state->lst_new_args = (
+			ft_arraylist_add(state->lst_new_args, state->res));
 }
 
 void	expand_argv(t_command cmd, sig_atomic_t last_status_code)
@@ -131,7 +143,8 @@ void	expand_argv(t_command cmd, sig_atomic_t last_status_code)
 	int					i;
 
 	if (cmd->type != CMD_SIMPLE)
-		return ;
+		return;
+	ft_bzero(&state, sizeof(state));
 	state.lst_new_args = ft_arraylist_new(free);
 	i = -1;
 	while (cmd->simple->cmd_argv[++i])
@@ -147,15 +160,12 @@ void	expand_argv(t_command cmd, sig_atomic_t last_status_code)
 
 void	expand_io_path(t_io_handler *io, sig_atomic_t *last_status_code)
 {
-	// TODO: expand path
-	(void) io;
-	(void) last_status_code;
-
 	t_expansion_state	state;
 	char				*errmsg;
 
 	if (io->type != IO_PATH)
 		return ft_assert(0, "unexpected io type on expand_io_path");
+	ft_bzero(&state, sizeof(state));
 	state.lst_new_args = ft_arraylist_new(free);
 	expand_str(io->path, *last_status_code, &state);
 	if (ft_arraylist_len(state.lst_new_args) != 1)
