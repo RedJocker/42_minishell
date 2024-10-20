@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/16 02:42:23 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/20 02:42:51 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void	env_destroy(void);
 char	*env_parse(char *env_var, t_type_env_var type);
 char	*env_get_bin(char *key);
 char	*env_get_value(char *key);
-int		env_get_key_len(char *env_var);
-void	env_set_value(char *key, char *value);
+void	env_set_value(char *key, char *value, bool equal);
 bool	env_destroy_single_var(char *key);
 
 #endif

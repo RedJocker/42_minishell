@@ -6,11 +6,12 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 06:45:51 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/20 02:37:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include "ft_string.h"
 #include "ft_stdio.h"
@@ -22,7 +23,7 @@
 #include "internal/repl/shell/command/command.h"
 
 static sig_atomic_t	export_args(char *cmd, sig_atomic_t status);
-static void			export_without_args(void);
+static void			export_valid_arg(char *cmd);
 static void			export_sort_vars(char **envp);
 static void			export_print_vars(char **envp);
 
@@ -30,37 +31,33 @@ sig_atomic_t	runner_cmd_builtin_export(t_command cmd)
 {
 	int				i;
 	sig_atomic_t	status;
+	char			**envp;
 
 	i = DEFAULT;
 	status = EXIT_OK;
+	envp = NULL;
 	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
-		export_without_args();
-	else
 	{
+		envp = get_envp(ENVP_EXPORT);
+		export_sort_vars(envp);
+		export_print_vars(envp);
+		if (envp)
+			ft_strarr_free(envp);
+	}
+	else
 		while (cmd->simple->cmd_argv[++i])
 			if (export_args(cmd->simple->cmd_argv[i], status) == EXIT_FAILURE)
 				status = EXIT_FAILURE;
-	}
 	return (status);
 }
 
 static sig_atomic_t	export_args(char *cmd, sig_atomic_t status)
 {
-	char	*key;
-	char	*value;
 	char	*error_msg;
 
-	key = NULL;
-	value = NULL;
 	error_msg = NULL;
 	if (*cmd != '=')
-	{
-		key = env_parse(cmd, KEY);
-		value = env_parse(cmd, VALUE);
-		env_set_value(key, value);
-		free(key);
-		free(value);
-	}
+		export_valid_arg(cmd);
 	else
 	{
 		status = EXIT_FAILURE;
@@ -72,15 +69,22 @@ static sig_atomic_t	export_args(char *cmd, sig_atomic_t status)
 	return (status);
 }
 
-static void	export_without_args(void)
+static void	export_valid_arg(char *cmd)
 {
-	char	**envp;
+	bool	equal;
+	char	*key;
+	char	*value;
 
-	envp = get_envp(ENVP_EXPORT);
-	export_sort_vars(envp);
-	export_print_vars(envp);
-	if (envp)
-		ft_strarr_free(envp);
+	key = NULL;
+	value = NULL;
+	equal = false;
+	key = env_parse(cmd, KEY);
+	value = env_parse(cmd, VALUE);
+	if (key[ft_strlen(key) - CHAR_BYTE] == '=')
+		equal = true;
+	env_set_value(key, value, equal);
+	free(key);
+	free(value);
 }
 
 static void	export_sort_vars(char **envp)

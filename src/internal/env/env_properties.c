@@ -6,10 +6,11 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 03:15:18 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/18 03:35:00 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/20 02:43:30 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "ft_util.h"
@@ -51,19 +52,7 @@ char	*env_get_value(char *key)
 		return (NULL);
 }
 
-int	env_get_key_len(char *env_var)
-{
-	int	i;
-
-	i = DEFAULT;
-	while (env_var[i] && env_var[i] != '=')
-		i++;
-	if (env_var[i] == '=')
-		i++;
-	return (i);
-}
-
-void	env_set_value(char *key, char *value)
+void	env_set_value(char *key, char *value, bool equal)
 {
 	t_env_var	*env_var;
 
@@ -78,7 +67,7 @@ void	env_set_value(char *key, char *value)
 		}
 		else
 		{
-			if (*value)
+			if (equal)
 			{
 				free(env_var->value);
 				env_var->value = ft_strdup(value);
@@ -94,9 +83,13 @@ void	env_set_value(char *key, char *value)
 
 char	*env_parse(char *env_var, t_type_env_var type)
 {
-	int		key_len;
+	int	key_len;
 
-	key_len = env_get_key_len(env_var);
+	key_len = DEFAULT;
+	while (env_var[key_len] && env_var[key_len] != '=')
+		key_len++;
+	if (env_var[key_len] == '=')
+		key_len++;
 	if (type == KEY)
 		return (ft_substr(env_var, DEFAULT, key_len));
 	else if (type == VALUE)
