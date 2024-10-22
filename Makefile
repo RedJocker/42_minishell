@@ -108,6 +108,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), builtins.c 
 								   env.c \
 								   exit.c \
 								   export.c \
+								   pwd.c \
 								   unset.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)

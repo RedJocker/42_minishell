@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/22 03:00:19 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/22 03:40:38 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ static t_builtins	builtins_init(void)
 			{BUILTIN_UNSET, "unset", &runner_cmd_builtin_unset},
 			{BUILTIN_ENV, "env", &runner_cmd_builtin_env},
 			{BUILTIN_EXIT, "exit", &runner_cmd_builtin_exit},
+			{BUILTIN_PWD, "pwd", &runner_cmd_builtin_pwd},
 			{NOT_BUILTIN, NULL, NULL},
 		}});
 }
