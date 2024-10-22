@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_extension.h                                     :+:      :+:    :+:   */
+/*   exit.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
+/*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/14 01:55:16 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/22 02:40:52 by dande-je         ###   ########.fr       */
+/*   Created: 2024/10/22 03:08:36 by dande-je          #+#    #+#             */
+/*   Updated: 2024/10/22 03:11:12 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_EXTENSION_H
-# define FT_EXTENSION_H
+#ifndef EXIT_H
+# define EXIT_H
 
-typedef int	(*t_pred_char)(char);
-typedef int	(*t_pred_int) (int);
-
-char		**ft_splitfun(char const *str, t_pred_int should_split);
-long long	ft_strtoll(const char *str, char **endptr);
+enum e_exit
+{
+	MAX_EXIT_ARGS = 2,
+	MAX_STATUS_CODE_SIZE = 256,
+};
 
 #endif

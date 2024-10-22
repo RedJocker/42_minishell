@@ -6,10 +6,11 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/20 05:13:58 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/22 03:00:19 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <signal.h>
 #include <unistd.h>
 #include "ft_string.h"
 #include "ft_util.h"
@@ -21,6 +22,8 @@
 #include "internal/repl/shell/command/command.h"
 
 static t_builtins	builtins_init(void);
+static sig_atomic_t	return_buildin_status(t_builtin_id builtin, \
+						sig_atomic_t status, t_runner_data *run_data);
 
 t_builtin_id	check_builtin(t_command cmd)
 {
@@ -89,6 +92,14 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 	close(copy_fds[FD_OUT]);
 	ft_arraylist_foreach(run_data->pipes_to_close, \
 		(t_consumer) close_fd_pipes);
+	return (return_buildin_status(builtin, status, run_data));
+}
+
+static sig_atomic_t	return_buildin_status(t_builtin_id builtin, \
+						sig_atomic_t status, t_runner_data *run_data)
+{
+	if (builtin == BUILTIN_EXIT)
+		runner_cmd_simple_exit_status(run_data, status);
 	return (status);
 }
 

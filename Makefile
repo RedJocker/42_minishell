@@ -71,7 +71,8 @@ LIBS                            := ./lib/libftx/libft.a
 NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
-SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), ft_splitfun.c)
+SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), ft_splitfun.c \
+								   ft_strtoll.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c \
 								   env_properties.c \
 								   envp.c)
