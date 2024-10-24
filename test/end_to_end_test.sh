@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/24 16:34:23 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/24 19:02:19 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,12 +44,22 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" \
+    VARIABLE_FROM_OUTSIDE="abc def" \
+    LANGUAGE="en" \
+    PS1='RedWillShell$ ' \
+    bash --norc -i <<< "$@"
 }
 
 minishell_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
+
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" \
+    VARIABLE_FROM_OUTSIDE="abc def" \
+    LANGUAGE="en" \
+    PS1='RedWillShell$ ' \
+    ./minishell <<< "$@"
 }
 
 minishell_leak_check() {
