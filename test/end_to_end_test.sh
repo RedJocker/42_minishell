@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/19 17:33:21 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/24 16:34:23 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,8 @@ setup_file() {
 setup() {
     #echo "START TEST METHOD" 1>&3
     temp_dir="./test/temp$$"
+    rm -f ./test/bash_*.txt > /dev/null || true
+    rm -f ./test/mini_*.txt > /dev/null || true
 }
 
 teardown() {
@@ -82,10 +84,15 @@ assert_minishell_equal_bash() {
 
     #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
     if ! [[ $bash_output == $output ]]; then
-	        
-	# echo "$bash_output" > "./test/bash_$BATS_TEST_NAME.txt"
-	# echo "$output" > "./test/mini_$BATS_TEST_NAME.txt"
+	local bash_file="./test/bash_$BATS_TEST_NAME.txt"
+        local mini_file="./test/mini_$BATS_TEST_NAME.txt"
+
+	echo "$bash_output" > "$bash_file"
+	echo "$output" > "$mini_file"
 	echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
+	echo -e "\ndiff:\n====================\n"
+	diff "$bash_file" "$mini_file" || true
+	echo -e "\n====================\n"
 	false
     fi
 
@@ -147,8 +154,6 @@ assert_minishell_equal_bash_heredoc() {
 	false
     fi
 }
-
-
 
 # TEST BEGIN
 
