@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/08 06:16:45 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/24 02:24:40 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ enum e_default_values
 	CHAR_BYTE = 1,
 	NULL_BYTE = 1,
 	CMD_NAME = 1,
+	MAX_ARGS = 2,
+	MAX_STATUS_CODE_SIZE = 256,
 };
 
 typedef enum e_operations	t_operations;

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 03:18:36 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/24 01:28:31 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/24 02:24:57 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "ft_string.h"
 #include "internal/default.h"
 #include "internal/repl/shell/command/command.h"
-#include "internal/repl/shell/runner/builtins/exit.h"
 
 static void	print_pwd_error(char *msg);
 

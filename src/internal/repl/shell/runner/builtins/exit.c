@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 05:02:21 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/22 03:11:37 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/24 02:25:15 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include "internal/default.h"
 #include "internal/ft_extension.h"
 #include "internal/repl/shell/command/command.h"
-#include "internal/repl/shell/runner/builtins/exit.h"
 
 static void	print_exit_error(char *cmd);
 
@@ -32,7 +31,7 @@ sig_atomic_t	runner_cmd_builtin_exit(t_command cmd)
 	write(STDOUT_FILENO, "exit\n", ft_strlen("exit\n"));
 	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
 		return (status);
-	else if (cmd->simple->cmd_argc > MAX_EXIT_ARGS)
+	else if (cmd->simple->cmd_argc > MAX_ARGS)
 	{
 		print_exit_error(NULL);
 		return (EXIT_FAILURE);
