@@ -152,6 +152,20 @@ assert_minishell_equal_bash_heredoc() {
 
 # TEST BEGIN
 
+# @test "pwd: permission denied error" {
+#     # Create directory with no permissions
+#
+#     # Run pwd in minishell
+#     assert_minishell_equal_bash "
+# mkdir -p 'test_dir'
+# cd 'test_dir'
+# chmod 000 '../test_dir'
+# pwd
+# cd ..
+# chmod 755 'test_dir'
+# "
+# }
+
 @test "test empty" {
     assert_minishell_equal_bash ""
 }
@@ -1598,7 +1612,19 @@ missing.out
 "
 }
 
-
+# @test "pwd: permission denied error" {
+#     # Create directory with no permissions
+#     mkdir -p "test_dir"
+#     cd "test_dir"
+#     chmod 000 "../test_dir"
+#
+#     # Run pwd in minishell
+#     assert_minishell_equal_bash "
+# pwd
+# "
+#     cd ..
+#     chmod 755 "test_dir"
+# }
 
 
 
