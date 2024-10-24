@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 02:17:40 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/24 05:55:06 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/24 06:02:07 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ sig_atomic_t	runner_cmd_builtin_cd(t_command cmd)
 	if (cmd->simple->cmd_argc > MAX_ARGS)
 		return (print_cd_error("too many arguments", EXIT_FAILURE));
 	else if (!cmd->simple->cmd_argv[DEFAULT_BEGIN] \
-		|| ft_strncmp(cmd->simple->cmd_argv[DEFAULT_BEGIN], "~", CHAR_BYTE + NULL_BYTE) == DEFAULT)
+		|| ft_strncmp(cmd->simple->cmd_argv[DEFAULT_BEGIN], "~", \
+		CHAR_BYTE + NULL_BYTE) == DEFAULT)
 	{
 		path = env_get_value("HOME");
 		if (!path)
