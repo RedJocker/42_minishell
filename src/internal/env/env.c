@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/16 02:55:44 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:27:01 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	env_initializer(void)
 			env_set_vars_size(ADD);
 		}
 	}
+	env_update_default_values();
 }
 
 void	env_destroy(void)

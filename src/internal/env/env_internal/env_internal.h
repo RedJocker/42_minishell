@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 02:29:58 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/16 02:36:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:28:00 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_env_var	*env_var_last(t_env_var *env_var);
 void		env_var_add_back(t_env_var **env_var, t_env_var *env_var_new);
 void		env_vars_destroy(t_env_var *env_var);
 void		env_var_destroy(t_env_var *env_var);
+void		env_update_default_values(void);
 void		env_set_vars_size(t_operations type);
 t_env_var	*env_get_key(char *key, t_env_var *env_var);
 char		**get_env_path(void);
