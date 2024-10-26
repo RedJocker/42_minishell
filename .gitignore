@@ -11,8 +11,8 @@ minishell
 *commands.json
 .cache/
 *out.txt
-mini_test*.txt
-bash_test*.txt
+mini_*.txt
+bash_*.txt
 
 ## emacs temp
 *~
