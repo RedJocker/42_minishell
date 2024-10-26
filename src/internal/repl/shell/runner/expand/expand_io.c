@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:41:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/25 22:08:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/26 05:47:51 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	expand_io_split_path(t_io_handler *io, char *original_path)
 	split = expand_split_str(io->path, (t_pred_int) ft_isspace);
 	if (split[0] == NULL || split[1] != NULL)
 	{
-		ft_asprintf(&errmsg, "bash: %s: ambiguous redirect", original_path);
+		ft_asprintf(&errmsg, "minishell: %s: ambiguous redirect", original_path);
 		free(io->path);
 		ft_strarr_free(split);
 		return (io_handler_set_error(io, errno, errmsg));

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/11 02:05:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:14:29 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	io_handler_path_to_fd(t_io_handler *io)
 	fd = open(io->path, io->flags, io->mode);
 	if (fd < 0)
 	{
-		ft_asprintf(&errmsg, "bash: %s: %s", io->path, strerror(errno));
+		ft_asprintf(&errmsg, "minishell: %s: %s", io->path, strerror(errno));
 		free(io->path);
 		io_handler_set_error(io, errno, errmsg);
 		return ;
@@ -84,7 +84,7 @@ void	io_handler_redirect(t_io_handler *io)
 		return ;
 	if (dup2(io->fd, fd_target) < 0)
 	{
-		ft_asprintf(&errmsg, "bash: %s", strerror(errno));
+		ft_asprintf(&errmsg, "minishell: %s", strerror(errno));
 		io_handler_set_error(io, errno, errmsg);
 	}
 	close(io->fd);

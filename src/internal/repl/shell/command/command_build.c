@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/19 16:59:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/26 05:46:07 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_command	command_build_simple(
 	t_command	cmd;
 	char		*err_msg;
 	t_token		*err_tkn;
-	const char	*err_template = "bash: syntax error near unexpected token `%s'";
+	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
 
 	if (command_simple_is_invalid(tokens, &endtoken_idx))
 	{
@@ -44,7 +44,7 @@ t_command	command_build_pipe(
 	t_command	cmd_before;
 	t_command   cmd_after;
 	char		*err_msg;
-	const char	*err_template = "bash: syntax error near unexpected token `%s'";
+	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
 
 	cmd_before = command_build(tokens, cmd_operator_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
@@ -82,7 +82,7 @@ t_command	command_build_and(
 	t_command	cmd_before;
 	t_command   cmd_after;
 	char		*err_msg;
-	const char	*err_template = "bash: syntax error near unexpected token `%s'";
+	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
 
 	cmd_before = command_build(tokens, cmd_operator_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
@@ -121,7 +121,7 @@ t_command	command_build_or(
 	t_command	cmd_before;
 	t_command   cmd_after;
 	char		*err_msg;
-	const char	*err_template = "bash: syntax error near unexpected token `%s'";
+	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
 
 	cmd_before = command_build(tokens, cmd_operator_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)

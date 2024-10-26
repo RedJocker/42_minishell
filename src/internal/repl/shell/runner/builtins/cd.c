@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 02:17:40 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/26 05:04:01 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:13:44 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ static sig_atomic_t	print_cd_error(char *msg, char *path, sig_atomic_t status)
 
 	if (!path)
 		ft_asprintf(&error_msg, \
-			"bash: cd: %s\n", msg); // TODO: change the name of program to minishell instead of bash.
+			"minishell: cd: %s\n", msg);
 	else
 		ft_asprintf(&error_msg, \
-			"bash: cd: %s: %s\n", path, msg); // TODO: change the name of program to minishell instead of bash.
+			"minishell: cd: %s: %s\n", path, msg);
 	write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
 	free(error_msg);
 	return (status);

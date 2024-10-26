@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/30 23:19:09 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/26 05:50:05 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	signals_initializer(bool redisplay)
 	if (sigaction(SIGINT, &sa_int, NULL) == FAIL
 		|| sigaction(SIGQUIT, &sa_quit, NULL) == FAIL)
 	{
-		ft_putendl_fd("shell: failed signal: fail to set signals", \
+		ft_putendl_fd("minishell: failed signal: fail to set signals", \
 			STDERR_FILENO);
 		exit (EXIT_FAILURE);
 	}
@@ -53,7 +53,7 @@ void	signals_afterfork(void)
 	sa_quit.sa_handler = sigquit_handler;
 	if (sigaction(SIGQUIT, &sa_quit, NULL) == FAIL)
 	{
-		ft_putendl_fd("shell: failed signal: fail to set signals", \
+		ft_putendl_fd("minishell: failed signal: fail to set signals", \
 			STDERR_FILENO);
 		exit (EXIT_FAILURE);
 	}

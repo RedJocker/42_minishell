@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/17 15:20:27 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/26 05:49:08 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	runner_cmd_simple_execve_error_eacces(
 	if (cmd->simple->cmd_argv[0][0] == '\0')
 	{
 		ft_asprintf(
-			&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
+			&msg, "minishell: %s: command not found", cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
 	}
 	stat(cmd->simple->cmd_argv[0], &path_stat);
@@ -75,20 +75,20 @@ static void	runner_cmd_simple_execve_error_eacces(
 		if (ft_strchr(cmd->simple->cmd_path, '/'))
 		{
 			ft_asprintf(
-				&msg, "bash: %s: Is a directory", cmd->simple->cmd_argv[0]);
+				&msg, "minishell: %s: Is a directory", cmd->simple->cmd_argv[0]);
 			runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_EXECUTABLE, true);
 		}
 		else
 		{
 			ft_asprintf(
-				&msg, "bash: %s: command not found", cmd->simple->cmd_argv[0]);
+				&msg, "minishell: %s: command not found", cmd->simple->cmd_argv[0]);
 			runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
 		}
 	}
 	else
 	{
 		ft_asprintf(
-			&msg, "bash: %s: %s",
+			&msg, "minishell: %s: %s",
 			cmd->simple->cmd_argv[0], strerror(err_num));
 		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_EXECUTABLE, true);
 	}
@@ -101,13 +101,13 @@ static void	runner_cmd_simple_execve_error_enoent(t_runner_data *run_data)
 
 	if (ft_strchr(cmd->simple->cmd_path, '/'))
 	{
-		ft_asprintf(&msg, "bash: %s: No such file or directory",
+		ft_asprintf(&msg, "minishell: %s: No such file or directory",
 			cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
 	}
 	else
 	{
-		ft_asprintf(&msg, "bash: %s: command not found",
+		ft_asprintf(&msg, "minishell: %s: command not found",
 			cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
 	}
@@ -122,7 +122,7 @@ static void	runner_cmd_simple_execve_error(t_runner_data *run_data, int err_num)
 		return (runner_cmd_simple_execve_error_enoent(run_data));
 	else if (err_num == EACCES)
 		return (runner_cmd_simple_execve_error_eacces(run_data, err_num));
-	ft_asprintf(&msg, "bash: %s: %s",
+	ft_asprintf(&msg, "minishell: %s: %s",
 		cmd->simple->cmd_argv[0], strerror(err_num));
 	return (runner_cmd_simple_panic(run_data, msg, err_num, true));
 }

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 05:02:21 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/24 02:25:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:12:58 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ static void	print_exit_error(char *cmd)
 
 	if (!cmd)
 		ft_asprintf(&error_msg, \
-			"bash: exit: too many arguments\n"); // TODO: change the name of program to minishell instead of bash.
+			"minishell: exit: too many arguments\n");
 	else
 		ft_asprintf(&error_msg, \
-			"bash: exit: %s: numeric argument required\n", cmd); // TODO: change the name of program to minishell instead of bash.
+			"minishell: exit: %s: numeric argument required\n", cmd);
 	write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
 	free(error_msg);
 }

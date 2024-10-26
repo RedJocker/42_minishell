@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 03:18:36 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/24 02:24:57 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:11:49 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	print_pwd_error(char *msg)
 	char	*error_msg;
 
 	ft_asprintf(&error_msg, \
-		"bash: pwd: %s\n", msg); // TODO: change the name of program to minishell instead of bash.
+		"minishell: pwd: %s\n", msg);
 	write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
 	free(error_msg);
 }

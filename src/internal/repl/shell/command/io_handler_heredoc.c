@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/11 04:24:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/26 05:46:51 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 		free(line);
 	}
 	else
-		ft_printf("bash: warning: here-document delimited by "
+		ft_printf("minishell: warning: here-document delimited by "
 				  "end-of-file (wanted `%s')\n", io->heredoc_limiter);
 	io->heredoc_input = stringbuilder_build(builder);
 }

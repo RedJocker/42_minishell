@@ -80,7 +80,8 @@ assert_minishell_equal_bash() {
     delete_temp_folder
     
     local bash_status=$status
-    local bash_output=$output
+    # local bash_output=$output
+	local bash_output=$(echo "$output" | sed 's/bash: /minishell: /g')
 
     #echo $bash_status 1>&3
     #echo "$bash_output" 1>&3
@@ -135,6 +136,7 @@ assert_minishell_equal_bash_heredoc() {
     #echo "$bash_output" 1>&3
 
     local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0} !/here-document/ { print $0}' <<< "$output")
+	local bash_output_heredoc=$(echo "$bash_out_norm" | sed 's/bash: /minishell: /g')
 
     
     run minishell_execute "$@"
@@ -143,8 +145,8 @@ assert_minishell_equal_bash_heredoc() {
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
     #echo -e "===> bash_out_norm:\n<$bash_out_norm>\n===> minishell_output:\n<$output>" 1>&3
-    if ! [[ $bash_out_norm == $output ]]; then
-		echo -e "===> bash_out_norm:\n<$bash_out_norm>\n===> minishell_output:\n<$output>"
+    if ! [[ $bash_output_heredoc == $output ]]; then
+		echo -e "===> bash_out_norm:\n<$bash_output_heredoc>\n===> minishell_output:\n<$output>"
 		false
     fi
 
@@ -382,7 +384,7 @@ cat $file1
 "
 }
 
-## SIMPLE WITH REDIRECT >> TESTS #########################
+
 
 @test "test simple command with one >> redirect at end of command: ls -a \$temp_dir -H >> \$file" {
     file="$temp_dir/a.txt"
@@ -1451,7 +1453,7 @@ eof
 }
 
 @test "test pipe heredoc: ls | wc << eof" {
-   
+
     assert_minishell_equal_bash "ls | wc -l << eof
 some heredoc
 text

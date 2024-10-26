@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/20 02:37:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/26 07:12:03 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static sig_atomic_t	export_args(char *cmd, sig_atomic_t status)
 	{
 		status = EXIT_FAILURE;
 		ft_asprintf(&error_msg, \
-			"bash: export: %s: not a valid identifier\n", cmd); // TODO: change the name of program to minishell instead of bash.
+			"minishell: export: %s: not a valid identifier\n", cmd);
 		write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
 		free(error_msg);
 	}
