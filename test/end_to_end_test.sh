@@ -7,20 +7,20 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/24 20:58:51 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/26 00:14:14 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 setup_file() {
     #echo "START TEST" 1>&3
     true
+    rm -f ./test/bash_*.txt > /dev/null || true
+    rm -f ./test/mini_*.txt > /dev/null || true
 }
 
 setup() {
     #echo "START TEST METHOD" 1>&3
     temp_dir="./test/temp$$"
-    rm -f ./test/bash_*.txt > /dev/null || true
-    rm -f ./test/mini_*.txt > /dev/null || true
 }
 
 teardown() {
@@ -988,6 +988,10 @@ cat $file3
 "
 }
 
+@test "test pipe and echo: echo before pipe | wc" {
+    assert_minishell_equal_bash "echo before pipe | cat"
+}
+
 @test "test pipe and echo: ls | echo after pipe" {
     assert_minishell_equal_bash "ls | echo after pipe"
 }
@@ -1054,7 +1058,6 @@ cat $file3
 "
 }
 
-
 ## INVALID COMMAND TESTS #########################
 
 @test "test invalid command: echo_heredoc" {
@@ -1099,28 +1102,31 @@ echo \$?"
 
 ## VARIABLE EXPANSION TESTS #########################
 
-@test "test environment variables" {
+@test "test expansion environment variables" {
     assert_minishell_equal_bash "echo LANG=\$LANG LC_ALL=\$LC_ALL LANGUAGE=\$LANGUAGE"
 }
 
-@test "test environment variables that exist from outside" {
+@test "test expansion environment variables that exist from outside" {
     assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE\"\$VARIABLE_FROM_OUTSIDE\"xxx"
 }
 
-@test "test environment variables that exist from outside more spaces" {
+@test "test expansion environment variables that exist from outside more spaces" {
     assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"xxx"
 }
 
-@test "test simple expand invalid enviroment variable: echo \$INVALID_VARIABLE" {
-    assert_minishell_equal_bash echo "\$INVALID_VARIABLE"
+@test "test expansion single quoted does not expand" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE'$VARIABLE_FROM_OUTSIDE'xxx"
 }
 
-@test "test pipe and echo: echo before pipe | wc" {
-    assert_minishell_equal_bash "echo before pipe | cat"
+@test "test expansion dolar alone" {
+    assert_minishell_equal_bash "echo \$"
 }
 
+@test "test expansion invalid enviroment variable: echo \$INVALID_VARIABLE" {
+    assert_minishell_equal_bash "echo \$INVALID_VARIABLE"
+}
 
-@test "test simple command expand filename: ls > ./temp_dir/\$LANGUAGE" {
+@test "test expansion redirect filename: ls > ./temp_dir/\$LANGUAGE" {
     assert_minishell_equal_bash "
 echo \$LANGUAGE
 ls > $temp_dir/\$LANGUAGE 
@@ -1128,7 +1134,7 @@ ls $temp_dir
 cat < $temp_dir/\$LANGUAGE"
 }
 
-@test "test simple command expand filename ambiguous: ls > ./temp_dir/\$VARIABLE_FROM_OUTSIDE" {
+@test "test expansion redirect filename ambiguous: ls > ./temp_dir/\$VARIABLE_FROM_OUTSIDE" {
     assert_minishell_equal_bash "
 echo \$VARIABLE_FROM_OUTSIDE
 ls > $temp_dir/\$VARIABLE_FROM_OUTSIDE 
@@ -1136,18 +1142,135 @@ ls $temp_dir
 cat < $temp_dir/\$VARIABLE_FROM_OUTSIDE"
 }
 
-@test "test expand unknown variable: \$DOES_NOT_EXIST" {
+
+@test "test expansion redirect filename single quoted does not expand" {
+    file="$temp_dir/'$VARIABLE_FROM_OUTSIDE'"
+    assert_minishell_equal_bash "echo > $file"
+}
+
+@test "test expansion unknown variable: \$DOES_NOT_EXIST" {
     assert_minishell_equal_bash "\$DOES_NOT_EXIST$$
 "
 }
 
-@test "test expand file unknown variable: ls > \$DOES_NOT_EXIST" {
+@test "test expansion file unknown variable: ls > \$DOES_NOT_EXIST" {
     assert_minishell_equal_bash "ls > \$DOES_NOT_EXIST$$
 "
 }
 
-@test "test expand file unknown variable: cat < \$DOES_NOT_EXIST" {
+@test "test expansion file unknown variable: cat < \$DOES_NOT_EXIST" {
     assert_minishell_equal_bash "cat < \$DOES_NOT_EXIST$$
+"
+}
+
+@test "test expansion: echo \"hello world\"" {
+    assert_minishell_equal_bash "
+echo \"hello world\"
+"
+}
+
+@test "test expansion: echo 'hello world'" {
+    assert_minishell_equal_bash "
+echo 'hello world'
+"
+}
+
+@test "test expansion: echo hello'world'" {
+    assert_minishell_equal_bash "
+echo hello'world'
+"
+}
+
+
+@test "test expansion: echo hello\"\"world" {
+    assert_minishell_equal_bash "
+echo hello\"\"world
+"
+}
+
+@test "test expansion: echo ''" {
+    assert_minishell_equal_bash "
+echo ''
+"
+}
+
+@test "test expansion: echo \"\$PWD\"" {
+    assert_minishell_equal_bash "
+echo \"\$PWD\"
+"
+}
+
+@test "test expansion: echo '\$PWD'" {
+    assert_minishell_equal_bash "
+echo '\$PWD'
+"
+}
+
+@test "test expansion: echo \"aspas ->'\"" {
+    assert_minishell_equal_bash "
+echo \"aspas ->'\"
+"
+}
+
+
+@test "test expansion: echo \"aspas -> ' \"" {
+    assert_minishell_equal_bash "
+echo \"aspas -> ' \"
+"
+}
+
+
+@test "test expansion: echo 'aspas ->\"'" {
+    assert_minishell_equal_bash "
+echo 'aspas ->\"'
+"
+}
+
+@test "test expansion: echo 'aspas -> \" '" {
+    assert_minishell_equal_bash "
+echo 'aspas -> \" '
+"
+}
+
+@test "test expansion: echo \"exit_code ->\$? user ->\$USER home -> \$HOME\"" {
+    assert_minishell_equal_bash "
+echo \"exit_code ->\$? user ->\$USER home -> \$HOME\"
+"
+}
+
+@test "test expansion: echo 'exit_code ->\$? user ->\$USER home -> \$HOME'" {
+    assert_minishell_equal_bash "
+echo 'exit_code ->\$? user ->\$USER home -> \$HOME'
+"
+}
+
+@test "test expansion: echo \"\$\"" {
+    assert_minishell_equal_bash "
+echo \"\$\"
+"
+}
+
+@test "test expansion: echo '\$'" {
+    assert_minishell_equal_bash "
+echo '\$'
+"
+}
+
+@test "test expansion: echo \$" {
+    assert_minishell_equal_bash "
+echo \$
+"
+}
+
+@test "test expansion: echo \$?" {
+    assert_minishell_equal_bash "
+echo \$?
+"
+}
+
+@test "test expansion: echo \$?HELLO" {
+    assert_minishell_equal_bash "
+echo \$?HELLO
 "
 }
 
@@ -1720,118 +1843,6 @@ missing.out
 }
 
 
-@test "test builtin: echo \"hello world\"" {
-    assert_minishell_equal_bash "
-echo \"hello world\"
-"
-}
-
-@test "test builtin: echo 'hello world'" {
-    assert_minishell_equal_bash "
-echo 'hello world'
-"
-}
-
-@test "test builtin: echo hello'world'" {
-    assert_minishell_equal_bash "
-echo hello'world'
-"
-}
-
-
-@test "test builtin: echo hello\"\"world" {
-    assert_minishell_equal_bash "
-echo hello\"\"world
-"
-}
-
-@test "test builtin: echo ''" {
-    assert_minishell_equal_bash "
-echo ''
-"
-}
-
-
-@test "test builtin: echo \"\$PWD\"" {
-    assert_minishell_equal_bash "
-echo \"\$PWD\"
-"
-}
-
-@test "test builtin: echo '\$PWD'" {
-    assert_minishell_equal_bash "
-echo '\$PWD'
-"
-}
-
-@test "test builtin: echo \"aspas ->'\"" {
-    assert_minishell_equal_bash "
-echo \"aspas ->'\"
-"
-}
-
-
-@test "test builtin: echo \"aspas -> ' \"" {
-    assert_minishell_equal_bash "
-echo \"aspas -> ' \"
-"
-}
-
-
-@test "test builtin: echo 'aspas ->\"'" {
-    assert_minishell_equal_bash "
-echo 'aspas ->\"'
-"
-}
-
-@test "test builtin: echo 'aspas -> \" '" {
-    assert_minishell_equal_bash "
-echo 'aspas -> \" '
-"
-}
-
-@test "test builtin: echo \"exit_code ->\$? user ->\$USER home -> \$HOME\"" {
-    assert_minishell_equal_bash "
-echo \"exit_code ->\$? user ->\$USER home -> \$HOME\"
-"
-}
-
-@test "test builtin: echo 'exit_code ->\$? user ->\$USER home -> \$HOME'" {
-    assert_minishell_equal_bash "
-echo 'exit_code ->\$? user ->\$USER home -> \$HOME'
-"
-}
-
-@test "test builtin: echo \"\$\"" {
-    assert_minishell_equal_bash "
-echo \"\$\"
-"
-}
-
-@test "test builtin: echo '\$'" {
-    assert_minishell_equal_bash "
-echo '\$'
-"
-}
-
-@test "test builtin: echo \$" {
-    assert_minishell_equal_bash "
-echo \$
-"
-}
-
-@test "test builtin: echo \$?" {
-    assert_minishell_equal_bash "
-echo \$?
-"
-}
-
-@test "test builtin: echo \$?HELLO" {
-    assert_minishell_equal_bash "
-echo \$?HELLO
-"
-}
-
 @test "test builtin: pwd" {
     assert_minishell_equal_bash "
 pwd
@@ -1951,6 +1962,15 @@ cd \$PWD hi
 cd 123123
 "
 }
+
+@test "test expansion redirect filename dolar alone: echo > \$" {
+    assert_minishell_equal_bash "
+cd $temp_dir
+echo > \$
+ls
+"  
+}
+
 
 @test "test builtin: exit 123" {
     assert_minishell_equal_bash "

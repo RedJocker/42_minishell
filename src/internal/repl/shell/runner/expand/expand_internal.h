@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 21:10:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/19 15:13:46 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/25 21:46:45 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,15 @@
 
 # include "stringbuilder.h"
 # include "collection/ft_arraylist.h"
+# include "internal/ft_extension.h"
+# include "internal/repl/shell/command/command.h"
+# include "internal/repl/shell/command/io_handler.h"
+# include <signal.h>
 
-typedef struct s_expansion_state
-{
-	t_stringbuilder	builder;
-	char			*res;
-	char			open_quote;
-	int				had_quote;
-	int				cur_ch;
-	t_arraylist		lst_new_args;
-}	t_expansion_state;
+char	**expand_split_str(char const *str, t_pred_int should_split);
+void	expand_argv(t_command cmd, sig_atomic_t last_status_code);
+void	expand_io(t_io_handler *io, sig_atomic_t *last_status_code);
+void	expand_str_dollar(char **strptr, sig_atomic_t last_status_code);
+void	expand_str_remove_quote(char **strptr);
 
 #endif
