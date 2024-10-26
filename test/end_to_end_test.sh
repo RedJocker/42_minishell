@@ -7,13 +7,15 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/19 17:33:21 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/26 00:14:14 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 setup_file() {
     #echo "START TEST" 1>&3
     true
+    rm -f ./test/bash_*.txt > /dev/null || true
+    rm -f ./test/mini_*.txt > /dev/null || true
 }
 
 setup() {
@@ -42,12 +44,22 @@ delete_temp_folder() {
 
 bash_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' bash --norc -i <<< "$@"
+
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" \
+    VARIABLE_FROM_OUTSIDE="abc def" \
+    LANGUAGE="en" \
+    PS1='RedWillShell$ ' \
+    bash --norc -i <<< "$@"
 }
 
 minishell_execute() {
     create_temp_folder
-    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" VARIABLE_FROM_OUTSIDE="abc def" LANGUAGE="en" PS1='RedWillShell$ ' ./minishell <<< "$@"
+
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" \
+    VARIABLE_FROM_OUTSIDE="abc def" \
+    LANGUAGE="en" \
+    PS1='RedWillShell$ ' \
+    ./minishell <<< "$@"
 }
 
 minishell_leak_check() {
@@ -82,10 +94,15 @@ assert_minishell_equal_bash() {
 
     #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
     if ! [[ $bash_output == $output ]]; then
-	        
-	# echo "$bash_output" > "./test/bash_$BATS_TEST_NAME.txt"
-	# echo "$output" > "./test/mini_$BATS_TEST_NAME.txt"
+	local bash_file="./test/bash_$BATS_TEST_NAME.txt"
+        local mini_file="./test/mini_$BATS_TEST_NAME.txt"
+
+	echo "$bash_output" > "$bash_file"
+	echo "$output" > "$mini_file"
 	echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>"
+	echo -e "\ndiff:\n====================\n"
+	diff "$bash_file" "$mini_file" || true
+	echo -e "\n====================\n"
 	false
     fi
 
@@ -148,23 +165,69 @@ assert_minishell_equal_bash_heredoc() {
     fi
 }
 
-
-
 # TEST BEGIN
 
-# @test "pwd: permission denied error" {
-#     # Create directory with no permissions
-#
-#     # Run pwd in minishell
-#     assert_minishell_equal_bash "
-# mkdir -p 'test_dir'
-# cd 'test_dir'
-# chmod 000 '../test_dir'
-# pwd
-# cd ..
-# chmod 755 'test_dir'
-# "
-# }
+
+## NEW TESTS #########################
+
+@test "pwd: permission denied error" {
+    ## cd .. tá falhando por causa da permisão mas deveria funcionar
+
+    temp_dir2="$temp_dir/temp"
+    
+    assert_minishell_equal_bash "
+mkdir -p \"$temp_dir2\"
+cd \"$temp_dir2\"
+chmod 000 .
+pwd
+cd ..
+chmod 755 'temp'
+"
+}
+
+@test "test export no args" {
+    ## tá falhando por causa do SHLVL que precisa aumentar no inicio do minishell
+    ## tá falhando por que tem que escapar os $ no output do export
+    assert_minishell_equal_bash "
+export | grep -v -i bats | grep -v '}' | grep -v _=
+"
+}
+
+
+@test "test cd: cd \"\$temp_dir2\" \n pwd \n cd . \n pwd \n cd .. \n pwd" {
+    temp_dir2="$temp_dir/temp"
+    
+    assert_minishell_equal_bash "
+mkdir -p \"$temp_dir2\"
+cd \"$temp_dir2\"
+pwd
+cd .
+pwd
+cd ..
+pwd
+"
+}
+
+@test "test cd: cd \"\$temp_dir2\" \n echo \$PWD \n echo \$OLD_PWD \n cd . \n echo \$PWD \n echo \$OLD_PWD \n cd .. \n echo \$PWD \n echo \$OLD_PWD" {
+    ## tá falando no primeiro echo PWD por algum motivo estranho já que os outros funcionam
+
+    temp_dir2="$temp_dir/temp"
+    
+    assert_minishell_equal_bash "
+mkdir -p \"$temp_dir2\"
+cd \"$temp_dir2\"
+echo \$PWD
+echo \$OLDPWD
+cd .
+echo \$PWD
+echo \$OLDPWD
+cd ..
+echo \$PWD 
+echo \$OLDPWD
+"
+}
+
+## SIMPLE TESTS #########################
 
 @test "test empty" {
     assert_minishell_equal_bash ""
@@ -204,6 +267,18 @@ uname"
 @test "test simple command with two args: ls -H -a" {
     assert_minishell_equal_bash ls -H -a
 }
+
+@test "test builtin echo with one arg" {
+    assert_minishell_equal_bash "echo testing
+"
+}
+
+@test "test builtin echo with two args" {
+    assert_minishell_equal_bash "echo testing two
+"
+}
+
+## SIMPLE WITH REDIRECT > TESTS #########################
 
 @test "test simple command with one > redirect at end of command: ls -a \$temp_dir -H > \$file" {
     file="$temp_dir/a.txt"
@@ -264,16 +339,6 @@ cat $file1
 "
 }
 
-@test "test builtin echo with one arg" {
-    assert_minishell_equal_bash "echo testing
-"
-}
-
-@test "test builtin echo with two args" {
-    assert_minishell_equal_bash "echo testing two
-"
-}
-
 @test "test builtin echo with > redirection end" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls $temp_dir 
@@ -316,6 +381,8 @@ echo \$?
 cat $file1
 "
 }
+
+## SIMPLE WITH REDIRECT >> TESTS #########################
 
 @test "test simple command with one >> redirect at end of command: ls -a \$temp_dir -H >> \$file" {
     file="$temp_dir/a.txt"
@@ -416,6 +483,36 @@ cat $file1
 "
 }
 
+@test "test builtin echo with one >> redirect at end of command: echo next >> \$file" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo previous > $file
+cat $file
+echo next >> $file
+cat $file
+"
+}
+
+@test "test builtin echo with one >> redirect at middle of command: echo hello  >> \$file there" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo previous > $file
+cat $file
+echo hello >> $file there
+cat $file
+"
+}
+
+@test "test builtin echo with one >> redirect at start of command: >> \$file echo next" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo previous > $file
+cat $file
+>> $file echo next
+cat $file
+"
+}
+
+
+## SIMPLE WITH REDIRECT < TESTS #########################
+
 @test "test simple command with < redirection at end: cat < \$file1 " {
     file1="$temp_dir/input.txt"
     assert_minishell_equal_bash "printf input > $file1
@@ -491,6 +588,8 @@ cat $file1
 "
 }
 
+## SIMPLE WITH QUOTES TESTS #########################
+
 @test "test simple command with single quote on args: printf 'hello'" {
     assert_minishell_equal_bash "
 printf 'hello'
@@ -521,6 +620,39 @@ p'rin'tf hello
 "
 }
 
+@test "test builtin echo with single quote on args: echo 'hello'" {
+    assert_minishell_equal_bash "
+echo 'hello'
+"
+}
+
+@test "test builtin echo with single quote on invocation: 'echo' hello" {
+    assert_minishell_equal_bash "
+'echo' hello
+"
+}
+
+@test "test builtin echo with single quote on arg with space: echo 'hello there'" {
+    assert_minishell_equal_bash "
+echo 'hello there' 
+"
+}
+
+@test "test builtin echo with single quote on middle of arg: echo he'll'o" {
+    assert_minishell_equal_bash "
+echo he'll'o 
+"
+}
+
+@test "test builtin echo with single quote on middle of invocation: e'ch'o hello" {
+    assert_minishell_equal_bash "
+e'ch'o hello 
+"
+}
+
+
+## SIMPLE WITH INVALID REDIRECT TESTS #########################
+
 @test "test simple command with invalid redirect syntax: ls >" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls >
@@ -541,32 +673,6 @@ printf \$?"
 printf \$?"
 }
 
-@test "test builtin echo with one >> redirect at end of command: echo next >> \$file" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo previous > $file
-cat $file
-echo next >> $file
-cat $file
-"
-}
-
-@test "test builtin echo with one >> redirect at middle of command: echo hello  >> \$file there" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo previous > $file
-cat $file
-echo hello >> $file there
-cat $file
-"
-}
-
-@test "test builtin echo with one >> redirect at start of command: >> \$file echo next" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo previous > $file
-cat $file
->> $file echo next
-cat $file
-"
-}
 
 @test "test builtin echo invalid redirect syntax > >>" {
     file1="$temp_dir/a.txt"
@@ -585,6 +691,53 @@ echo \$?"
     assert_minishell_equal_bash "ls -a $temp_dir -H >> >> $file1
 echo \$?"
 }
+
+@test "test builtin echo with invalid redirect syntax > <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail > < $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax < >" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail < > $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax >> <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail >> < $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax < >>" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail < >> $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax < <" {
+    file1="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo fail < < $file1
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax: echo hello >" {
+    assert_minishell_equal_bash "echo hello >
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax: echo hello >>" {
+    assert_minishell_equal_bash "ls >>
+echo \$?"
+}
+
+@test "test builtin echo with invalid redirect syntax: echo hello <" {
+    assert_minishell_equal_bash "ls <
+echo \$?"
+}
+
+## SIMPLE WITH REDIRECT EXTRAS TESTS #########################
 
 @test "test builtin echo with >> redirection to file without permission " {
     file1="$temp_dir/a.txt"
@@ -647,36 +800,6 @@ echo ignore input < $file1
 "
 }
 
-@test "test builtin echo with invalid redirect syntax > <" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo fail > < $file1
-echo \$?"
-}
-
-@test "test builtin echo with invalid redirect syntax < >" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo fail < > $file1
-echo \$?"
-}
-
-@test "test builtin echo with invalid redirect syntax >> <" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo fail >> < $file1
-echo \$?"
-}
-
-@test "test builtin echo with invalid redirect syntax < >>" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo fail < >> $file1
-echo \$?"
-}
-
-@test "test builtin echo with invalid redirect syntax < <" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo fail < < $file1
-echo \$?"
-}
-
 @test "test builtin echo with < redirection from file without permission " {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "echo protected >> $file1
@@ -715,40 +838,7 @@ cat $file1
 "
 }
 
-@test "test builtin echo with single quote on args: echo 'hello'" {
-    assert_minishell_equal_bash "
-echo 'hello'
-"
-}
-
-@test "test builtin echo with single quote on invocation: 'echo' hello" {
-    assert_minishell_equal_bash "
-'echo' hello
-"
-}
-
-@test "test builtin echo with single quote on arg with space: echo 'hello there'" {
-    assert_minishell_equal_bash "
-echo 'hello there' 
-"
-}
-
-@test "test builtin echo with single quote on middle of arg: echo he'll'o" {
-    assert_minishell_equal_bash "
-echo he'll'o 
-"
-}
-
-@test "test builtin echo with single quote on middle of invocation: e'ch'o hello" {
-    assert_minishell_equal_bash "
-e'ch'o hello 
-"
-}
-
-@test "test builtin echo with invalid redirect syntax: echo hello >" {
-    assert_minishell_equal_bash "echo hello >
-echo \$?"
-}
+## SIMPLE ECHO WITH option -n #########################
 
 @test "test builtin echo with only option -n: echo -n" {
     assert_minishell_equal_bash "echo -n
@@ -770,15 +860,7 @@ echo \$?"
 echo \$?"
 }
 
-@test "test builtin echo with invalid redirect syntax: echo hello >>" {
-    assert_minishell_equal_bash "ls >>
-echo \$?"
-}
-
-@test "test builtin echo with invalid redirect syntax: echo hello <" {
-    assert_minishell_equal_bash "ls <
-echo \$?"
-}
+## PIPE TESTS #########################
 
 @test "test pipe: ls | wc" {
     assert_minishell_equal_bash "ls | wc"
@@ -833,6 +915,12 @@ ls | cat < $file1"
 
 @test "test pipe: ls | wc | cat -e" {
     assert_minishell_equal_bash "ls | wc | cat -e"
+}
+
+@test "test pipe: echo hi | cat | cat | cat | cat | cat | cat | cat" {
+    assert_minishell_equal_bash "
+echo hi | cat | cat | cat | cat | cat | cat | cat
+"
 }
 
 @test "test pipe: ls > \$file1 | wc > \$file2 | cat -e > \$file3" {
@@ -898,107 +986,6 @@ cat $file3
     echo \$?
     <$file1 cat|<$file2 cat  
 "
-}
-
-@test "test pipe heredoc: cat << eof | wc" {
-    assert_minishell_equal_bash "cat << eof | wc
-some heredoc
-text
-eof
-"
-}
-
-@test "test pipe heredoc: ls | wc << eof" {
-   
-    assert_minishell_equal_bash "ls | wc -l << eof
-some heredoc
-text
-eof
-"
-}
-
-@test "test pipe heredoc: ls << eof | wc -l << eof" {
-    assert_minishell_equal_bash "ls << eof | wc -l << eof
-some heredoc
-text
-eof
-another
-different
-text
-with more
-lines
-eof
-"
-}
-
-@test "test pipe heredoc: << eof ls | << eof wc -l" {
-    assert_minishell_equal_bash "<< eof ls | << eof wc -l
-some heredoc
-text
-eof
-another
-different
-text
-with more
-lines
-eof
-"
-}
-
-@test "test invalid command: echo_heredoc" {
-    assert_minishell_equal_bash "echo_heredoc
-"
-}
-
-@test "test invalid command: eof" {
-    assert_minishell_equal_bash "eof
-echo \$?"
-}
-
-@test "test invalid_command does not exist" {
-    file1="$temp_dir/does_not_exist"
-    assert_minishell_equal_bash "
-rm -rf $file1 2> /dev/null
-$file1
-echo \$?"
-}
-
-@test "test invalid_command is not executable" {
-    file1="$temp_dir/text"
-    assert_minishell_equal_bash "
-echo 'some text' > $file1 
-$file1
-echo \$?"
-}
-
-@test "test invalid_command is directory with execute permission" {
-    assert_minishell_equal_bash "
-chmod 777 $temp_dir
-$temp_dir
-echo \$?"
-}
-
-@test "test invalid_command is directory without execute permission" {
-    assert_minishell_equal_bash "
-chmod 000 $temp_dir
-$temp_dir
-echo \$?"
-}
-
-@test "test environment variables" {
-    assert_minishell_equal_bash "echo LANG=\$LANG LC_ALL=\$LC_ALL LANGUAGE=\$LANGUAGE"
-}
-
-@test "test environment variables that exist from outside" {
-    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE\"\$VARIABLE_FROM_OUTSIDE\"xxx"
-}
-
-@test "test environment variables that exist from outside more spaces" {
-    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"xxx"
-}
-
-@test "test simple expand invalid enviroment variable: echo \$INVALID_VARIABLE" {
-    assert_minishell_equal_bash echo "\$INVALID_VARIABLE"
 }
 
 @test "test pipe and echo: echo before pipe | wc" {
@@ -1071,7 +1058,75 @@ cat $file3
 "
 }
 
-@test "test simple command expand filename: ls > ./temp_dir/\$LANGUAGE" {
+## INVALID COMMAND TESTS #########################
+
+@test "test invalid command: echo_heredoc" {
+    assert_minishell_equal_bash "echo_heredoc
+"
+}
+
+@test "test invalid command: eof" {
+    assert_minishell_equal_bash "eof
+echo \$?"
+}
+
+@test "test invalid_command does not exist" {
+    file1="$temp_dir/does_not_exist"
+    assert_minishell_equal_bash "
+rm -rf $file1 2> /dev/null
+$file1
+echo \$?"
+}
+
+@test "test invalid_command is not executable" {
+    file1="$temp_dir/text"
+    assert_minishell_equal_bash "
+echo 'some text' > $file1 
+$file1
+echo \$?"
+}
+
+@test "test invalid_command is directory with execute permission" {
+    assert_minishell_equal_bash "
+chmod 777 $temp_dir
+$temp_dir
+echo \$?"
+}
+
+@test "test invalid_command is directory without execute permission" {
+    assert_minishell_equal_bash "
+chmod 000 $temp_dir
+$temp_dir
+echo \$?"
+}
+
+## VARIABLE EXPANSION TESTS #########################
+
+@test "test expansion environment variables" {
+    assert_minishell_equal_bash "echo LANG=\$LANG LC_ALL=\$LC_ALL LANGUAGE=\$LANGUAGE"
+}
+
+@test "test expansion environment variables that exist from outside" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE\"\$VARIABLE_FROM_OUTSIDE\"xxx"
+}
+
+@test "test expansion environment variables that exist from outside more spaces" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"\$VARIABLE_FROM_OUTSIDE_MORE_SPACES\"xxx"
+}
+
+@test "test expansion single quoted does not expand" {
+    assert_minishell_equal_bash "echo xxx\$VARIABLE_FROM_OUTSIDE'$VARIABLE_FROM_OUTSIDE'xxx"
+}
+
+@test "test expansion dolar alone" {
+    assert_minishell_equal_bash "echo \$"
+}
+
+@test "test expansion invalid enviroment variable: echo \$INVALID_VARIABLE" {
+    assert_minishell_equal_bash "echo \$INVALID_VARIABLE"
+}
+
+@test "test expansion redirect filename: ls > ./temp_dir/\$LANGUAGE" {
     assert_minishell_equal_bash "
 echo \$LANGUAGE
 ls > $temp_dir/\$LANGUAGE 
@@ -1079,8 +1134,7 @@ ls $temp_dir
 cat < $temp_dir/\$LANGUAGE"
 }
 
-
-@test "test simple command expand filename ambiguous: ls > ./temp_dir/\$VARIABLE_FROM_OUTSIDE" {
+@test "test expansion redirect filename ambiguous: ls > ./temp_dir/\$VARIABLE_FROM_OUTSIDE" {
     assert_minishell_equal_bash "
 echo \$VARIABLE_FROM_OUTSIDE
 ls > $temp_dir/\$VARIABLE_FROM_OUTSIDE 
@@ -1088,6 +1142,140 @@ ls $temp_dir
 cat < $temp_dir/\$VARIABLE_FROM_OUTSIDE"
 }
 
+
+@test "test expansion redirect filename single quoted does not expand" {
+    file="$temp_dir/'$VARIABLE_FROM_OUTSIDE'"
+    assert_minishell_equal_bash "echo > $file"
+}
+
+@test "test expansion unknown variable: \$DOES_NOT_EXIST" {
+    assert_minishell_equal_bash "\$DOES_NOT_EXIST$$
+"
+}
+
+@test "test expansion file unknown variable: ls > \$DOES_NOT_EXIST" {
+    assert_minishell_equal_bash "ls > \$DOES_NOT_EXIST$$
+"
+}
+
+@test "test expansion file unknown variable: cat < \$DOES_NOT_EXIST" {
+    assert_minishell_equal_bash "cat < \$DOES_NOT_EXIST$$
+"
+}
+
+@test "test expansion: echo \"hello world\"" {
+    assert_minishell_equal_bash "
+echo \"hello world\"
+"
+}
+
+@test "test expansion: echo 'hello world'" {
+    assert_minishell_equal_bash "
+echo 'hello world'
+"
+}
+
+@test "test expansion: echo hello'world'" {
+    assert_minishell_equal_bash "
+echo hello'world'
+"
+}
+
+
+@test "test expansion: echo hello\"\"world" {
+    assert_minishell_equal_bash "
+echo hello\"\"world
+"
+}
+
+@test "test expansion: echo ''" {
+    assert_minishell_equal_bash "
+echo ''
+"
+}
+
+@test "test expansion: echo \"\$PWD\"" {
+    assert_minishell_equal_bash "
+echo \"\$PWD\"
+"
+}
+
+@test "test expansion: echo '\$PWD'" {
+    assert_minishell_equal_bash "
+echo '\$PWD'
+"
+}
+
+@test "test expansion: echo \"aspas ->'\"" {
+    assert_minishell_equal_bash "
+echo \"aspas ->'\"
+"
+}
+
+
+@test "test expansion: echo \"aspas -> ' \"" {
+    assert_minishell_equal_bash "
+echo \"aspas -> ' \"
+"
+}
+
+
+@test "test expansion: echo 'aspas ->\"'" {
+    assert_minishell_equal_bash "
+echo 'aspas ->\"'
+"
+}
+
+@test "test expansion: echo 'aspas -> \" '" {
+    assert_minishell_equal_bash "
+echo 'aspas -> \" '
+"
+}
+
+@test "test expansion: echo \"exit_code ->\$? user ->\$USER home -> \$HOME\"" {
+    assert_minishell_equal_bash "
+echo \"exit_code ->\$? user ->\$USER home -> \$HOME\"
+"
+}
+
+@test "test expansion: echo 'exit_code ->\$? user ->\$USER home -> \$HOME'" {
+    assert_minishell_equal_bash "
+echo 'exit_code ->\$? user ->\$USER home -> \$HOME'
+"
+}
+
+@test "test expansion: echo \"\$\"" {
+    assert_minishell_equal_bash "
+echo \"\$\"
+"
+}
+
+@test "test expansion: echo '\$'" {
+    assert_minishell_equal_bash "
+echo '\$'
+"
+}
+
+@test "test expansion: echo \$" {
+    assert_minishell_equal_bash "
+echo \$
+"
+}
+
+@test "test expansion: echo \$?" {
+    assert_minishell_equal_bash "
+echo \$?
+"
+}
+
+@test "test expansion: echo \$?HELLO" {
+    assert_minishell_equal_bash "
+echo \$?HELLO
+"
+}
+
+
+## HEREDOC TESTS #########################
 
 @test "test simple command simple heredoc: eof\\nsimple heredoc\\neof" {
     assert_minishell_equal_bash_heredoc "cat << eof
@@ -1253,6 +1441,55 @@ eof
 "
 }
 
+
+@test "test pipe heredoc: cat << eof | wc" {
+    assert_minishell_equal_bash "cat << eof | wc
+some heredoc
+text
+eof
+"
+}
+
+@test "test pipe heredoc: ls | wc << eof" {
+   
+    assert_minishell_equal_bash "ls | wc -l << eof
+some heredoc
+text
+eof
+"
+}
+
+@test "test pipe heredoc: ls << eof | wc -l << eof" {
+    assert_minishell_equal_bash "ls << eof | wc -l << eof
+some heredoc
+text
+eof
+another
+different
+text
+with more
+lines
+eof
+"
+}
+
+@test "test pipe heredoc: << eof ls | << eof wc -l" {
+    assert_minishell_equal_bash "<< eof ls | << eof wc -l
+some heredoc
+text
+eof
+another
+different
+text
+with more
+lines
+eof
+"
+}
+
+
+## AND TESTS #########################
+
 @test "test command and: ls && uname" {
     assert_minishell_equal_bash "ls && uname"
 }
@@ -1285,37 +1522,41 @@ eof
     assert_minishell_equal_bash "echo ok && echo $?"
 }
 
-@test "test command and: ls || uname" {
+## OR TESTS #########################
+
+@test "test command or: ls || uname" {
     assert_minishell_equal_bash "ls || uname"
 }
 
-@test "test command and: false || uname" {
+@test "test command or: false || uname" {
     assert_minishell_equal_bash "false || uname"
 }
 
-@test "test command and: true || uname" {
+@test "test command or: true || uname" {
     assert_minishell_equal_bash "true || uname"
 }
 
-@test "test command and: \" \" || uname" {
+@test "test command or: \" \" || uname" {
     assert_minishell_equal_bash "\" \" || uname"
 }
 
-@test "test command and: uname || \" \"" {
+@test "test command or: uname || \" \"" {
     assert_minishell_equal_bash "uname || \" \""
 }
 
-@test "test command and: false || echo \$?" {
+@test "test command or: false || echo \$?" {
     assert_minishell_equal_bash "false || echo $?"
 }
 
-@test "test command and: true || echo \$?" {
+@test "test command or: true || echo \$?" {
     assert_minishell_equal_bash "true || echo $?"
 }
 
-@test "test command and: echo ok || echo \$?" {
+@test "test command or: echo ok || echo \$?" {
     assert_minishell_equal_bash "echo ok || echo $?"
 }
+
+## PIPE WITH AND TESTS #########################
 
 @test "test command pipe with and: ls && uname | cat - e" {
     assert_minishell_equal_bash "ls && uname | cat -e"
@@ -1349,6 +1590,8 @@ eof
     assert_minishell_equal_bash "uname && \" \"" 
 }
 
+## PIPE WITH OR TESTS #########################
+
 @test "test command pipe with or: ls || uname | cat - e" {
     assert_minishell_equal_bash "ls || uname | cat -e"
 }
@@ -1381,20 +1624,8 @@ eof
     assert_minishell_equal_bash "uname || \" \"" 
 }
 
-@test "test expand unknown variable: \$DOES_NOT_EXIST" {
-    assert_minishell_equal_bash "\$DOES_NOT_EXIST$$
-"
-}
 
-@test "test expand file unknown variable: ls > \$DOES_NOT_EXIST" {
-    assert_minishell_equal_bash "ls > \$DOES_NOT_EXIST$$
-"
-}
-
-@test "test expand file unknown variable: cat < \$DOES_NOT_EXIST" {
-    assert_minishell_equal_bash "cat < \$DOES_NOT_EXIST$$
-"
-}
+## TESTS FROM OTHER TESTERS #########################
 
 @test "test export update env variable value" {
     assert_minishell_equal_bash "echo \$HELLO
@@ -1407,7 +1638,6 @@ echo \$HELLO
 
 @test "invalid command followed by empty input keeps the exit code" {
     assert_minishell_equal_bash "doesntexist
-
 echo \$?
 "
 }
@@ -1612,57 +1842,222 @@ missing.out
 "
 }
 
-# @test "pwd: permission denied error" {
-#     # Create directory with no permissions
-#     mkdir -p "test_dir"
-#     cd "test_dir"
-#     chmod 000 "../test_dir"
-#
-#     # Run pwd in minishell
-#     assert_minishell_equal_bash "
-# pwd
-# "
-#     cd ..
-#     chmod 755 "test_dir"
-# }
+
+@test "test builtin: pwd" {
+    assert_minishell_equal_bash "
+pwd
+"
+}
+
+@test "test builtin: export hello" {
+    assert_minishell_equal_bash "
+export hello
+\$hello
+\"\$hello\"
+"
+}
+
+@test "test builtin: export HELLO=123" {
+    assert_minishell_equal_bash "
+export HELLO=123
+\$HELLO
+\"\$HELLO\"
+"
+}
+
+@test "test builtin: export A-" {
+    assert_minishell_equal_bash "
+export A-
+"
+}
+
+@test "test builtin: export HELLO=123 A" {
+    assert_minishell_equal_bash "
+export HELLO=123 A
+"
+}
+
+@test "test builtin: export HELLO=\"123 A-\"" {
+    assert_minishell_equal_bash "
+export HELLO=\"123 A-\"
+"
+}
+
+@test "test builtin: export hello world" {
+    assert_minishell_equal_bash "
+export hello world
+"
+}
+
+@test "test builtin: export HELLO-=123" {
+    assert_minishell_equal_bash "
+export HELLO-=123
+"
+}
+
+@test "test builtin: export =" {
+    assert_minishell_equal_bash "
+export HELLO-=123
+"
+}
+
+@test "test builtin: export 123" {
+    assert_minishell_equal_bash "
+export 123
+"
+}
+
+@test "test builtin: unset" {
+    assert_minishell_equal_bash "
+unset
+"
+}
+
+@test "test builtin: unset HELLO" {
+    assert_minishell_equal_bash "
+export HELLO=hello
+echo $HELLO
+unset HELLO
+"
+}
+
+@test "test builtin: unset HELLO1 HELLO2" {
+    assert_minishell_equal_bash "
+unset HELLO1 HELLO2
+"
+}
+
+@test "test builtin: unset HOME" {
+    assert_minishell_equal_bash "
+unset HOME
+"
+}
+
+@test "test builtin: unset PATH" {
+    assert_minishell_equal_bash "
+unset PATH
+"
+}
+
+@test "test builtin: unset SHELL" {
+    assert_minishell_equal_bash "
+unset SHELL
+"
+}
+
+@test "test builtin: cd \$PWD" {
+    assert_minishell_equal_bash "
+cd \$PWD
+"
+}
+
+@test "test builtin: cd \$PWD hi " {
+    assert_minishell_equal_bash "
+cd \$PWD hi 
+"
+}
+
+@test "test builtin: cd 123123" {
+    assert_minishell_equal_bash "
+cd 123123
+"
+}
+
+@test "test expansion redirect filename dolar alone: echo > \$" {
+    assert_minishell_equal_bash "
+cd $temp_dir
+echo > \$
+ls
+"  
+}
 
 
+@test "test builtin: exit 123" {
+    assert_minishell_equal_bash "
+exit 123
+uname
+"
+}
 
-# @test "test export no args" {
-#     assert_minishell_equal_bash "
-# echo \$BASH_FUNC_bats_readlinkf%%
-# unset _
-# unset BATS_BEGIN_CODE_QUOTE
-# export
-# "
-# }
+@test "test builtin: exit 298" {
+    assert_minishell_equal_bash "
+exit 298
+uname
+"
+}
+
+@test "test builtin: exit +100" {
+    assert_minishell_equal_bash "
+exit +100
+uname
+"
+}
+
+@test "test builtin: exit \"+100\"" {
+    assert_minishell_equal_bash "
+exit \"+100\"
+uname
+"
+}
+
+@test "test builtin: exit +\"100\"" {
+    assert_minishell_equal_bash "
+exit +\"100\"
+uname
+"
+}
+
+@test "test builtin: exit -100" {
+    assert_minishell_equal_bash "
+exit -100
+uname
+"
+}
+
+@test "test builtin: exit \"-100\"" {
+    assert_minishell_equal_bash "
+exit \"-100\"
+uname
+"
+}
+
+@test "test builtin: exit -\"100\"" {
+    assert_minishell_equal_bash "
+exit -\"100\"
+uname
+"
+}
+
+@test "test builtin: exit hello" {
+    assert_minishell_equal_bash "
+exit hello
+uname
+"
+}
+
+@test "test builtin: exit 42 world" {
+    assert_minishell_equal_bash "
+exit 42 world
+uname
+"
+}
 
 
-# # keep track of OLDPWD
-# cd obj
-# echo $PWD $OLDPWD
+# # # keep track of OLDPWD
+# # cd obj
+# # echo $PWD $OLDPWD
 
 # #invalid command, followed by empty variable, should clear the exit code
- # doesntexist
-# $EMPTY
-# echo $?
 
-# # Check if there isn't a zombie process called `cat`
-# echo "hi" | cat | cat | cat | cat | cat | cat | cat
-# ps -a
+# # # Neither of these unsets should break the shell, and you should still be able to call `/bin/ls`
+# # unset USER
+# # unset PATH
+# # unset PWD
+# # /bin/ls
 
-# # Should skip the empty argument, and print hello after spaces
-# echo - "" "  " hello
+# # # This should not change the current directory
+# # cd .. hi
 
-# # Neither of these unsets should break the shell, and you should still be able to call `/bin/ls`
-# unset USER
-# unset PATH
-# unset PWD
-# /bin/ls
-
-# # This should not change the current directory
-# cd .. hi
-
-# # Empty `cd` moves to home
-# cd"
+# # # Empty `cd` moves to home
+# # cd"
 
