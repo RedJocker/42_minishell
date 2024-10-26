@@ -178,7 +178,7 @@ assert_minishell_equal_bash_heredoc() {
     assert_minishell_equal_bash "
 mkdir -p \"$temp_dir2\"
 cd \"$temp_dir2\"
-chmod 000 .
+chmod 000 \"$temp_dir\"
 pwd
 cd ..
 chmod 755 'temp'
