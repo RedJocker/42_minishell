@@ -12,6 +12,7 @@ minishell
 .cache/
 *out.txt
 mini_test*.txt
+bash_test*.txt
 
 ## emacs temp
 *~
