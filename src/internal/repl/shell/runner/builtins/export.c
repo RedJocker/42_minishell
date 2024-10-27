@@ -6,13 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/26 07:12:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/27 05:29:32 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include "collection/ft_arraylist.h"
+#include "ft_ctype.h"
 #include "ft_string.h"
 #include "ft_stdio.h"
 #include "ft_util.h"
@@ -53,16 +55,19 @@ sig_atomic_t	runner_cmd_builtin_export(t_command cmd)
 
 static sig_atomic_t	export_args(char *cmd, sig_atomic_t status)
 {
+	char	*key;
 	char	*error_msg;
 
 	error_msg = NULL;
-	if (*cmd != '=')
+	key = env_parse(cmd, KEY);
+	if (*cmd != '=' && !ft_isdigit(*key) \
+		&& !ft_strnstr(key, "-", ft_strlen(key)))
 		export_valid_arg(cmd);
 	else
 	{
 		status = EXIT_FAILURE;
 		ft_asprintf(&error_msg, \
-			"minishell: export: %s: not a valid identifier\n", cmd);
+			"minishell: export: '%s': not a valid identifier\n", cmd);
 		write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
 		free(error_msg);
 	}
@@ -112,11 +117,28 @@ static void	export_sort_vars(char **envp)
 
 static void	export_print_vars(char **envp)
 {
-	char	*env_var;
+	int			envp_i;
+	t_arraylist	lst_new_envp;
+	char		*env_var;
 
+	lst_new_envp = NULL;
+	envp_i = DEFAULT_INIT;
 	while (envp && *envp)
 	{
-		ft_asprintf(&env_var, "declare -x %s\n", *envp++);
+		if (!ft_strnstr(*envp, "$", ft_strlen(*envp)))
+			ft_asprintf(&env_var, "declare -x %s\n", *envp++);
+		else
+		{
+			lst_new_envp = ft_arraylist_new((t_consumer) free);
+			while (envp[++envp_i])
+			{
+				if (*envp[envp_i] == '$')
+					lst_new_envp = ft_arraylist_add(lst_new_envp, "\\");
+				lst_new_envp = ft_arraylist_add(lst_new_envp, envp[envp_i]);
+			}
+			ft_asprintf(&env_var, "declare -x %s\n", ft_lststr_to_arrstr(lst_new_envp));
+			free(lst_new_envp);
+		}
 		write(STDOUT_FILENO, env_var, ft_strlen(env_var));
 		free(env_var);
 	}
