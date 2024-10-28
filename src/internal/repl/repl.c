@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/24 20:53:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/28 02:15:45 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,19 @@
 #include "internal/repl/history/history.h"
 #include "internal/repl/shell/shell.h"
 #include "ft_memlib.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 static void	repl_loop(t_shell *shell);
+
+// void clear_readline_data(void)
+// {
+//     rl_clear_history();
+//     if (rl_line_buffer)
+//         rl_free(rl_line_buffer);
+//     rl_line_buffer = NULL;
+//     rl_done = 1;
+// }
 
 int	repl(void)
 {
@@ -31,6 +42,8 @@ int	repl(void)
 	while (WAIT)
 		repl_loop(&shell);
 	env_destroy();
+	// rl_clear_history();
+	// clear_readline_data();
 	return (signal_status(DEFAULT, GET));
 }
 
