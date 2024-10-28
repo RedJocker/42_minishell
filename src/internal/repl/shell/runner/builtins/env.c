@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 18:50:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/26 07:13:14 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/28 02:29:21 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ sig_atomic_t	runner_cmd_builtin_env(t_command cmd)
 		status = EXIT_FAILURE;
 		ft_asprintf(&error_msg, \
 			"minishell: env: env doesn't accept arguments or flags\n", cmd);
-		write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
+		write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 		free(error_msg);
 	}
 	return (status);

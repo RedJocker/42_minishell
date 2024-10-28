@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 02:17:40 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/26 07:21:49 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/28 02:28:55 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static sig_atomic_t	print_cd_error(char *msg, char *path, sig_atomic_t status)
 	else
 		ft_asprintf(&error_msg, \
 			"minishell: cd: %s: %s\n", path, msg);
-	write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
+	write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 	free(error_msg);
 	return (status);
 }

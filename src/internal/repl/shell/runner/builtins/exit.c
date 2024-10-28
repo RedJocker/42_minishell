@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 05:02:21 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/26 07:55:33 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/28 02:31:06 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,13 @@ sig_atomic_t	runner_cmd_builtin_exit(t_command cmd)
 	char			*nbr_endptr;
 
 	status = EXIT_OK;
-	write(STDOUT_FILENO, "exit\n", ft_strlen("exit\n"));
 	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
+	{
+		write(STDOUT_FILENO, "exit\n", ft_strlen("exit\n"));
 		return (status);
+	}
 	nbr_status = ft_strtoll(cmd->simple->cmd_argv[DEFAULT_BEGIN], &nbr_endptr);
+	write(STDERR_FILENO, "exit\n", ft_strlen("exit\n"));
 	if (*nbr_endptr)
 	{
 		print_exit_error(cmd->simple->cmd_argv[DEFAULT_BEGIN]);
@@ -55,6 +58,6 @@ static void	print_exit_error(char *cmd)
 	else
 		ft_asprintf(&error_msg, \
 			"minishell: exit: %s: numeric argument required\n", cmd);
-	write(STDOUT_FILENO, error_msg, ft_strlen(error_msg));
+	write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 	free(error_msg);
 }
