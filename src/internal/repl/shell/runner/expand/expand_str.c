@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/29 01:47:16 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/29 03:53:52 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ static int	expand_str_dollar_variable(char *str, t_stringbuilder *builder,	\
 
 void	expand_str_star(char *strptr, t_arraylist *out_lst)
 {
+	(void)strptr;
+	(void)out_lst;
 	// TODO: retrieve files current directory
 	//       verify if has pattern
 	//       if yes retrieve files
