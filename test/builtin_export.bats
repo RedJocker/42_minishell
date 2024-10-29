@@ -42,6 +42,17 @@ export | grep -v -i 'bats' | grep -v '}' | grep -v '_=' | grep -v '$'"
 }
 
 @test "export invalid key(-key)" {
-    assert_minishell_equal_bash "export -aaa"
+    assert_minishell_equal_bash "export -aaa
+export | grep -v -i 'bats' | grep -v '}' | grep -v '_=' | grep -v '$'"
+}
+
+@test "export invalid key(1key)" {
+    assert_minishell_equal_bash "export 1aaa
+export | grep -v -i 'bats' | grep -v '}' | grep -v '_=' | grep -v '$'"
+}
+
+@test "export invalid key(1key=value)" {
+    assert_minishell_equal_bash "export 1aaa=test
+export | grep -v -i 'bats' | grep -v '}' | grep -v '_=' | grep -v '$'"
 }
 

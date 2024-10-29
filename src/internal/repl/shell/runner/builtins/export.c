@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/29 04:21:55 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/29 04:57:20 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,6 @@ static sig_atomic_t	export_args(char *cmd, char *key, sig_atomic_t status)
 	error_msg = NULL;
 	if (*cmd == '-' && !ft_strnstr(key, "=", ft_strlen(key)))
 		status = EXIT_OK;
-	else if (*cmd == '-' && ft_strnstr(key, "=", ft_strlen(key)))
-		ft_asprintf(&error_msg, \
-			"minishell: export: `-=': not a valid identifier\n");
 	else if (*cmd != '=' && !ft_isdigit(*key) \
 		&& !ft_strnstr(key, "-", ft_strlen(key)))
 		export_valid_arg(cmd);
