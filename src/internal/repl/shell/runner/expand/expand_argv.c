@@ -6,10 +6,11 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:20:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/25 22:08:50 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/29 02:00:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "collection/ft_arraylist.h"
 #include "expand_internal.h"
 #include "ft_util.h"
 #include "ft_string.h"
@@ -66,9 +67,29 @@ void	expand_argv_dollar(t_command cmd, sig_atomic_t last_status_code)
 		expand_str_dollar(&cmd->simple->cmd_argv[i], last_status_code);
 }
 
+void	expand_argv_star(t_command cmd)
+{
+	char		**res;
+	int			i;
+	t_arraylist	lst_new_args;
+
+	if (cmd->type != CMD_SIMPLE)
+		return ;
+	lst_new_args = ft_arraylist_new(free);
+	i = -1;
+	while (cmd->simple->cmd_argv[++i])
+		expand_str_star(cmd->simple->cmd_argv[i], &lst_new_args);
+	res = ft_lststr_to_arrstr(lst_new_args);
+	ft_arraylist_destroy(lst_new_args);
+	ft_strarr_free(cmd->simple->cmd_argv);
+	cmd->simple->cmd_argv = res;
+}
+
 void	expand_argv(t_command cmd, sig_atomic_t last_status_code)
 {
 	expand_argv_dollar(cmd, last_status_code);
 	expand_argv_split(cmd);
+	//expand_argv_star(cmd);
 	expand_argv_remove_quote(cmd);
+	
 }

@@ -6,10 +6,11 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/25 23:31:19 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/29 01:47:16 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "collection/ft_arraylist.h"
 #include "expand_internal.h"
 #include "ft_assert.h"
 #include "ft_string.h"
@@ -52,6 +53,19 @@ static int	expand_str_dollar_variable(char *str, t_stringbuilder *builder,	\
 	stringbuilder_addstr(builder, env_value);
 	free(env_value);
 	return (i - NULL_BYTE);
+}
+
+void	expand_str_star(char *strptr, t_arraylist *out_lst)
+{
+	// TODO: retrieve files current directory
+	//       verify if has pattern
+	//       if yes retrieve files
+	//              sort files
+	//              make pattern match
+	//              add all matches to out_lst
+	//       else
+	//              add strptr to out_lst
+	
 }
 
 void	expand_str_dollar(char **strptr, sig_atomic_t last_status_code)
