@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/26 05:49:08 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/29 01:16:34 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,21 @@ static void	runner_cmd_simple_execve_error_enoent(t_runner_data *run_data)
 {
 	char	*msg;
 	const t_command	cmd = run_data->cmd;
+	char 	*path;
 
-	if (ft_strchr(cmd->simple->cmd_path, '/'))
+	path  = env_get_value("PATH");
+	if (ft_strchr(cmd->simple->cmd_path, '/') || !path)
 	{
+		if (path)
+			free(path);
 		ft_asprintf(&msg, "minishell: %s: No such file or directory",
 			cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
 	}
 	else
 	{
+		if (path)
+			free(path);
 		ft_asprintf(&msg, "minishell: %s: command not found",
 			cmd->simple->cmd_argv[0]);
 		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);

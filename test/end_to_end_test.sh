@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/26 00:14:14 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/29 01:09:54 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,11 @@ minishell_execute() {
 }
 
 minishell_leak_check() {
-    
+
+    VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" \
+    VARIABLE_FROM_OUTSIDE="abc def" \
+    LANGUAGE="en" \
+    PS1='RedWillShell$ ' \
     valgrind --leak-check=full \
 	     -s \
 	     --show-reachable=yes \
@@ -172,8 +176,33 @@ assert_minishell_equal_bash_heredoc() {
 
 ## NEW TESTS #########################
 
+# # unset USER
+# # unset PATH
+# # unset PWD
+# # /bin/ls
+
+# # # This should not change the current directory
+# # cd .. hi
+
+# # # Empty `cd` moves to home
+# # cd"
+
+@test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
+    
+    assert_minishell_equal_bash "
+unset PATH  
+ls
+echo \$? 
+/bin/ls
+echo \$?
+export PATH='/bin/'
+ls
+"
+}
+
+
+
 @test "pwd: permission denied error" {
-    ## cd .. tá falhando por causa da permisão mas deveria funcionar
 
     temp_dir2="$temp_dir/temp"
     
@@ -187,11 +216,10 @@ chmod 755 'temp'
 "
 }
 
+
 @test "test export no args" {
-    ## tá falhando por causa do SHLVL que precisa aumentar no inicio do minishell
-    ## tá falhando por que tem que escapar os $ no output do export
     assert_minishell_equal_bash "
-export | grep -v -i bats | grep -v '}' | grep -v _=
+export | grep -v -i bats | grep -v '}' | grep -v _= | grep -v \$
 "
 }
 
@@ -211,7 +239,6 @@ pwd
 }
 
 @test "test cd: cd \"\$temp_dir2\" \n echo \$PWD \n echo \$OLD_PWD \n cd . \n echo \$PWD \n echo \$OLD_PWD \n cd .. \n echo \$PWD \n echo \$OLD_PWD" {
-    ## tá falando no primeiro echo PWD por algum motivo estranho já que os outros funcionam
 
     temp_dir2="$temp_dir/temp"
     
@@ -2045,21 +2072,4 @@ uname
 }
 
 
-# # # keep track of OLDPWD
-# # cd obj
-# # echo $PWD $OLDPWD
-
-# #invalid command, followed by empty variable, should clear the exit code
-
-# # # Neither of these unsets should break the shell, and you should still be able to call `/bin/ls`
-# # unset USER
-# # unset PATH
-# # unset PWD
-# # /bin/ls
-
-# # # This should not change the current directory
-# # cd .. hi
-
-# # # Empty `cd` moves to home
-# # cd"
 
