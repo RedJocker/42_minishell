@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/28 02:31:18 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/29 00:22:33 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,23 @@
 static sig_atomic_t	export_args(char *cmd, sig_atomic_t status);
 static void			export_valid_arg(char *cmd);
 static void			export_sort_vars(char **envp);
-static void			export_print_vars(char **envp, int envp_i, t_stringbuilder *builder_new_envp);
+static void			export_print_vars(char **envp);
 
 sig_atomic_t	runner_cmd_builtin_export(t_command cmd)
 {
 	int				i;
 	sig_atomic_t	status;
 	char			**envp;
-	t_stringbuilder	builder_new_envp;
 
 	i = DEFAULT;
 	status = EXIT_OK;
 	envp = NULL;
-	builder_new_envp = stringbuilder_new();
+	
 	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
 	{
 		envp = get_envp(ENVP_EXPORT);
 		export_sort_vars(envp);
-		export_print_vars(envp, DEFAULT_INIT, &builder_new_envp);
+		export_print_vars(envp);
 		if (envp)
 			ft_strarr_free(envp);
 	}
@@ -52,7 +51,6 @@ sig_atomic_t	runner_cmd_builtin_export(t_command cmd)
 		while (cmd->simple->cmd_argv[++i])
 			if (export_args(cmd->simple->cmd_argv[i], status) == EXIT_FAILURE)
 				status = EXIT_FAILURE;
-	stringbuilder_destroy(builder_new_envp);
 	return (status);
 }
 
@@ -119,27 +117,26 @@ static void	export_sort_vars(char **envp)
 	}
 }
 
-static void	export_print_vars(char **envp, int envp_i, t_stringbuilder *builder_new_envp)
+static void	export_print_vars(char **envp)
 {
 	char			*temp_envp;
 	char			*env_var;
+	int 			envp_i;
+	t_stringbuilder	builder_new_envp;
 
 	while (envp && *envp)
 	{
-		if (!ft_strnstr(*envp, "$", ft_strlen(*envp)))
-			ft_asprintf(&env_var, "declare -x %s\n", *envp);
-		else
-		{
-			while (envp[DEFAULT][++envp_i])
-			{
-				if (envp[DEFAULT][envp_i] == '$')
-					stringbuilder_addchar(*builder_new_envp, '\\');
-				stringbuilder_addchar(*builder_new_envp, envp[DEFAULT][envp_i]);
-			}
-			temp_envp = stringbuilder_build(*builder_new_envp);
-			ft_asprintf(&env_var, "declare -x %s\n", temp_envp);
-			free(temp_envp);
+		envp_i = -1;
+		builder_new_envp = stringbuilder_new();
+		while (envp[DEFAULT][++envp_i])
+		{	
+			if (envp[DEFAULT][envp_i] == '$')
+				builder_new_envp = stringbuilder_addchar(builder_new_envp, '\\');
+			builder_new_envp = stringbuilder_addchar(builder_new_envp, envp[DEFAULT][envp_i]);
 		}
+		temp_envp = stringbuilder_build(builder_new_envp);
+		ft_asprintf(&env_var, "declare -x %s\n", temp_envp);
+		free(temp_envp);
 		envp++;
 		write(STDOUT_FILENO, env_var, ft_strlen(env_var));
 		free(env_var);
