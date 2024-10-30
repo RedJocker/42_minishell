@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:15:04 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/28 02:15:45 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/30 03:56:11 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	repl(void)
 
 static void	repl_loop(t_shell *shell)
 {
+	signal_status(DEFAULT, SET);
 	shell_set_input(shell);
 	if (!history_add_input(shell->input))
 		return ;

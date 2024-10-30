@@ -6,12 +6,13 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/26 05:46:51 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/30 05:13:00 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
 #include "ft_memlib.h"
+#include "internal/default.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include <readline/readline.h>
@@ -22,6 +23,7 @@
 #include "ft_stdio.h"
 #include "ft_string.h"
 #include "ft_util.h"
+#include "internal/signal/signal.h"
 #include "io_handler.h"
 #include "stringbuilder.h"
 
@@ -69,7 +71,7 @@ void io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit)
 	*lst_ios = ft_arraylist_add(*lst_ios, io);
 }
 
-
+#include <stdio.h>
 // tmp_fd[0]: read, tmp_fd[1]: write
 void io_handler_heredoc_prompt(t_io_handler *io)
 {
@@ -84,13 +86,31 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 	delim_len = ft_strlen(io->heredoc_limiter);
 	builder = stringbuilder_new();
 	line = readline("> ");
-	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len + 1) != 0)
+	if (signal_status(DEFAULT, GET) == SIGINT)
 	{
-		//ft_printf("heredoc %s %s\n", io->heredoc_limiter, line);
+		io->heredoc_input = stringbuilder_build(builder);
+		if (line)
+			free(line);
+		// close(STDERR_FILENO);
+		dup2(io->fd, STDIN_FILENO);
+		// close(STDIN_FILENO);
+		// close(2);
+		// rl_on_new_line();
+		rl_replace_line("", DEFAULT);
+		rl_redisplay();
+		return ;
+	}
+	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len + 1) != 0 && signal_status(DEFAULT, GET) != SIGINT)
+	{
+		// ft_printf("heredoc %s %s\n", io->heredoc_limiter, line);
+		// if (signal_status(DEFAULT, GET) == SIGINT)
+		// 	break ;
 		stringbuilder_addstr(&builder, line);
 		stringbuilder_addstr(&builder, (char *) endline);
 		free(line);
 		line = readline("> ");
+		// if (signal_status(DEFAULT, GET) == SIGINT)
+		// 	break ;
 	}
 	if (line)
 	{
@@ -101,6 +121,15 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 		ft_printf("minishell: warning: here-document delimited by "
 				  "end-of-file (wanted `%s')\n", io->heredoc_limiter);
 	io->heredoc_input = stringbuilder_build(builder);
+	if (signal_status(DEFAULT, GET) == SIGINT)
+	{
+		dup2(io->fd, STDIN_FILENO);
+		// close(STDIN_FILENO);
+		// rl_on_new_line();
+		rl_replace_line("", DEFAULT);
+		rl_redisplay();
+		return ;
+	}
 }
 
 void io_handlers_heredoc_prompt(t_arraylist ios)
