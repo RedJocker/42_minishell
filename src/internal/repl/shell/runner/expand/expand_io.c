@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:41:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/29 02:00:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/30 19:23:18 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	expand_io_star(t_io_handler *io, char *original_path)
 	char		**res;
 	char		*errmsg;
 	t_arraylist	lst_new_args;
-	
+
 	if (io->type != IO_PATH)
 		return;
 	lst_new_args = ft_arraylist_new(free);
@@ -69,7 +69,8 @@ void	expand_io_star(t_io_handler *io, char *original_path)
 	ft_arraylist_destroy(lst_new_args);
 	if (res[0] == NULL || res[1] != NULL)
 	{
-		ft_asprintf(&errmsg, "minishell: %s: ambiguous redirect", original_path);
+		ft_asprintf(&errmsg, \
+			"minishell: %s: ambiguous redirect", original_path);
 		free(io->path);
 		ft_strarr_free(res);
 		return (io_handler_set_error(io, errno, errmsg));
@@ -96,7 +97,7 @@ void	expand_io(t_io_handler *io, sig_atomic_t *last_status_code)
 		original_path = NULL;
 	expand_io_dollar(io, *last_status_code);
 	expand_io_split(io, original_path);
-	//expand_io_star(io, original_path);
+	expand_io_star(io, original_path);
 	expand_io_remove_quote(io);
 	if (original_path)
 		free(original_path);
