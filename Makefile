@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/10/25 21:59:03 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/31 02:07:24 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -213,7 +213,7 @@ define debug
 endef
 
 define test
-	bats test/end_to_end_test.sh
+	bats test_old/end_to_end_test.sh
 endef
 
 define reset_count

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/22 09:13:28 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/30 05:02:16 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/31 01:53:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,29 +45,18 @@ void	sigquit_handler(sig_atomic_t signal)
 static void	sigint_handler(sig_atomic_t signal, bool redisplay)
 {
 	signal_status(signal, SET);
-	if (!redisplay)
-	{
-		// signal_status(SIGINT, SET);
-		// ft_putstr_fd("\n", STDIN_FILENO);
-		rl_done = 1;   // Tell readline to finish current line
-		ft_putstr_fd("\n", STDIN_FILENO);
-		rl_replace_line("", DEFAULT);
-		return ;
-		// close(STDIN_FILENO);
-    	// rl_on_new_line();
-		// signals_initializer(true);
-		// shell->input = readline("RedWillShell$ ");
-		// signals_initializer(false);
-		// ft_putstr_fd("\n", STDOUT_FILENO);
-		// rl_on_new_line();
-		// ft_putstr_fd("\n", STDIN_FILENO);
-		// return ;
-		// rl_on_new_line();
-		// rl_replace_line("", DEFAULT);
-	}
 	ft_putstr_fd("\n", STDIN_FILENO);
 	rl_on_new_line();
 	rl_replace_line("", DEFAULT);
 	if (redisplay)
 		rl_redisplay();
+}
+
+void	sigint_handler_heredoc(sig_atomic_t signal)
+{
+	signal_status(signal, SET);
+	ft_putstr_fd("\n", STDIN_FILENO);
+	rl_done = 1;
+	rl_on_new_line();
+	rl_replace_line("", DEFAULT);
 }

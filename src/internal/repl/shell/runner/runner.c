@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/30 23:04:37 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/31 01:53:44 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #include "internal/repl/shell/runner/expand/expand.h"
 #include "internal/signal/signal.h"
 #include "runner.h"
-
+#include "signal.h"
 
 sig_atomic_t	runner_exit_signal(sig_atomic_t	status)
 {
@@ -176,7 +176,9 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	runner_data_init(&run_data, cmd, last_cmd_status);
 	if (cmd->type == CMD_EOF)
 		runner_cmd_eof(&run_data);
+	signals_heredoc();
 	runner_heredoc_prompt(run_data.base_cmd);
+	signals_initializer(false);
 	if (!(signal_status(DEFAULT, GET) == SIGINT))
 		status = runner_cmd(&run_data, FORK_NOT);
 	else

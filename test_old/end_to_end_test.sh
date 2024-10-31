@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/30 19:50:15 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/31 03:25:47 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -195,34 +195,46 @@ assert_minishell_equal_bash_heredoc() {
 }
 
 @test "test wildcards: ls > *" {
-    assert_minishell_equal_bash "ls > *
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+ls > *
 "
 }
 
 @test "test wildcards: echo > *" {
     
-    assert_minishell_equal_bash "echo > *
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+echo > *
 "
 }
 
 @test "test wildcards: ls \"*\"" {
-    
     assert_minishell_equal_bash "ls \"*\"
 "
 }
 
 @test "test wildcards: echo \"*\"" {
     
-    assert_minishell_equal_bash "echo \"*\""
+    assert_minishell_equal_bash "
+echo \"*\""
 }
 
 @test "test wildcards: ls > '*'" {
-    assert_minishell_equal_bash "ls > '*'"
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+ls > '*'"
 }
 
 @test "test wildcards: echo > '*'" {
     
-    assert_minishell_equal_bash "echo > '*'"
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+echo > '*'"
 }
 
 
