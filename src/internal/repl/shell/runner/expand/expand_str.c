@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/30 21:09:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/30 21:11:47 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "internal/default.h"
 #include "ft_memlib.h"
 #include "internal/env/env.h"
+#include "internal/ft_extension.h"
 #include <unistd.h>
 #include <dirent.h>
 
@@ -64,21 +65,60 @@ int		has_star(char *str)
 	return (ft_strchr(str, '*') != NULL);
 }
 
+int	icompare_str(char *str1, char *str2)
+{
+	while (*str1 && *str2)
+	{
+		if (ft_tolower(*str1) != (ft_tolower(*str2)))
+			return (ft_tolower(*str1) - (ft_tolower(*str2)));
+		str1++;
+		str2++;
+	}
+	return (ft_tolower(*str1) - (ft_tolower(*str2)));
+}
+
+void	ft_arraylist_sort(t_arraylist lst, t_intbifun compare_fun)
+{
+	int		i;
+	int		next_i;
+
+	i = -1;
+	while (ft_arraylist_get(lst, ++i))
+	{
+		next_i = i + 1;
+		while (ft_arraylist_get(lst, ++next_i))
+		{
+			if (compare_fun(ft_arraylist_get(lst, i), \
+							ft_arraylist_get(lst, next_i)) > 0)
+				ft_arraylist_swap(lst, i, next_i);
+		}
+	}
+}
+
+int star_match(char *star_str, char *filename)
+{
+	// hide hidden files
+	//TODO make star match
+	return (*filename != '.' && star_str);
+}
+
 void	expand_str_star(char *str, t_arraylist *out_lst)
 {
 	char			*cwd;
 	DIR				*dp;
 	struct dirent	*dirp;
 	t_arraylist		lst_files;
+	char			**arr_files;
+	int				i;
 	// TODO: retrieve files current directory
 	//       verify if has pattern
 	if (!has_star(str))
 	//           if not
-	//              add strptr to out_lst
+	//              add str to out_lst
 		*out_lst = ft_arraylist_add(*out_lst, ft_strdup(str));
 	else
 	{
-	//       if yes retrieve files
+		//       if yes retrieve files
 		cwd = NULL;
 		cwd = getcwd(cwd, 0);
 		dp = opendir(cwd);
@@ -93,10 +133,16 @@ void	expand_str_star(char *str, t_arraylist *out_lst)
 			lst_files = ft_arraylist_add(lst_files, ft_strdup(dirp->d_name));
 			dirp = readdir(dp);
 		}
-	//              sort files
-		ft_strarr_printfd(ft_lststr_to_arrstr(*out_lst), 0);
-	//              make pattern match
-	//              add files that match to out_lst
+		//              sort files case insensitive
+		ft_arraylist_sort(lst_files, (t_intbifun) icompare_str);
+		arr_files = ft_lststr_to_arrstr(lst_files);
+		ft_arraylist_destroy(lst_files);
+		//ft_strarr_printfd(arr_files, 0);
+		i = -1;
+		while (arr_files[++i])
+			if (star_match(str, arr_files[i]))
+				//    add files that match to out_lst
+				ft_arraylist_add(*out_lst, ft_strdup(arr_files[i]));
 	}
 }
 

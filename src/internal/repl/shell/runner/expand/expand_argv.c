@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:20:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/29 02:00:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/30 02:09:27 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,16 @@ void	expand_argv_star(t_command cmd)
 	ft_arraylist_destroy(lst_new_args);
 	ft_strarr_free(cmd->simple->cmd_argv);
 	cmd->simple->cmd_argv = res;
+	cmd->simple->cmd_argc = -1;
+	while (cmd->simple->cmd_argv[++cmd->simple->cmd_argc])
+		;
+	//ft_strarr_printfd(cmd->simple->cmd_argv, 0);
 }
 
 void	expand_argv(t_command cmd, sig_atomic_t last_status_code)
 {
 	expand_argv_dollar(cmd, last_status_code);
 	expand_argv_split(cmd);
-	//expand_argv_star(cmd);
+	expand_argv_star(cmd);
 	expand_argv_remove_quote(cmd);
-	
 }
