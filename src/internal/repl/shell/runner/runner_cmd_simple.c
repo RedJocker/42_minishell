@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/29 01:16:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/30 22:53:37 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include <stdio.h>
 void	runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 	sig_atomic_t status_code, bool should_exit)
 {
 	ft_puterrl(msg);
 	free(msg);
+	printf("%d status\n", signal_status(DEFAULT, GET));
 	if (should_exit)
 		runner_cmd_simple_exit_status(run_data, status_code);
 }

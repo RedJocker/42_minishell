@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/30 05:13:00 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/30 23:08:56 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ void io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit)
 	*lst_ios = ft_arraylist_add(*lst_ios, io);
 }
 
-#include <stdio.h>
 // tmp_fd[0]: read, tmp_fd[1]: write
 void io_handler_heredoc_prompt(t_io_handler *io)
 {
@@ -88,16 +87,14 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 	line = readline("> ");
 	if (signal_status(DEFAULT, GET) == SIGINT)
 	{
-		io->heredoc_input = stringbuilder_build(builder);
-		if (line)
-			free(line);
-		// close(STDERR_FILENO);
-		dup2(io->fd, STDIN_FILENO);
-		// close(STDIN_FILENO);
-		// close(2);
-		// rl_on_new_line();
+		free(line);
+		rl_done = 1;   // Tell readline to finish current line
+		stringbuilder_destroy(builder);
+		free(io->heredoc_limiter);
+		io_handler_set_error(io, 1, ft_strdup(""));
 		rl_replace_line("", DEFAULT);
-		rl_redisplay();
+		rl_on_new_line();
+		// rl_redisplay();
 		return ;
 	}
 	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len + 1) != 0 && signal_status(DEFAULT, GET) != SIGINT)
@@ -123,7 +120,7 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 	io->heredoc_input = stringbuilder_build(builder);
 	if (signal_status(DEFAULT, GET) == SIGINT)
 	{
-		dup2(io->fd, STDIN_FILENO);
+		// dup2(io->fd, STDIN_FILENO);
 		// close(STDIN_FILENO);
 		// rl_on_new_line();
 		rl_replace_line("", DEFAULT);

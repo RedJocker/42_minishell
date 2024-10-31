@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/24 02:24:40 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/30 23:04:34 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef enum e_exit_code
 	EXIT_TEMPORARY = 111,
 	EXIT_COMMAND_NOT_EXECUTABLE = 126,
 	EXIT_COMMAND_NOT_FOUND = 127,
+	EXIT_SIGINT = 130,
 }	t_exit_code;
 
 #endif

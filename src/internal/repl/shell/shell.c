@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/07 18:55:07 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/30 23:11:58 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	shell_set_input(t_shell *shell)
 {
 	signals_initializer(true);
 	shell->input = readline("RedWillShell$ ");
+	rl_redisplay();
 	signals_initializer(false);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/17 16:29:46 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/30 23:04:37 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,10 @@ sig_atomic_t	runner(t_command cmd, sig_atomic_t last_cmd_status)
 	if (cmd->type == CMD_EOF)
 		runner_cmd_eof(&run_data);
 	runner_heredoc_prompt(run_data.base_cmd);
-	status = runner_cmd(&run_data, FORK_NOT);
+	if (!(signal_status(DEFAULT, GET) == SIGINT))
+		status = runner_cmd(&run_data, FORK_NOT);
+	else
+		status = EXIT_SIGINT;
 	status = status << 8;
 	pids_len = ft_arraylist_len(run_data.pids);
 	i = -1;
