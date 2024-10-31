@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/30 21:13:56 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/30 21:14:45 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,29 @@ static int	expand_str_dollar_variable(char *str, t_stringbuilder *builder,	\
 
 int		has_star(char *str)
 {
-	// TODO: improve with quote consideration
-	return (ft_strchr(str, '*') != NULL);
+	char	open_quote;
+	int		i;
+
+	open_quote = 0;
+	i = -1;
+	while (str[++i])
+	{
+		if (!open_quote && str[i] == '*')
+			return (1);
+		else if (!open_quote && (str[i] == '\'' || str[i] == '\"'))
+			open_quote = str[i];
+		else if (open_quote == str[i])
+			open_quote = 0;
+	}
+	return (0);
 }
 
 int	icompare_str(char *str1, char *str2)
 {
 	while (*str1 && *str2)
 	{
+		// TODO: add weird behaviour when comparing sybols agains letters
+		// mini#sg < mini%sg < mini.sg < minishell < mini#si < mini%si < mini.si
 		if (ft_tolower(*str1) != (ft_tolower(*str2)))
 			return (ft_tolower(*str1) - (ft_tolower(*str2)));
 		str1++;
