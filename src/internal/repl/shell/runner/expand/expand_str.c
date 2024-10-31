@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/29 03:53:52 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/30 21:09:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 #include "ft_assert.h"
 #include "ft_string.h"
 #include "ft_ctype.h"
+#include "ft_util.h"
 #include "internal/default.h"
 #include "ft_memlib.h"
 #include "internal/env/env.h"
+#include <unistd.h>
+#include <dirent.h>
 
 // return len parsed
 static int	expand_str_dollar_variable(char *str, t_stringbuilder *builder,	\
@@ -55,19 +58,46 @@ static int	expand_str_dollar_variable(char *str, t_stringbuilder *builder,	\
 	return (i - NULL_BYTE);
 }
 
-void	expand_str_star(char *strptr, t_arraylist *out_lst)
+int		has_star(char *str)
 {
-	(void)strptr;
-	(void)out_lst;
+	// TODO: improve with quote consideration
+	return (ft_strchr(str, '*') != NULL);
+}
+
+void	expand_str_star(char *str, t_arraylist *out_lst)
+{
+	char			*cwd;
+	DIR				*dp;
+	struct dirent	*dirp;
+	t_arraylist		lst_files;
 	// TODO: retrieve files current directory
 	//       verify if has pattern
-	//       if yes retrieve files
-	//              sort files
-	//              make pattern match
-	//              add all matches to out_lst
-	//       else
+	if (!has_star(str))
+	//           if not
 	//              add strptr to out_lst
-	
+		*out_lst = ft_arraylist_add(*out_lst, ft_strdup(str));
+	else
+	{
+	//       if yes retrieve files
+		cwd = NULL;
+		cwd = getcwd(cwd, 0);
+		dp = opendir(cwd);
+		if (dp == NULL)
+		{
+			// TODO: error?
+		}
+		lst_files = ft_arraylist_new(free);
+		dirp = readdir(dp);
+		while (dirp)
+		{
+			lst_files = ft_arraylist_add(lst_files, ft_strdup(dirp->d_name));
+			dirp = readdir(dp);
+		}
+	//              sort files
+		ft_strarr_printfd(ft_lststr_to_arrstr(*out_lst), 0);
+	//              make pattern match
+	//              add files that match to out_lst
+	}
 }
 
 void	expand_str_dollar(char **strptr, sig_atomic_t last_status_code)
