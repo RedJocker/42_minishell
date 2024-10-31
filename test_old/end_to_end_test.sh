@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/29 01:09:54 by maurodri         ###   ########.fr        #
+#    Updated: 2024/10/30 19:20:32 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -176,16 +176,31 @@ assert_minishell_equal_bash_heredoc() {
 
 ## NEW TESTS #########################
 
-# # unset USER
-# # unset PATH
-# # unset PWD
-# # /bin/ls
-
 # # # This should not change the current directory
 # # cd .. hi
 
 # # # Empty `cd` moves to home
 # # cd"
+
+@test "test wildcards: ls *" {
+    
+    assert_minishell_equal_bash "ls * | "
+}
+
+@test "test wildcards: echo *" {
+    
+    assert_minishell_equal_bash "echo *"
+}
+
+@test "test wildcards: ls > *" {
+    assert_minishell_equal_bash "ls > *"
+}
+
+@test "test wildcards: echo > *" {
+    
+    assert_minishell_equal_bash "echo > *"
+}
+
 
 @test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
     
