@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/30 21:14:45 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/10/31 23:48:55 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,34 +78,61 @@ int		has_star(char *str)
 	return (0);
 }
 
-int	icompare_str(char *str1, char *str2)
+#include "ft_stdio.h"
+
+int	icompare_str(char *str0, char *str1)
 {
-	while (*str1 && *str2)
+	int isalternate_case;
+	int isalternate_alpha;
+	ft_printf("comp %s %s: ", str0, str1);
+	while (*str0 && *str1)
 	{
 		// TODO: add weird behaviour when comparing sybols agains letters
 		// mini#sg < mini%sg < mini.sg < minishell < mini#si < mini%si < mini.si
-		if (ft_tolower(*str1) != (ft_tolower(*str2)))
-			return (ft_tolower(*str1) - (ft_tolower(*str2)));
+		isalternate_case = (ft_islower(*str0) && ft_isupper(*str1)) \
+			|| (ft_isupper(*str0) && ft_islower(*str1));
+		isalternate_alpha = (ft_isalpha(*str0) && !ft_isalpha(*str1)) \
+			|| (!ft_isalpha(*str0) && ft_isalpha(*str1));
+		if (*str0 == *str1)
+			;
+		else if (isalternate_case)
+		{
+			ft_printf("alternate %d\n", (ft_isupper(*str0)));
+			return (ft_isupper(*str0));
+		}
+		else if (isalternate_alpha)
+		{
+			str0 += !ft_isalpha(*str0);
+			str1 += !ft_isalpha(*str1);
+			continue ;
+		}
+		else
+		{
+			ft_printf("else %d\n", (*str0 - *str1));
+			return (*str0 - *str1);
+		}
+			
+		str0++;
 		str1++;
-		str2++;
 	}
-	return (ft_tolower(*str1) - (ft_tolower(*str2)));
+	ft_printf("outside %d\n", (*str0 - *str1));
+	return *str0 - *str1;
 }
 
 void	ft_arraylist_sort(t_arraylist lst, t_intbifun compare_fun)
 {
-	int		i;
-	int		next_i;
-
-	i = -1;
-	while (ft_arraylist_get(lst, ++i))
+	size_t	i;
+	size_t	top;
+	
+	top = ft_arraylist_len(lst);
+	while (--top > 0)
 	{
-		next_i = i + 1;
-		while (ft_arraylist_get(lst, ++next_i))
+		i = 0;
+		while (++i <= top)
 		{
-			if (compare_fun(ft_arraylist_get(lst, i), \
-							ft_arraylist_get(lst, next_i)) > 0)
-				ft_arraylist_swap(lst, i, next_i);
+			if (compare_fun(ft_arraylist_get(lst, i - 1), \
+							ft_arraylist_get(lst, i)) > 0)
+				ft_arraylist_swap(lst, i - 1, i);
 		}
 	}
 }
@@ -145,7 +172,8 @@ void	expand_str_star(char *str, t_arraylist *out_lst)
 		dirp = readdir(dp);
 		while (dirp)
 		{
-			lst_files = ft_arraylist_add(lst_files, ft_strdup(dirp->d_name));
+			if (dirp->d_name[0] != '.')
+				lst_files = ft_arraylist_add(lst_files, ft_strdup(dirp->d_name));
 			dirp = readdir(dp);
 		}
 		//              sort files case insensitive
