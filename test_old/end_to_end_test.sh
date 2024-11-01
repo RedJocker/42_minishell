@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/31 03:25:47 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/01 00:28:00 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -182,6 +182,7 @@ assert_minishell_equal_bash_heredoc() {
 # # # Empty `cd` moves to home
 # # cd"
 
+
 @test "test wildcards: ls *" {
     
     assert_minishell_equal_bash "ls *
@@ -193,6 +194,28 @@ assert_minishell_equal_bash_heredoc() {
     assert_minishell_equal_bash "echo *
 "
 }
+
+@test "test wildcards ordering: touch xxxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef\n echo *" {
+    
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch xxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef
+ls
+echo *
+"
+}
+
+
+@test "test wildcards ordering: touch ABC ABc AbC aBC Abc aBc abC abc \n echo *" {
+    
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch ABC ABc AbC aBC Abc aBc abC abc 
+ls
+echo *
+"
+}
+
 
 @test "test wildcards: ls > *" {
     assert_minishell_equal_bash "
@@ -2121,6 +2144,3 @@ exit 42 world
 uname
 "
 }
-
-
-

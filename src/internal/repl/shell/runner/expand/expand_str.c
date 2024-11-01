@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/31 23:48:55 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/01 00:54:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,25 @@ int		has_star(char *str)
 	return (0);
 }
 
-#include "ft_stdio.h"
+//#include "ft_stdio.h"
+
+static char	ch_tolower(unsigned int i, char ch)
+{
+	(void) i;
+	if (ft_isupper(ch))
+		return (ch + 32);
+	else
+		return (ch);
+}
 
 int	icompare_str(char *str0, char *str1)
 {
 	int isalternate_case;
 	int isalternate_alpha;
-	ft_printf("comp %s %s: ", str0, str1);
+	int temp;
+	char *lower[2];
+
+	//ft_printf("comp %s %s: ", str0, str1);
 	while (*str0 && *str1)
 	{
 		// TODO: add weird behaviour when comparing sybols agains letters
@@ -97,8 +109,15 @@ int	icompare_str(char *str0, char *str1)
 			;
 		else if (isalternate_case)
 		{
-			ft_printf("alternate %d\n", (ft_isupper(*str0)));
-			return (ft_isupper(*str0));
+			lower[0] = ft_strmapi(str0, ch_tolower);
+			lower[1] = ft_strmapi(str1, ch_tolower);
+			temp = icompare_str(lower[0], lower[1]);
+			free(lower[0]);
+			free(lower[1]);
+			if (temp == 0)
+				return (ft_isupper(*str0));
+			else
+				return (temp);
 		}
 		else if (isalternate_alpha)
 		{
@@ -106,17 +125,25 @@ int	icompare_str(char *str0, char *str1)
 			str1 += !ft_isalpha(*str1);
 			continue ;
 		}
+		else if (!ft_isalpha(*str0) && !ft_isalpha(*str1))
+		{
+			temp = icompare_str(str0 + 1, str1 + 1);
+			//ft_printf("rest %d %d\n", rest, (*str0 - *str1));
+			if (temp == 0)
+				return (*str0 - *str1);
+			else
+				return (temp);
+		}
 		else
 		{
-			ft_printf("else %d\n", (*str0 - *str1));
+			//ft_printf("else %d\n", (*str0 - *str1));
 			return (*str0 - *str1);
 		}
-			
 		str0++;
 		str1++;
 	}
-	ft_printf("outside %d\n", (*str0 - *str1));
-	return *str0 - *str1;
+	//ft_printf("outside %d\n", (*str0 - *str1));
+	return (*str0 - *str1);
 }
 
 void	ft_arraylist_sort(t_arraylist lst, t_intbifun compare_fun)
@@ -151,7 +178,7 @@ void	expand_str_star(char *str, t_arraylist *out_lst)
 	struct dirent	*dirp;
 	t_arraylist		lst_files;
 	int				i;
-	// TODO: retrieve files current directory
+	//       retrieve files current directory
 	//       verify if has pattern
 	if (!has_star(str))
 	//           if not
