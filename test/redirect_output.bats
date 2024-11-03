@@ -14,17 +14,46 @@
 load parallel_helper
 
 @test "test redirect output: > a.txt" {
-    assert_minishell_equal_bash "> $TEST_CASE_DIR/a.txt
-ls"
+    assert_minishell_equal_bash "touch b.txt
+ls -H
+> a.txt
+printf '$?\n'
+ls -H"
+}
+
+@test "test redirect output: > a.txt > c.txt" {
+    assert_minishell_equal_bash "touch b.txt
+ls -H
+> a.txt > c.txt
+printf '$?\n'
+ls -H"
+}
+
+@test "test redirect output: :> a.txt" {
+    assert_minishell_equal_bash "touch b.txt
+ls -H
+:> a.txt
+printf '$?\n'
+ls -H"
+}
+
+@test "test redirect output: :> a.txt :> c.txt" {
+    assert_minishell_equal_bash "touch b.txt
+ls -H
+:> a.txt :> c.txt
+printf '$?\n'
+ls -H"
 }
 
 @test "test redirect output(simple command redirect output): echo hello > a.txt" {
     assert_minishell_equal_bash "echo hello > $TEST_CASE_DIR/a.txt
+printf '$?\n'
 cat $TEST_CASE_DIR/a.txt"
 }
 
 @test "test redirect output(simple command with one > redirect at end of command): ls -a \$TEST_CASE_DIR -H > a.txt" {
     assert_minishell_equal_bash "echo hello > $TEST_CASE_DIR/a.txt
+printf '$?\n'
 ls -a $TEST_CASE_DIR -H > $TEST_CASE_DIR/a.txt
 cat $TEST_CASE_DIR/a.txt"
 }
@@ -32,18 +61,21 @@ cat $TEST_CASE_DIR/a.txt"
 @test "test redirect output(simple command with one > redirect between args): ls -a \$TEST_CASE_DIR > a.txt -H" {
     assert_minishell_equal_bash "echo hello > $TEST_CASE_DIR/a.txt
 ls -a $TEST_CASE_DIR > $TEST_CASE_DIR/a.txt -H
+printf '$?\n'
 cat $TEST_CASE_DIR/a.txt"
 }
 
 @test "test redirect output(simple command with one > redirect between invocation and arg): ls > a.txt -a \$TEST_CASE_DIR -H" {
     assert_minishell_equal_bash "echo hello > $TEST_CASE_DIR/a.txt
 ls > $TEST_CASE_DIR/a.txt -a $TEST_CASE_DIR -H
+printf '$?\n'
 cat $TEST_CASE_DIR/a.txt"
 }
 
 @test "test redirect output(simple command with one > redirect before invocation): > a.txt ls -a \$TEST_CASE_DIR -H" {
     assert_minishell_equal_bash "echo hello > $TEST_CASE_DIR/a.txt
 > $TEST_CASE_DIR/a.txt ls -a $TEST_CASE_DIR -H 
+printf '$?\n'
 cat $TEST_CASE_DIR/a.txt"
 }
 
@@ -52,6 +84,7 @@ cat $TEST_CASE_DIR/a.txt"
 printf truncable > $TEST_CASE_DIR/a.txt
 cat $TEST_CASE_DIR/a.txt
 ls -a $TEST_CASE_DIR -H > $TEST_CASE_DIR/a.txt > $TEST_CASE_DIR/b.txt 
+printf '$?\n'
 cat $TEST_CASE_DIR/a.txt
 cat $TEST_CASE_DIR/b.txt"
 }

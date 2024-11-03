@@ -79,17 +79,19 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
 
     if ! [[ "$bash_output" == "$output" ]]; then
-        echo "$bash_output" > "./test/bash_"$BATS_TEST_NAME".txt"
-        echo "$output" > "./test/mini_"$BATS_TEST_NAME".txt"
-		echo -e "===> bash_output:\n<"$bash_output">\n\n===> minishell_output:\n<"$output">"
+		local bash_file="$PROJECT_ROOT/test/bash_$BATS_TEST_NAME.txt"
+		local mini_file="$PROJECT_ROOT/test/mini_$BATS_TEST_NAME.txt"
+		echo "$bash_output" > "$bash_file"
+		echo "$output" > "$mini_file"
+		echo -e "===> bash_output:\n<$bash_output>\n\n===> minishell_output:\n<$output>"
         echo -e "\ndiff:\n====================\n"
-        diff "./test/bash_"$BATS_TEST_NAME".txt" "./test/mini_"$BATS_TEST_NAME".txt" || true
+        diff "$bash_file" "$mini_file" || true
         echo -e "\n====================\n"
         false
     fi
 
     if ! [[ "$bash_status" == "$status" ]]; then
-        echo -e "===> bash_status: "$bash_status"\nminishell_status: "$status
+        echo -e "===> bash_status: $bash_status\nminishell_status: $status"
         false
     fi
 
@@ -113,17 +115,19 @@ assert_minishell_equal_bash_heredoc() {
     run minishell_execute "$@"
 
     if ! [[ "$bash_output_heredoc" == "$output" ]]; then
-        echo "$bash_output_heredoc" > "./test/bash_"$BATS_TEST_NAME".txt"
-        echo "$output" > "./test/mini_"$BATS_TEST_NAME".txt"
-		echo -e "===> bash_output:\n<"$bash_output_heredoc">\n\n===> minishell_output:\n<"$output">"
+		local bash_file="$PROJECT_ROOT/test/bash_$BATS_TEST_NAME.txt"
+		local mini_file="$PROJECT_ROOT/test/mini_$BATS_TEST_NAME.txt"
+        echo "$bash_output_heredoc" > "$bash_file"
+        echo "$output" > "$mini_file"
+		echo -e "===> bash_output:\n<$bash_output_heredoc>\n\n===> minishell_output:\n<$output>"
         echo -e "\ndiff:\n====================\n"
-        diff "./test/bash_"$BATS_TEST_NAME".txt" "./"$TEST_DIR"/mini_"$BATS_TEST_NAME".txt" || true
+        diff "$bash_file" "$mini_file" || true
         echo -e "\n====================\n"
 		false
     fi
 
     if ! [[ "$bash_status" == "$status" ]]; then
-		echo -e "===> bash_status: "$bash_status"\nminishell_status: "$status
+		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
     fi
 
