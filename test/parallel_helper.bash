@@ -78,7 +78,7 @@ assert_minishell_equal_bash() {
 
     run minishell_execute "$@"
 
-    if ! [[ $bash_output == $output ]]; then
+    if ! [[ "$bash_output" == "$output" ]]; then
         echo "$bash_output" > "./test/bash_"$BATS_TEST_NAME".txt"
         echo "$output" > "./test/mini_"$BATS_TEST_NAME".txt"
 		echo -e "===> bash_output:\n<$bash_output>\n\n===> minishell_output:\n<$output>"
@@ -88,7 +88,7 @@ assert_minishell_equal_bash() {
         false
     fi
 
-    if ! [[ $bash_status == $status ]]; then
+    if ! [[ "$bash_status" == "$status" ]]; then
         echo -e "===> bash_status: $bash_status\nminishell_status: $status"
         false
     fi
@@ -122,7 +122,7 @@ assert_minishell_equal_bash_heredoc() {
 		false
     fi
 
-    if ! [[ $bash_status == $status ]]; then
+    if ! [[ "$bash_status" == "$status" ]]; then
 		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
     fi
