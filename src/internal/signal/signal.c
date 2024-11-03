@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/26 05:50:05 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/31 03:24:21 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,35 @@ void	signals_initializer(bool redisplay)
 	ft_memset(&sa_quit, DEFAULT, sizeof(sa_quit));
 	sa_quit.sa_flags = SA_RESTART;
 	sa_quit.sa_handler = SIG_IGN;
+	rl_event_hook = NULL;
 	if (redisplay)
 		signals_initializer_redisplay(&sa_int);
 	else
 		signals_initializer_no_redisplay(&sa_int);
 	if (sigaction(SIGINT, &sa_int, NULL) == FAIL
 		|| sigaction(SIGQUIT, &sa_quit, NULL) == FAIL)
+	{
+		ft_putendl_fd("minishell: failed signal: fail to set signals", \
+			STDERR_FILENO);
+		exit (EXIT_FAILURE);
+	}
+}
+
+int event(void)
+{
+	return (0);
+}
+
+void	signals_heredoc(void)
+{
+	struct sigaction	sa_int;
+
+	ft_memset(&sa_int, DEFAULT, sizeof(sa_int));
+	sa_int.sa_handler = sigint_handler_heredoc;
+	if (isatty(STDIN_FILENO)) {
+		rl_event_hook = event;
+	}
+	if (sigaction(SIGINT, &sa_int, NULL) == FAIL)
 	{
 		ft_putendl_fd("minishell: failed signal: fail to set signals", \
 			STDERR_FILENO);

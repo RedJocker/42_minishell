@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/30 23:08:56 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/10/31 02:00:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,26 +88,19 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 	if (signal_status(DEFAULT, GET) == SIGINT)
 	{
 		free(line);
-		rl_done = 1;   // Tell readline to finish current line
 		stringbuilder_destroy(builder);
 		free(io->heredoc_limiter);
 		io_handler_set_error(io, 1, ft_strdup(""));
-		rl_replace_line("", DEFAULT);
-		rl_on_new_line();
-		// rl_redisplay();
 		return ;
 	}
-	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len + 1) != 0 && signal_status(DEFAULT, GET) != SIGINT)
+	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len + 1) != 0 \
+			&& signal_status(DEFAULT, GET) != SIGINT)
 	{
 		// ft_printf("heredoc %s %s\n", io->heredoc_limiter, line);
-		// if (signal_status(DEFAULT, GET) == SIGINT)
-		// 	break ;
 		stringbuilder_addstr(&builder, line);
 		stringbuilder_addstr(&builder, (char *) endline);
 		free(line);
 		line = readline("> ");
-		// if (signal_status(DEFAULT, GET) == SIGINT)
-		// 	break ;
 	}
 	if (line)
 	{
@@ -118,15 +111,6 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 		ft_printf("minishell: warning: here-document delimited by "
 				  "end-of-file (wanted `%s')\n", io->heredoc_limiter);
 	io->heredoc_input = stringbuilder_build(builder);
-	if (signal_status(DEFAULT, GET) == SIGINT)
-	{
-		// dup2(io->fd, STDIN_FILENO);
-		// close(STDIN_FILENO);
-		// rl_on_new_line();
-		rl_replace_line("", DEFAULT);
-		rl_redisplay();
-		return ;
-	}
 }
 
 void io_handlers_heredoc_prompt(t_arraylist ios)

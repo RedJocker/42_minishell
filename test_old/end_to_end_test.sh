@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/10/29 01:09:54 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/01 00:28:00 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,7 @@ assert_minishell_equal_bash() {
     
     local bash_status=$status
     # local bash_output=$output
-	local bash_output=$(echo "$output" | sed 's/bash: /minishell: /g')
+    local bash_output=$(echo "$output" | sed 's/bash: /minishell: /g')
 
     #echo $bash_status 1>&3
     #echo "$bash_output" 1>&3
@@ -98,7 +98,7 @@ assert_minishell_equal_bash() {
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
     #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
-    if ! [[ $bash_output == $output ]]; then
+    if ! [[ "$bash_output" == "$output" ]]; then
 	local bash_file="./test/bash_$BATS_TEST_NAME.txt"
         local mini_file="./test/mini_$BATS_TEST_NAME.txt"
 
@@ -113,7 +113,7 @@ assert_minishell_equal_bash() {
 
     #echo "$output" 1>&3
 
-    if ! [[ $bash_status == $status ]]; then
+    if ! [[ "$bash_status" == "$status" ]]; then
 		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
     fi
@@ -140,7 +140,7 @@ assert_minishell_equal_bash_heredoc() {
     #echo "$bash_output" 1>&3
 
     local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0} !/here-document/ { print $0}' <<< "$output")
-	local bash_output_heredoc=$(echo "$bash_out_norm" | sed 's/bash: /minishell: /g')
+    local bash_output_heredoc=$(echo "$bash_out_norm" | sed 's/bash: /minishell: /g')
 
     
     run minishell_execute "$@"
@@ -149,14 +149,14 @@ assert_minishell_equal_bash_heredoc() {
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
     #echo -e "===> bash_out_norm:\n<$bash_out_norm>\n===> minishell_output:\n<$output>" 1>&3
-    if ! [[ $bash_output_heredoc == $output ]]; then
+    if ! [[ "$bash_output_heredoc" == "$output" ]]; then
 		echo -e "===> bash_out_norm:\n<$bash_output_heredoc>\n===> minishell_output:\n<$output>"
 		false
     fi
 
     #echo "$output" 1>&3
 
-    if ! [[ $bash_status == $status ]]; then
+    if ! [[ "$bash_status" == "$status" ]]; then
 		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
     fi
@@ -176,16 +176,90 @@ assert_minishell_equal_bash_heredoc() {
 
 ## NEW TESTS #########################
 
-# # unset USER
-# # unset PATH
-# # unset PWD
-# # /bin/ls
-
 # # # This should not change the current directory
 # # cd .. hi
 
 # # # Empty `cd` moves to home
 # # cd"
+
+
+@test "test wildcards: ls *" {
+    
+    assert_minishell_equal_bash "ls *
+"
+}
+
+@test "test wildcards: echo *" {
+    
+    assert_minishell_equal_bash "echo *
+"
+}
+
+@test "test wildcards ordering: touch xxxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef\n echo *" {
+    
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch xxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef
+ls
+echo *
+"
+}
+
+
+@test "test wildcards ordering: touch ABC ABc AbC aBC Abc aBc abC abc \n echo *" {
+    
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch ABC ABc AbC aBC Abc aBc abC abc 
+ls
+echo *
+"
+}
+
+
+@test "test wildcards: ls > *" {
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+ls > *
+"
+}
+
+@test "test wildcards: echo > *" {
+    
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+echo > *
+"
+}
+
+@test "test wildcards: ls \"*\"" {
+    assert_minishell_equal_bash "ls \"*\"
+"
+}
+
+@test "test wildcards: echo \"*\"" {
+    
+    assert_minishell_equal_bash "
+echo \"*\""
+}
+
+@test "test wildcards: ls > '*'" {
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+ls > '*'"
+}
+
+@test "test wildcards: echo > '*'" {
+    
+    assert_minishell_equal_bash "
+cd $temp_dir
+touch a b c
+echo > '*'"
+}
+
 
 @test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
     
@@ -219,7 +293,7 @@ chmod 755 'temp'
 
 @test "test export no args" {
     assert_minishell_equal_bash "
-export | grep -v -i bats | grep -v '}' | grep -v _= | grep -v \$
+export | grep -v -i bats | grep -v '}' | grep -v _=
 "
 }
 
@@ -2070,6 +2144,3 @@ exit 42 world
 uname
 "
 }
-
-
-
