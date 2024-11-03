@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 00:47:10 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/31 03:24:21 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/02 23:28:28 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 #include "internal/default.h"
 #include "internal/signal/signal.h"
 #include "internal/signal/signal_internal/signal_internal.h"
-
-static void	signals_initializer_redisplay(struct sigaction *sa_int);
-static void	signals_initializer_no_redisplay(struct sigaction *sa_int);
 
 void	signals_initializer(bool redisplay)
 {
@@ -45,20 +42,14 @@ void	signals_initializer(bool redisplay)
 	}
 }
 
-int event(void)
-{
-	return (0);
-}
-
 void	signals_heredoc(void)
 {
 	struct sigaction	sa_int;
 
 	ft_memset(&sa_int, DEFAULT, sizeof(sa_int));
 	sa_int.sa_handler = sigint_handler_heredoc;
-	if (isatty(STDIN_FILENO)) {
-		rl_event_hook = event;
-	}
+	if (isatty(STDIN_FILENO))
+		rl_event_hook = rl_hook;
 	if (sigaction(SIGINT, &sa_int, NULL) == FAIL)
 	{
 		ft_putendl_fd("minishell: failed signal: fail to set signals", \
@@ -89,16 +80,4 @@ sig_atomic_t	signal_status(sig_atomic_t value, t_operations type)
 	if (type == SET)
 		signal_status = value;
 	return (signal_status);
-}
-
-static void	signals_initializer_redisplay(struct sigaction *sa_int)
-{
-	sa_int->sa_flags = SA_RESTART;
-	sa_int->sa_handler = sigint_handler_redisplay;
-}
-
-static void	signals_initializer_no_redisplay(struct sigaction *sa_int)
-{
-	sa_int->sa_flags = SA_RESTART;
-	sa_int->sa_handler = sigint_handler_no_redisplay;
 }
