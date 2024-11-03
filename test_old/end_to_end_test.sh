@@ -183,82 +183,82 @@ assert_minishell_equal_bash_heredoc() {
 # # cd"
 
 
-@test "test wildcards: ls *" {
-    
-    assert_minishell_equal_bash "ls *
-"
-}
-
-@test "test wildcards: echo *" {
-    
-    assert_minishell_equal_bash "echo *
-"
-}
-
-@test "test wildcards ordering: touch xxxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef\n echo *" {
-    
-    assert_minishell_equal_bash "
-cd $temp_dir
-touch xxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef
-ls
-echo *
-"
-}
-
-
-@test "test wildcards ordering: touch ABC ABc AbC aBC Abc aBc abC abc \n echo *" {
-    
-    assert_minishell_equal_bash "
-cd $temp_dir
-touch ABC ABc AbC aBC Abc aBc abC abc 
-ls
-echo *
-"
-}
-
-
-@test "test wildcards: ls > *" {
-    assert_minishell_equal_bash "
-cd $temp_dir
-touch a b c
-ls > *
-"
-}
-
-@test "test wildcards: echo > *" {
-    
-    assert_minishell_equal_bash "
-cd $temp_dir
-touch a b c
-echo > *
-"
-}
-
-@test "test wildcards: ls \"*\"" {
-    assert_minishell_equal_bash "ls \"*\"
-"
-}
-
-@test "test wildcards: echo \"*\"" {
-    
-    assert_minishell_equal_bash "
-echo \"*\""
-}
-
-@test "test wildcards: ls > '*'" {
-    assert_minishell_equal_bash "
-cd $temp_dir
-touch a b c
-ls > '*'"
-}
-
-@test "test wildcards: echo > '*'" {
-    
-    assert_minishell_equal_bash "
-cd $temp_dir
-touch a b c
-echo > '*'"
-}
+# @test "test wildcards: ls *" {
+#
+#     assert_minishell_equal_bash "ls *
+# "
+# }
+#
+# @test "test wildcards: echo *" {
+#
+#     assert_minishell_equal_bash "echo *
+# "
+# }
+#
+# @test "test wildcards ordering: touch xxxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef\n echo *" {
+#
+#     assert_minishell_equal_bash "
+# cd $temp_dir
+# touch xxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef
+# ls
+# echo *
+# "
+# }
+#
+#
+# @test "test wildcards ordering: touch ABC ABc AbC aBC Abc aBc abC abc \n echo *" {
+#
+#     assert_minishell_equal_bash "
+# cd $temp_dir
+# touch ABC ABc AbC aBC Abc aBc abC abc 
+# ls
+# echo *
+# "
+# }
+#
+#
+# @test "test wildcards: ls > *" {
+#     assert_minishell_equal_bash "
+# cd $temp_dir
+# touch a b c
+# ls > *
+# "
+# }
+#
+# @test "test wildcards: echo > *" {
+#
+#     assert_minishell_equal_bash "
+# cd $temp_dir
+# touch a b c
+# echo > *
+# "
+# }
+#
+# @test "test wildcards: ls \"*\"" {
+#     assert_minishell_equal_bash "ls \"*\"
+# "
+# }
+#
+# @test "test wildcards: echo \"*\"" {
+#
+#     assert_minishell_equal_bash "
+# echo \"*\""
+# }
+#
+# @test "test wildcards: ls > '*'" {
+#     assert_minishell_equal_bash "
+# cd $temp_dir
+# touch a b c
+# ls > '*'"
+# }
+#
+# @test "test wildcards: echo > '*'" {
+#
+#     assert_minishell_equal_bash "
+# cd $temp_dir
+# touch a b c
+# echo > '*'"
+# }
 
 
 @test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
@@ -291,44 +291,44 @@ chmod 755 'temp'
 }
 
 
-@test "test export no args" {
-    assert_minishell_equal_bash "
-export | grep -v -i bats | grep -v '}' | grep -v _=
-"
-}
-
-
-@test "test cd: cd \"\$temp_dir2\" \n pwd \n cd . \n pwd \n cd .. \n pwd" {
-    temp_dir2="$temp_dir/temp"
-    
-    assert_minishell_equal_bash "
-mkdir -p \"$temp_dir2\"
-cd \"$temp_dir2\"
-pwd
-cd .
-pwd
-cd ..
-pwd
-"
-}
-
-@test "test cd: cd \"\$temp_dir2\" \n echo \$PWD \n echo \$OLD_PWD \n cd . \n echo \$PWD \n echo \$OLD_PWD \n cd .. \n echo \$PWD \n echo \$OLD_PWD" {
-
-    temp_dir2="$temp_dir/temp"
-    
-    assert_minishell_equal_bash "
-mkdir -p \"$temp_dir2\"
-cd \"$temp_dir2\"
-echo \$PWD
-echo \$OLDPWD
-cd .
-echo \$PWD
-echo \$OLDPWD
-cd ..
-echo \$PWD 
-echo \$OLDPWD
-"
-}
+# @test "test export no args" {
+#     assert_minishell_equal_bash "
+# export | grep -v -i bats | grep -v '}' | grep -v _=
+# "
+# }
+#
+#
+# @test "test cd: cd \"\$temp_dir2\" \n pwd \n cd . \n pwd \n cd .. \n pwd" {
+#     temp_dir2="$temp_dir/temp"
+#
+#     assert_minishell_equal_bash "
+# mkdir -p \"$temp_dir2\"
+# cd \"$temp_dir2\"
+# pwd
+# cd .
+# pwd
+# cd ..
+# pwd
+# "
+# }
+#
+# @test "test cd: cd \"\$temp_dir2\" \n echo \$PWD \n echo \$OLD_PWD \n cd . \n echo \$PWD \n echo \$OLD_PWD \n cd .. \n echo \$PWD \n echo \$OLD_PWD" {
+#
+#     temp_dir2="$temp_dir/temp"
+#
+#     assert_minishell_equal_bash "
+# mkdir -p \"$temp_dir2\"
+# cd \"$temp_dir2\"
+# echo \$PWD
+# echo \$OLDPWD
+# cd .
+# echo \$PWD
+# echo \$OLDPWD
+# cd ..
+# echo \$PWD 
+# echo \$OLDPWD
+# "
+# }
 
 ## SIMPLE TESTS #########################
 
@@ -371,77 +371,77 @@ uname"
     assert_minishell_equal_bash ls -H -a
 }
 
-@test "test builtin echo with one arg" {
-    assert_minishell_equal_bash "echo testing
-"
-}
-
-@test "test builtin echo with two args" {
-    assert_minishell_equal_bash "echo testing two
-"
-}
+# @test "test builtin echo with one arg" {
+#     assert_minishell_equal_bash "echo testing
+# "
+# }
+#
+# @test "test builtin echo with two args" {
+#     assert_minishell_equal_bash "echo testing two
+# "
+# }
 
 ## SIMPLE WITH REDIRECT > TESTS #########################
 
-@test "test simple command with one > redirect at end of command: ls -a \$temp_dir -H > \$file" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H > $file
-cat $file"
-}
-
-@test "test simple command with one > redirect between args: ls -a \$temp_dir > \$file -H" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir > $file -H 
-cat $file"
-}
-
-@test "test simple command with one > redirect between invocation and arg: ls > \$file -a \$temp_dir -H" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls > $file -a $temp_dir -H 
-cat $file"
-}
-
-@test "test simple command with one > redirect before invocation: > \$file ls -a \$temp_dir -H" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "> $file ls -a $temp_dir -H 
-cat $file"
-}
-
-@test "test simple command with two > redirects to different files: ls -a \$temp_dir -H > \$file1 > \$file2" {
-    file1="$temp_dir/a.txt"
-    file2="$temp_dir/b.txt"
-    assert_minishell_equal_bash "
-printf truncable > $file1
-cat $file1
-ls -a $temp_dir -H > $file1 > $file2 
-cat $file1
-cat $file2
-"
-}
-
-@test "test simple command with two > redirects to same file: ls -a \$temp_dir -H > \$file1 > \$file1" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file1 
-cat $file1
-"
-}
- 
-@test "test simple command with invalid redirect syntax" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls -a $temp_dir -H > > $file1
-printf \$?"
-}
-
-@test "test simple command with > redirection to file without permission " {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "printf protected > $file1
-chmod 444 $file1
-ls > $file1
-printf \$?
-cat $file1
-"
-}
-
+# @test "test simple command with one > redirect at end of command: ls -a \$temp_dir -H > \$file" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls -a $temp_dir -H > $file
+# cat $file"
+# }
+#
+# @test "test simple command with one > redirect between args: ls -a \$temp_dir > \$file -H" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls -a $temp_dir > $file -H 
+# cat $file"
+# }
+#
+# @test "test simple command with one > redirect between invocation and arg: ls > \$file -a \$temp_dir -H" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls > $file -a $temp_dir -H 
+# cat $file"
+# }
+#
+# @test "test simple command with one > redirect before invocation: > \$file ls -a \$temp_dir -H" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "> $file ls -a $temp_dir -H 
+# cat $file"
+# }
+#
+# @test "test simple command with two > redirects to different files: ls -a \$temp_dir -H > \$file1 > \$file2" {
+#     file1="$temp_dir/a.txt"
+#     file2="$temp_dir/b.txt"
+#     assert_minishell_equal_bash "
+# printf truncable > $file1
+# cat $file1
+# ls -a $temp_dir -H > $file1 > $file2 
+# cat $file1
+# cat $file2
+# "
+# }
+#
+# @test "test simple command with two > redirects to same file: ls -a \$temp_dir -H > \$file1 > \$file1" {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls -a $temp_dir -H > $file1 > $file1 
+# cat $file1
+# "
+# }
+#
+# @test "test simple command with invalid redirect syntax" {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls -a $temp_dir -H > > $file1
+# printf \$?"
+# }
+#
+# @test "test simple command with > redirection to file without permission " {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "printf protected > $file1
+# chmod 444 $file1
+# ls > $file1
+# printf \$?
+# cat $file1
+# "
+# }
+#
 @test "test builtin echo with > redirection end" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls $temp_dir 
