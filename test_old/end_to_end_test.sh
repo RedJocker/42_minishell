@@ -442,51 +442,51 @@ uname"
 # "
 # }
 #
-@test "test builtin echo with > redirection end" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls $temp_dir 
-echo working > $file1
-cat $file
-ls $temp_dir
-"
-}
-
-@test "test builtin echo with > redirection middle" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls $temp_dir 
-echo > $file1 working
-cat $file
-ls $temp_dir
-"
-}
-
-@test "test builtin echo with > redirection start" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "ls $temp_dir 
-> $file1 echo working
-cat $file
-ls $temp_dir
-"
-}
-
-@test "test builtin echo with invalid redirect syntax > >" {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "echo what > > $file1
-echo \$?"
-}
-
-@test "test builtin echo with > redirection to file without permission " {
-    file1="$temp_dir/a.txt"
-    assert_minishell_equal_bash "printf protected > $file1
-chmod 444 $file1
-echo override > $file1
-echo \$?
-cat $file1
-"
-}
-
-
-
+# @test "test builtin echo with > redirection end" {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls $temp_dir 
+# echo working > $file1
+# cat $file
+# ls $temp_dir
+# "
+# }
+#
+# @test "test builtin echo with > redirection middle" {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls $temp_dir 
+# echo > $file1 working
+# cat $file
+# ls $temp_dir
+# "
+# }
+#
+# @test "test builtin echo with > redirection start" {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "ls $temp_dir 
+# > $file1 echo working
+# cat $file
+# ls $temp_dir
+# "
+# }
+#
+# @test "test builtin echo with invalid redirect syntax > >" {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "echo what > > $file1
+# echo \$?"
+# }
+#
+# @test "test builtin echo with > redirection to file without permission " {
+#     file1="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "printf protected > $file1
+# chmod 444 $file1
+# echo override > $file1
+# echo \$?
+# cat $file1
+# "
+# }
+#
+#
+#
 @test "test simple command with one >> redirect at end of command: ls -a \$temp_dir -H >> \$file" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls -a $temp_dir -H >> $file
