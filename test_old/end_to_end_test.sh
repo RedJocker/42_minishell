@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/01 00:28:00 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/04 15:48:07 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -181,6 +181,122 @@ assert_minishell_equal_bash_heredoc() {
 
 # # # Empty `cd` moves to home
 # # cd"
+
+@test "test redirect alone: > \$file" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "> $file
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: >> \$file" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash ">> $file
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: > \$file1 > \$file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "> $file1 > $file2
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: >> \$file1 >> \$file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash ">> $file1 >> $file2
+ls $temp_dir
+"
+}
+
+
+@test "test redirect alone: >> \$file1 > \$file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash ">> $file1 > $file2
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: > \$file1 >> \$file2" {
+    file1="$temp_dir/a.txt"
+    file2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "> $file1 >> $file2
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: > \$file /n < \$file" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "> $file
+ls $temp_dir
+< $file
+"
+}
+
+@test "test redirect alone: < \$does_not_exist" {
+    does_not_exist="$temp_dir/a.txt"
+    assert_minishell_equal_bash "< $does_not_exist
+"
+}
+
+@test "test redirect alone: < \$does_not_exist1 < \$does_not_exist2" {
+    does_not_exist1="$temp_dir/a.txt"
+    does_not_exist2="$temp_dir/b.txt"
+    assert_minishell_equal_bash "< $does_not_exist1 < $does_not_exist2
+"
+}
+
+@test "test redirect alone: << eof \n input \n eof" {
+    assert_minishell_equal_bash "<< eof
+input
+eof
+"
+}
+
+
+@test "test redirect alone: << eof > \$file \n input \n eof" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "<< eof > $file
+input
+eof
+echo $?
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: > \$file << eof \n input \n eof" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "> $file << eof
+input
+eof
+echo $?
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: << eof >> \$file \n input \n eof" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "<< eof >> $file
+input
+eof
+echo $?
+ls $temp_dir
+"
+}
+
+@test "test redirect alone: >> \$file << eof \n input \n eof" {
+    file="$temp_dir/a.txt"
+    assert_minishell_equal_bash ">> $file << eof
+input
+eof
+echo $?
+ls $temp_dir
+"
+}
 
 
 # @test "test wildcards: ls *" {
