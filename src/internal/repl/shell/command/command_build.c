@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/05 00:01:25 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/05 00:24:46 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_command	command_build_pipe(
 	cmd_before = command_build(tokens, cmd_operator_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
-	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0)
+	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0 && ft_arraylist_len(cmd_before->io_handlers) == 0)
 	{
 		command_destroy(cmd_before);
 		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
@@ -65,7 +65,7 @@ t_command	command_build_pipe(
 		command_destroy(cmd_before);
 		return (cmd_after);
 	}
-	else if (cmd_before->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0)
+	else if (cmd_after->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0 && ft_arraylist_len(cmd_after->io_handlers) == 0)
 	{
 		command_destroy(cmd_after);
 		command_destroy(cmd_before);
