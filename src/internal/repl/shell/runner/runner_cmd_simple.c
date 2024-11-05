@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/31 02:08:30 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:32:25 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,14 +163,14 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 	if (*pid == 0)
 	{
 		free(pid);
-		if (cmd->simple->cmd_argc == DEFAULT)
-			runner_cmd_simple_exit_status(run_data, EXIT_OK);
-		cmd->simple->cmd_envp = get_envp(ENVP_DEFAULT);
-		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
 		if (!io_handlers_redirect(cmd->io_handlers))
 			runner_cmd_simple_panic(run_data, \
 				ft_strdup(io_handlers_get_error(cmd->io_handlers)), \
 					EXIT_REDIRECT_FAIL, true);
+		if (cmd->simple->cmd_argc == DEFAULT)
+			runner_cmd_simple_exit_status(run_data, EXIT_OK);
+		cmd->simple->cmd_envp = get_envp(ENVP_DEFAULT);
+		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
 		signals_afterfork();
 		if (builtin)
 		{
