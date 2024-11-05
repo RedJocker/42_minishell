@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:22:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 15:02:19 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/04 22:36:38 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,10 @@ void	token_type_string(char out_str[23], t_token_type type)
 		ft_strlcpy(out_str, "OP_OR", 6);
 	else if (type == OP_NEWLINE)
 		ft_strlcpy(out_str, "OP_NEW_LINE", 12);
+	else if (type == OP_PAREN_OPEN)
+		ft_strlcpy(out_str, "OP_PAREN_OPEN", 14);
+	else if (type == OP_PAREN_CLOSE)
+		ft_strlcpy(out_str, "OP_PAREN_CLOSE", 15);
 	else if (type == WORD)
 		ft_strlcpy(out_str, "WORD", 5);
 	else if (type == OP_EOF)
