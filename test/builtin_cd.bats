@@ -15,30 +15,32 @@ setup() {
     load parallel_helper
 }
 
-@test "test cd: cd \"\$temp_dir2\" \n pwd \n cd . \n pwd \n cd .. \n pwd" {
-    temp_dir2="$TEST_CASE_DIR/temp"
-    assert_minishell_equal_bash "
-mkdir -p \"$temp_dir2\"
-cd \"$temp_dir2\"
+@test "test cd: cd temp \n pwd \n cd . \n pwd \n cd .. \n pwd" {
+    assert_minishell_equal_bash "mkdir -p $TEST_CASE_DIR/temp
+cd $TEST_CASE_DIR/temp
+printf '$?\n'
 pwd
 cd .
+printf '$?\n'
 pwd
 cd ..
+printf '$?\n'
 pwd"
 }
 
-@test "test cd: cd \"\$temp_dir2\" \n echo \$PWD \n echo \$OLD_PWD \n cd . \n echo \$PWD \n echo \$OLD_PWD \n cd .. \n echo \$PWD \n echo \$OLD_PWD" {
-
-    temp_dir2="$TEST_CASE_DIR/temp"
-    assert_minishell_equal_bash "
-mkdir -p \"$temp_dir2\"
-cd \"$temp_dir2\"
-echo \$PWD
-echo \$OLDPWD
+@test "test cd: cd temp \n echo \$PWD \n echo \$OLD_PWD \n cd . \n echo \$PWD \n echo \$OLD_PWD \n cd .. \n echo \$PWD \n echo \$OLD_PWD" {
+    assert_minishell_equal_bash "mkdir -p $TEST_CASE_DIR/temp
+printf '$?\n'
+cd $TEST_CASE_DIR/temp
+printf '$?\n'
+printf '$PWD\n'
+printf '$OLDPWD\n'
 cd .
-echo \$PWD
-echo \$OLDPWD
+printf '$?\n'
+printf '$PWD\n'
+printf '$OLDPWD\n'
 cd ..
-echo \$PWD 
-echo \$OLDPWD"
+printf '$?\n'
+printf '$PWD\n'
+printf '$OLDPWD\n'"
 }
