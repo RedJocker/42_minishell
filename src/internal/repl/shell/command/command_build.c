@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/05 00:24:46 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/05 01:29:16 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,56 @@ t_command	command_build_or(
 	return (command_or_new(cmd_before, cmd_after));
 }
 
+static int	find_paren_end(t_token **tokens, int tokens_len)
+{
+	int open_paren;
+	int	i;
 
+	ft_assert(tokens[0]->type == OP_PAREN_OPEN, "expected paren open");
+	i = 1;
+	open_paren = 1;
+	while (i < tokens_len)
+	{
+		if (tokens[i]->type == OP_PAREN_OPEN)
+			open_paren++;
+		else if (tokens[i]->type == OP_PAREN_CLOSE)
+			open_paren--;
+		if (open_paren == 0)
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+t_command	command_build_parentheses(
+	t_token **tokens, int cmd_operator_idx, int tokens_len)
+{
+	t_command	cmd;
+	int			paren_close_idx;
+	char		*err_msg;
+	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
+
+	paren_close_idx = find_paren_end(tokens, tokens_len);
+	if (tokens[paren_close_idx]->type != OP_PAREN_CLOSE)
+	{
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
+		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd);
+	}
+	cmd = command_build(tokens + 1, paren_close_idx - 1);
+	if (!cmd || cmd->type == CMD_INVALID)
+		return (cmd);
+	else if (cmd->type == CMD_SIMPLE && cmd->simple->cmd_argc == 0 && ft_arraylist_len(cmd->io_handlers) == 0)
+	{
+		command_destroy(cmd);
+		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
+		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
+		free(err_msg);
+		return (cmd);
+	}
+	return (command_paren_new(cmd));
+}
 
 t_command	command_build(t_token **tokens, int tokens_len)
 {
@@ -173,6 +222,8 @@ t_command	command_build(t_token **tokens, int tokens_len)
 		return (command_build_and(tokens, cmd_operator_idx, tokens_len));
 	else if (tokens[cmd_operator_idx]->type == OP_OR)
 		return (command_build_or(tokens, cmd_operator_idx, tokens_len));
+	else if (tokens[cmd_operator_idx]->type == OP_PAREN_OPEN)
+		return (command_build_parentheses(tokens, cmd_operator_idx, tokens_len));
 	ft_assert(0, "unexpected execution at command_build");
 	return (command_invalid_new("temporarily unnexpected", -1));
 }

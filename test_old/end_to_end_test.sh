@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/05 00:33:30 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/05 05:02:16 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,7 +97,7 @@ assert_minishell_equal_bash() {
 
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
+    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
     if ! [[ "$bash_output" == "$output" ]]; then
 	local bash_file="./test/bash_$BATS_TEST_NAME.txt"
         local mini_file="./test/mini_$BATS_TEST_NAME.txt"
@@ -181,6 +181,120 @@ assert_minishell_equal_bash_heredoc() {
 
 # # # Empty `cd` moves to home
 # # cd"
+
+
+@test "test paren: (ls)" {
+    
+    assert_minishell_equal_bash "(ls)
+"
+}
+
+@test "test paren: (ls && printf ok\n)" {
+    
+    assert_minishell_equal_bash "(ls && printf 'ok\n')
+"
+}
+
+
+@test "test paren: (false && printf ok\n)" {
+    
+    assert_minishell_equal_bash "(false && printf 'ok\n')
+"
+}
+
+
+@test "test paren: (false || printf ok\n)" {
+    
+    assert_minishell_equal_bash "(false || printf 'ok\n')
+"
+}
+
+
+@test "test paren: (true || printf ok\n)" {
+    
+    assert_minishell_equal_bash "(true || printf 'ok\n')
+"
+}
+
+
+@test "test paren: (ls && echo ok)" {
+    
+    assert_minishell_equal_bash "(ls && echo 'ok')
+"
+}
+
+
+@test "test paren: (false && echo ok)" {
+    
+    assert_minishell_equal_bash "(false && echo 'ok')
+"
+}
+
+
+@test "test paren: (false || echo ok)" {
+    
+    assert_minishell_equal_bash "(false || echo 'ok')
+"
+}
+
+
+@test "test paren: (true || echo ok)" {
+    
+    assert_minishell_equal_bash "(true || echo 'ok')
+"
+}
+
+@test "test paren: (ls && echo ok) | wc -l" {
+    
+    assert_minishell_equal_bash "(ls && echo 'ok') | wc -l
+"
+}
+
+
+@test "test paren: (false && echo ok) | wc -l" {
+    
+    assert_minishell_equal_bash "(false && echo 'ok') | wc -l
+"
+}
+
+
+@test "test paren: (false || echo ok) | wc -l" {
+    
+    assert_minishell_equal_bash "(false || echo 'ok') | wc -l
+"
+}
+
+
+@test "test paren: (true || echo ok) | wc -l" {
+    
+    assert_minishell_equal_bash "(true || echo 'ok') | wc -l
+"
+}
+
+@test "test paren: ls && (echo ok | wc -l)" {
+    
+    assert_minishell_equal_bash "ls && (echo ok | wc -l)
+"
+}
+
+@test "test paren: (ls | cat) | (wc -l)" {
+    
+    assert_minishell_equal_bash "(ls | cat) | (wc -l)
+"
+}
+
+
+@test "test paren: (true || (echo ok)) | wc -l" {
+    
+    assert_minishell_equal_bash "(true || (echo ok)) | wc -l
+"
+}
+
+@test "test paren: (false && (echo ok)) | wc -l" {
+    
+    assert_minishell_equal_bash "(false && (echo ok)) | wc -l
+"
+}
 
 @test "test redirect alone: > \$file" {
     file="$temp_dir/a.txt"
