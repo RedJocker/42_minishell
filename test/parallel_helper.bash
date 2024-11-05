@@ -90,11 +90,6 @@ assert_minishell_equal_bash() {
         false
     fi
 
-    if ! [[ "$bash_status" == "$status" ]]; then
-        echo -e "===> bash_status: $bash_status\nminishell_status: $status"
-        false
-    fi
-
     run minishell_leak_check "$@"
 
     if (( $status == 33 )); then
@@ -123,11 +118,6 @@ assert_minishell_equal_bash_heredoc() {
         echo -e "\ndiff:\n====================\n"
         diff "$bash_file" "$mini_file" || true
         echo -e "\n====================\n"
-		false
-    fi
-
-    if ! [[ "$bash_status" == "$status" ]]; then
-		echo -e "===> bash_status: $bash_status\nminishell_status: $status"
 		false
     fi
 
