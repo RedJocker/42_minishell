@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/05 02:24:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:49:31 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,54 @@ void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 		command_or_add_pipe_io(cmd, pipe_fd, dir);
 	else if (cmd->type == CMD_PAREN)
 		command_paren_add_pipe_io(cmd, pipe_fd, dir);
+}
+
+void	command_close_ios(t_command cmd);
+
+void command_simple_close_ios(t_command cmd)
+{
+	io_handlers_close(cmd->io_handlers);
+}
+
+void command_pipe_close_ios(t_command cmd)
+{
+	io_handlers_close(cmd->io_handlers);
+	command_close_ios(cmd->pipe->cmd_before);
+	command_close_ios(cmd->pipe->cmd_after);
+}
+
+void command_and_close_ios(t_command cmd)
+{
+	io_handlers_close(cmd->io_handlers);
+	command_close_ios(cmd->and->cmd_before);
+	command_close_ios(cmd->and->cmd_after);
+}
+
+void command_or_close_ios(t_command cmd)
+{
+	io_handlers_close(cmd->io_handlers);
+	command_close_ios(cmd->or->cmd_before);
+	command_close_ios(cmd->or->cmd_after);
+}
+
+void command_paren_close_ios(t_command cmd)
+{
+	io_handlers_close(cmd->io_handlers);
+	command_close_ios(cmd->paren->cmd);
+}
+
+void	command_close_ios(t_command cmd)
+{
+	if (cmd->type == CMD_SIMPLE)
+		command_simple_close_ios(cmd);
+	else if (cmd->type == CMD_PIPE)
+		command_pipe_close_ios(cmd);
+	else if (cmd->type == CMD_AND)
+		command_and_close_ios(cmd);
+	else if (cmd->type == CMD_OR)
+		command_or_close_ios(cmd);
+	else if (cmd->type == CMD_PAREN)
+		command_paren_close_ios(cmd);
 }
 
 void	command_destroy(t_command cmd)

@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/05 05:02:16 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/06 19:37:27 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -295,6 +295,20 @@ assert_minishell_equal_bash_heredoc() {
     assert_minishell_equal_bash "(false && (echo ok)) | wc -l
 "
 }
+
+@test "test paren: (ls | wc -l) | cat" {
+    
+    assert_minishell_equal_bash "(ls | wc -l) | cat
+"
+}
+
+
+@test "test paren: (cd .. && pwd) && pwd" {
+    
+    assert_minishell_equal_bash "(cd .. && pwd) && pwd
+"
+}
+
 
 @test "test redirect alone: > \$file" {
     file="$temp_dir/a.txt"
