@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:56:15 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 14:59:27 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/04 22:32:34 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ int	command_token_precedence(t_token_type token_type)
 		return (9);
 	else if (token_type == OP_NEWLINE)
 		return (8);
-	else if (token_type == OP_PIPE)
+	else if (token_type == OP_PAREN_OPEN)
 		return (7);
-	else if (token_type == OP_AND || token_type == OP_OR)
+	else if (token_type == OP_PIPE)
 		return (6);
+	else if (token_type == OP_AND || token_type == OP_OR)
+		return (5);
 	return (11);
 }

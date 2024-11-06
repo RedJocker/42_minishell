@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/07 17:48:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/05 01:26:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,5 @@ void	command_simple_destroy(t_command cmd)
 	if (cmd->simple->cmd_path)
 		free(cmd->simple->cmd_path);
 	free(cmd->simple);
-	
 	command_free(cmd);
 }

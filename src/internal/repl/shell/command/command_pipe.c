@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:18:39 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 15:12:13 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/05 02:25:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,29 @@
 #include "internal/repl/shell/command/command_internal.h"
 #include "ft_memlib.h"
 #include "ft_assert.h"
+
+// TODO: Move to command_paren.c
+t_command	command_paren_new(t_command cmd_inside)
+{
+	t_command	cmd;
+
+	cmd = command_new(CMD_PAREN, "CMD_PAREN");
+	if (!cmd)
+		return (NULL);
+	cmd->paren = ft_calloc(1, sizeof(t_command_paren));
+	if (!cmd->paren)
+		return (ft_free_retnull(cmd_inside));
+	cmd->paren->cmd = cmd_inside;
+	return (cmd);
+}
+
+void	command_paren_destroy(t_command cmd)
+{
+	command_destroy(cmd->paren->cmd);
+	free(cmd->paren);
+	command_free(cmd);
+}
+
 
 // TODO: Move to command_and.c
 t_command	command_and_new(t_command cmd_before, t_command cmd_after)
@@ -94,5 +117,31 @@ void	command_pipe_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 	else if (dir == IO_OUT)
 		command_add_pipe_io(cmd->pipe->cmd_after, pipe_fd, dir);
 	else
-		ft_assert(0, "unexpected io_direction");
+		ft_assert(0, "unexpected io_direction at command_pipe_add_pipe_io");
 }
+
+void	command_and_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
+{
+	if (dir == IO_IN)
+		command_add_pipe_io(cmd->and->cmd_before, pipe_fd, dir);
+	else if (dir == IO_OUT)
+		command_add_pipe_io(cmd->and->cmd_after, pipe_fd, dir);
+	else
+		ft_assert(0, "unexpected io_direction command_and_add_pipe_io");
+}
+
+void	command_or_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
+{
+	if (dir == IO_IN)
+		command_add_pipe_io(cmd->or->cmd_before, pipe_fd, dir);
+	else if (dir == IO_OUT)
+		command_add_pipe_io(cmd->or->cmd_after, pipe_fd, dir);
+	else
+		ft_assert(0, "unexpected io_direction command_or_add_pipe_io");
+}
+
+void	command_paren_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
+{
+	command_add_pipe_io(cmd->paren->cmd, pipe_fd, dir);
+}
+

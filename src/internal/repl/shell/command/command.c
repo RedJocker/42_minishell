@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 16:01:29 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/05 02:24:53 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@ void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 		command_simple_add_pipe_io(cmd, pipe_fd, dir);
 	else if (cmd->type == CMD_PIPE)
 		command_pipe_add_pipe_io(cmd, pipe_fd, dir);
-	// TODO: command_and_add_pipe.....command_or_add_pipe
+	else if (cmd->type == CMD_AND)
+		command_and_add_pipe_io(cmd, pipe_fd, dir);
+	else if (cmd->type == CMD_OR)
+		command_or_add_pipe_io(cmd, pipe_fd, dir);
+	else if (cmd->type == CMD_PAREN)
+		command_paren_add_pipe_io(cmd, pipe_fd, dir);
 }
 
 void	command_destroy(t_command cmd)
@@ -38,6 +43,8 @@ void	command_destroy(t_command cmd)
 		command_and_destroy(cmd);
 	else if (cmd->type == CMD_OR)
 		command_or_destroy(cmd);
+	else if (cmd->type == CMD_PAREN)
+		command_paren_destroy(cmd);
 	else if (cmd->type == CMD_EOF)
 		command_eof_destroy(cmd);
 	else if (cmd->type == CMD_INVALID)
@@ -49,19 +56,25 @@ int	command_operator_idx(t_token **tokens, int tokens_len)
 	int	cmd_operator_idx;
 	int	precedence_cur;
 	int	precedence_next;
-	int	i;
+	int i;
+	int open_parens;
 
 	precedence_cur = command_token_precedence(WORD);
+	open_parens = 0;
 	cmd_operator_idx = -1;
 	i = -1;
 	while (++i < tokens_len)
 	{
 		precedence_next = command_token_precedence(tokens[i]->type);
-		if (precedence_next < precedence_cur)
+		if (open_parens == 0 && precedence_next < precedence_cur)
 		{
 			cmd_operator_idx = i;
 			precedence_cur = precedence_next;
 		}
+		if (tokens[i]->type == OP_PAREN_OPEN)
+			open_parens++;
+		else if (tokens[i]->type == OP_PAREN_CLOSE)
+			open_parens--;
 	}
 	return (cmd_operator_idx);
 }

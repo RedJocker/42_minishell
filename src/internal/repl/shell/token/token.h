@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 00:52:37 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/16 14:58:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/04 21:31:02 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ typedef enum e_token_type
 	OP_PIPE,
 	OP_AND,
 	OP_OR,
+	OP_PAREN_OPEN,
+	OP_PAREN_CLOSE,
 	OP_NEWLINE,
 	WORD,
 	OP_EOF,

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/31 01:53:44 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/05 04:19:50 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 	return (status);
 }
 
-sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
+
+sig_atomic_t	runner_cmd_and(t_runner_data *run_data, t_fork_flag should_fork)
 {
 	sig_atomic_t	status;
 	const t_command cmd = run_data->cmd;
@@ -97,13 +98,17 @@ sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 	if (WIFEXITED(status))
 		run_data->last_cmd_status = (WEXITSTATUS(status));
 	if (run_data->last_cmd_status != 0)
+	{
+		
+		io_handlers_close(cmd->and->cmd_after->io_handlers);
 		return (run_data->last_cmd_status);
+	}
 	run_data->cmd = cmd->and->cmd_after;
-	return (runner_cmd(run_data, FORK_NOT));
+	return (runner_cmd(run_data, should_fork));
 }
 
 
-sig_atomic_t	runner_cmd_or(t_runner_data *run_data)
+sig_atomic_t	runner_cmd_or(t_runner_data *run_data, t_fork_flag should_fork)
 {
 	sig_atomic_t	status;
 	const t_command cmd = run_data->cmd;
@@ -130,9 +135,22 @@ sig_atomic_t	runner_cmd_or(t_runner_data *run_data)
 	else if (WIFSIGNALED(status))
 		run_data->last_cmd_status = runner_exit_signal(status);
 	if (run_data->last_cmd_status == 0)
+	{
+		io_handlers_close(cmd->or->cmd_after->io_handlers);
 		return (EXIT_OK);
+	}
 	run_data->cmd = cmd->and->cmd_after;
-	return (runner_cmd(run_data, FORK_NOT));
+	return (runner_cmd(run_data, should_fork));
+}
+
+
+sig_atomic_t	runner_cmd_paren(t_runner_data *run_data)
+{
+	const t_command cmd = run_data->cmd;
+
+	ft_assert(cmd->type == CMD_PAREN, "expected only cmd_paren");
+	run_data->cmd = cmd->paren->cmd;
+	return (runner_cmd(run_data, FORK_YES));
 }
 
 
@@ -152,9 +170,11 @@ sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork)
 	else if (cmd->type == CMD_PIPE)
 		status = runner_cmd_pipe(run_data);
 	else if (cmd->type == CMD_AND)
-		status = runner_cmd_and(run_data);
+		status = runner_cmd_and(run_data, should_fork);
 	else if (cmd->type == CMD_OR)
-		status = runner_cmd_or(run_data);
+		status = runner_cmd_or(run_data, should_fork);
+	else if (cmd->type == CMD_PAREN)
+		status = runner_cmd_paren(run_data);
 	run_data->last_cmd_status = status;
 	return (status);
 }

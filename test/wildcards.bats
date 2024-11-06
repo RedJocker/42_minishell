@@ -7,7 +7,7 @@
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/26 03:16:58 by dande-je          #+#    #+#              #
-#    Updated: 2024/10/26 03:16:58 by dande-je         ###   ########.fr        #
+#    Updated: 2024/11/05 04:55:29 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,3 +79,11 @@ touch a b c
 echo > '*'
 printf '$?\n'"
 }
+
+
+@test "test wildcard: echo *.txt" {
+    
+    assert_minishell_equal_bash "echo *.txt
+"
+}
+
