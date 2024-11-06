@@ -79,7 +79,8 @@ SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c \
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_INTERNAL_DIR), env_build.c \
 								   env_destroy.c \
 								   env_manage.c \
-								   env_path.c)
+								   env_path.c \
+								   env_update.c)
 SRCS_FILES                      += $(addprefix $(SRCS_REPL_DIR), repl.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_DIR), signal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_INTERNAL_DIR), signal_handler.c \

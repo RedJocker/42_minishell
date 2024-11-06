@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/31 01:45:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 04:30:22 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,17 @@
 #include "internal/repl/shell/shell.h"
 #include "internal/repl/shell/token/token.h"
 #include "internal/signal/signal.h"
+#include "internal/env/env.h"
 #include "ft_util.h" // ft_strarr_printfd
 
 void	shell_set_input(t_shell *shell)
 {
+	char	*ps1;
+
+	ps1 = env_get_value("PS1");
 	signals_initializer(true);
-	shell->input = readline("RedWillShell$ ");
+	shell->input = readline(ps1);
+	free(ps1);
 	signals_initializer(false);
 }
 
