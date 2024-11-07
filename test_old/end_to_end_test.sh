@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/06 19:37:27 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/06 21:25:22 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -182,7 +182,6 @@ assert_minishell_equal_bash_heredoc() {
 # # # Empty `cd` moves to home
 # # cd"
 
-
 @test "test paren: (ls)" {
     
     assert_minishell_equal_bash "(ls)
@@ -217,6 +216,34 @@ assert_minishell_equal_bash_heredoc() {
 }
 
 
+@test "test paren: ((true) && printf ok\n)" {
+    
+    assert_minishell_equal_bash "((true) && printf 'ok\n')
+"
+}
+
+
+@test "test paren: ((false) && printf ok\n)" {
+    
+    assert_minishell_equal_bash "((false) && printf 'ok\n')
+"
+}
+
+
+@test "test paren: ((true) || printf ok\n)" {
+    
+    assert_minishell_equal_bash "((true) || printf 'ok\n')
+"
+}
+
+
+@test "test paren: ((false) || printf ok\n)" {
+    
+    assert_minishell_equal_bash "((false) || printf 'ok\n')
+"
+}
+
+
 @test "test paren: (ls && echo ok)" {
     
     assert_minishell_equal_bash "(ls && echo 'ok')
@@ -244,61 +271,60 @@ assert_minishell_equal_bash_heredoc() {
 "
 }
 
-@test "test paren: (ls && echo ok) | wc -l" {
+
+@test "test paren: (ls | wc -l) | (cat)" {
     
-    assert_minishell_equal_bash "(ls && echo 'ok') | wc -l
+    assert_minishell_equal_bash "(ls | wc -l) | (cat)
+"
+}
+
+@test "test paren: (ls && echo ok) | cat" {
+    
+    assert_minishell_equal_bash "(ls && echo 'ok') | cat
 "
 }
 
 
-@test "test paren: (false && echo ok) | wc -l" {
+@test "test paren: (false && echo ok) | cat" {
     
-    assert_minishell_equal_bash "(false && echo 'ok') | wc -l
+    assert_minishell_equal_bash "(false && echo 'ok') | cat
 "
 }
 
 
-@test "test paren: (false || echo ok) | wc -l" {
+@test "test paren: (false || echo ok) | cat" {
     
-    assert_minishell_equal_bash "(false || echo 'ok') | wc -l
+    assert_minishell_equal_bash "(false || echo 'ok') | cat
 "
 }
 
-
-@test "test paren: (true || echo ok) | wc -l" {
+@test "test paren: (true || echo ok) | cat" {
     
-    assert_minishell_equal_bash "(true || echo 'ok') | wc -l
+    assert_minishell_equal_bash "(true || echo 'ok') | cat
 "
 }
 
-@test "test paren: ls && (echo ok | wc -l)" {
+@test "test paren: ls && (echo ok | cat)" {
     
-    assert_minishell_equal_bash "ls && (echo ok | wc -l)
+    assert_minishell_equal_bash "ls && (echo ok | cat)
 "
 }
 
-@test "test paren: (ls | cat) | (wc -l)" {
+@test "test paren: (true || (echo ok)) | cat" {
     
-    assert_minishell_equal_bash "(ls | cat) | (wc -l)
+    assert_minishell_equal_bash "(true || (echo ok)) | cat
 "
 }
 
-
-@test "test paren: (true || (echo ok)) | wc -l" {
+@test "test paren: (false && (echo ok)) | cat" {
     
-    assert_minishell_equal_bash "(true || (echo ok)) | wc -l
+    assert_minishell_equal_bash "(false && (echo ok)) | cat
 "
 }
 
-@test "test paren: (false && (echo ok)) | wc -l" {
+@test "test paren: (ls | cat) | cat" {
     
-    assert_minishell_equal_bash "(false && (echo ok)) | wc -l
-"
-}
-
-@test "test paren: (ls | wc -l) | cat" {
-    
-    assert_minishell_equal_bash "(ls | wc -l) | cat
+    assert_minishell_equal_bash "(ls | cat) | cat
 "
 }
 
@@ -306,6 +332,41 @@ assert_minishell_equal_bash_heredoc() {
 @test "test paren: (cd .. && pwd) && pwd" {
     
     assert_minishell_equal_bash "(cd .. && pwd) && pwd
+"
+}
+
+
+@test "test paren: (echo ') with close paren in single quote str')" {
+    
+    assert_minishell_equal_bash "(echo ') with close paren in single quote str')
+"
+}
+
+
+@test "test paren: (echo \") with close paren in doble quote str\")" {
+    
+    assert_minishell_equal_bash "(echo \") with close paren in double quote str\")
+"
+}
+
+
+@test "test paren: (echo '( with open paren in single quote str')" {
+    
+    assert_minishell_equal_bash "(echo '( with close paren in single quote str')
+"
+}
+
+
+@test "test paren: (echo \"( with open paren in doble quote str\")" {
+    
+    assert_minishell_equal_bash "(echo \"( with close paren in double quote str\")
+"
+}
+
+
+@test "test paren: (ls | ( ( ( (cat) ) ) ) | ( ( (cat) ) )" {
+    
+    assert_minishell_equal_bash "(ls | ( ( ( (cat) ) ) ) ) | ( ( (cat) ) )
 "
 }
 
