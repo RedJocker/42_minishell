@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/05 01:29:16 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 23:36:45 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,10 +183,12 @@ t_command	command_build_parentheses(
 	char		*err_msg;
 	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
 
+	ft_assert(tokens[cmd_operator_idx]->type == OP_PAREN_OPEN,
+			  "expected opening paren at command_cuild_parentheses");
 	paren_close_idx = find_paren_end(tokens, tokens_len);
 	if (tokens[paren_close_idx]->type != OP_PAREN_CLOSE)
 	{
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
+		ft_asprintf(&err_msg, err_template, tokens[paren_close_idx]->content);
 		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
 		free(err_msg);
 		return (cmd);
@@ -197,7 +199,7 @@ t_command	command_build_parentheses(
 	else if (cmd->type == CMD_SIMPLE && cmd->simple->cmd_argc == 0 && ft_arraylist_len(cmd->io_handlers) == 0)
 	{
 		command_destroy(cmd);
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
+		ft_asprintf(&err_msg, err_template, tokens[paren_close_idx]->content);
 		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
 		free(err_msg);
 		return (cmd);
