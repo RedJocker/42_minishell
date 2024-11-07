@@ -1,15 +1,4 @@
 #!/usr/bin/env bash
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    parallel_helper.bash                               :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/26 03:15:43 by dande-je          #+#    #+#              #
-#    Updated: 2024/10/28 03:28:23 by dande-je         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
 # Get the absolute path to the project root directory
 export PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -79,8 +68,9 @@ assert_minishell_equal_bash() {
     run minishell_execute "$@"
 
     if ! [[ "$bash_output" == "$output" ]]; then
-		local bash_file="$PROJECT_ROOT/test/bash_$BATS_TEST_NAME.txt"
-		local mini_file="$PROJECT_ROOT/test/mini_$BATS_TEST_NAME.txt"
+		mkdir -p $PROJECT_ROOT/test/output_error
+		local bash_file="$PROJECT_ROOT/test/output_error/bash_$BATS_TEST_NAME.txt"
+		local mini_file="$PROJECT_ROOT/test/output_error/mini_$BATS_TEST_NAME.txt"
 		echo "$bash_output" > "$bash_file"
 		echo "$output" > "$mini_file"
 		echo -e "===> bash_output:\n<$bash_output>\n\n===> minishell_output:\n<$output>"
@@ -93,8 +83,11 @@ assert_minishell_equal_bash() {
     run minishell_leak_check "$@"
 
     if (( $status == 33 )); then
-	echo -e "VALGRIND ERROR:\n$output"
-	false
+		mkdir -p $PROJECT_ROOT/test/output_error
+		local valgrind_file="$PROJECT_ROOT/test/output_error/valgrind_$BATS_TEST_NAME.txt"
+		echo "$output" > "$valgrind_file"
+		echo -e "VALGRIND ERROR:\n$output"
+		false
     fi
 }
 
@@ -110,8 +103,9 @@ assert_minishell_equal_bash_heredoc() {
     run minishell_execute "$@"
 
     if ! [[ "$bash_output_heredoc" == "$output" ]]; then
-		local bash_file="$PROJECT_ROOT/test/bash_$BATS_TEST_NAME.txt"
-		local mini_file="$PROJECT_ROOT/test/mini_$BATS_TEST_NAME.txt"
+		mkdir -p $PROJECT_ROOT/test/output_error
+		local bash_file="$PROJECT_ROOT/test/output_error/bash_$BATS_TEST_NAME.txt"
+		local mini_file="$PROJECT_ROOT/test/output_error/mini_$BATS_TEST_NAME.txt"
         echo "$bash_output_heredoc" > "$bash_file"
         echo "$output" > "$mini_file"
 		echo -e "===> bash_output:\n<$bash_output_heredoc>\n\n===> minishell_output:\n<$output>"
@@ -124,7 +118,10 @@ assert_minishell_equal_bash_heredoc() {
     run minishell_leak_check "$@"
 
     if (( $status == 33 )); then
-	echo -e "VALGRIND ERROR:\n"$output
-	false
+		mkdir -p $PROJECT_ROOT/test/output_error
+		local valgrind_file="$PROJECT_ROOT/test/output_error/valgrind_$BATS_TEST_NAME.txt"
+		echo "$output" > "$valgrind_file"
+		echo -e "VALGRIND ERROR:\n$output\n"
+		false
     fi
 }

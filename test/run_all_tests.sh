@@ -1,19 +1,7 @@
 #!/bin/bash
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    run_all_tests.sh                                   :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/26 03:14:21 by dande-je          #+#    #+#              #
-#    Updated: 2024/10/26 03:14:21 by dande-je         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
 # Clean old test.
-rm -f ./*/bash_*.txt > /dev/null || true
-rm -f ./*/mini_*.txt > /dev/null || true
+rm -rf test/output_error > /dev/null || true
 # Test serially.
 bats test/*.bats
 
