@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/04 23:09:29 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:49:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,6 @@ struct s_command
 
 t_command	command_build(t_token **tokens, int tokens_len);
 void		command_destroy(t_command cmd);
+void		command_close_ios(t_command cmd);
 
 #endif

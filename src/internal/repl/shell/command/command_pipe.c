@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:18:39 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/05 02:25:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 20:53:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "internal/repl/shell/command/command_internal.h"
 #include "ft_memlib.h"
 #include "ft_assert.h"
+#include <unistd.h>
 
 // TODO: Move to command_paren.c
 t_command	command_paren_new(t_command cmd_inside)
@@ -122,26 +123,38 @@ void	command_pipe_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 
 void	command_and_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 {
+	int	fd;
+
 	if (dir == IO_IN)
 		command_add_pipe_io(cmd->and->cmd_before, pipe_fd, dir);
 	else if (dir == IO_OUT)
+	{
+		fd = dup(pipe_fd);
+		command_add_pipe_io(cmd->and->cmd_before, fd, dir);
 		command_add_pipe_io(cmd->and->cmd_after, pipe_fd, dir);
+	}
 	else
 		ft_assert(0, "unexpected io_direction command_and_add_pipe_io");
 }
 
 void	command_or_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 {
+	int fd;
+
 	if (dir == IO_IN)
 		command_add_pipe_io(cmd->or->cmd_before, pipe_fd, dir);
 	else if (dir == IO_OUT)
+	{
+		fd = dup(pipe_fd);
+		command_add_pipe_io(cmd->or->cmd_before, fd, dir);
 		command_add_pipe_io(cmd->or->cmd_after, pipe_fd, dir);
+	}
 	else
 		ft_assert(0, "unexpected io_direction command_or_add_pipe_io");
 }
 
-void	command_paren_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
+void	command_paren_add_pipe_io(
+	t_command cmd, int pipe_fd, t_io_direction dir)
 {
 	command_add_pipe_io(cmd->paren->cmd, pipe_fd, dir);
 }
-

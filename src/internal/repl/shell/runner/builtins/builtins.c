@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/26 08:27:07 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:52:13 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,7 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 	dup2(copy_fds[FD_OUT], STDOUT_FILENO);
 	close(copy_fds[FD_IN]);
 	close(copy_fds[FD_OUT]);
-	ft_arraylist_foreach(run_data->pipes_to_close, \
-		(t_consumer) close_fd_pipes);
+	close_fd_lst(run_data->pipes_to_close);
 	return (return_buildin_status(builtin, status, run_data));
 }
 

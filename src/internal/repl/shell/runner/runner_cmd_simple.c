@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/04 15:32:25 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 16:39:12 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,19 @@ void	runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 		runner_cmd_simple_exit_status(run_data, status_code);
 }
 
-void close_fd_pipes(int *fd)
+void close_fd_lst(t_arraylist fd_lst)
 {
-	close(*fd);
+	int *fd;
+	int	i;
+	int len;
+
+	i = -1;
+	len = ft_arraylist_len(fd_lst);
+	while (++i < len)
+	{
+		fd = ft_arraylist_get(fd_lst, i);
+		close(*fd);
+	}
 }
 
 void	runner_cmd_simple_exit_status(
@@ -50,8 +60,7 @@ void	runner_cmd_simple_exit_status(
 	close(STDOUT_FILENO);
 	close(STDERR_FILENO);
 	env_destroy();
-	ft_arraylist_foreach(runner_data->pipes_to_close, \
-		(t_consumer) close_fd_pipes);
+	close_fd_lst(runner_data->pipes_to_close);
 	runner_data_clean(runner_data);
 	exit(status);
 }
@@ -96,9 +105,9 @@ static void	runner_cmd_simple_execve_error_eacces(
 
 static void	runner_cmd_simple_execve_error_enoent(t_runner_data *run_data)
 {
-	char	*msg;
+	char			*msg;
 	const t_command	cmd = run_data->cmd;
-	char 	*path;
+	char			*path;
 
 	path  = env_get_value("PATH");
 	if (ft_strchr(cmd->simple->cmd_path, '/') || !path)
@@ -174,7 +183,6 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 		signals_afterfork();
 		if (builtin)
 		{
-			//ft_printf("fork builtin %s %d\n", cmd->debug_id, cmd->type);
 			status = runner_cmd_builtin(builtin, cmd);
 			runner_cmd_simple_exit_status(run_data, status);
 			ft_assert(0, "unexpected line executed");
@@ -183,9 +191,8 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 	}
 	else
 	{
-		//TODO: change status to function error handling
 		run_data->pids = ft_arraylist_add(run_data->pids, pid);
-		io_handlers_close(cmd->io_handlers);
+		command_close_ios(cmd);
 		if (!(run_data->pids))
 			status = EXIT_OUT_OF_MEMORY;
 	}

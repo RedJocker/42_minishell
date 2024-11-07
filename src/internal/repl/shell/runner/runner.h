@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/17 15:14:39 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 15:37:33 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void			runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 					sig_atomic_t status_code, bool should_exit);
 void			runner_cmd_simple_exit_status(
 					t_runner_data *runner_data, sig_atomic_t status);
-void			close_fd_pipes(int *fd);
 void			runner_data_init(
 					t_runner_data *run_data,
 					t_command cmd,
@@ -49,5 +48,6 @@ void			runner_data_init(
 void			runner_data_clean(t_runner_data *run_data);
 void			runner_heredoc_prompt(t_command cmd);
 void			runner_heredoc_to_fd(t_command cmd);
+void			close_fd_lst(t_arraylist fd_lst);
 
 #endif

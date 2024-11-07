@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/05 04:19:50 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/06 19:30:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include "collection/ft_arraylist.h"
 #include "ft_assert.h"
 #include "ft_stdio.h"
@@ -71,7 +72,7 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 }
 
 
-sig_atomic_t	runner_cmd_and(t_runner_data *run_data, t_fork_flag should_fork)
+sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
 	const t_command cmd = run_data->cmd;
@@ -79,7 +80,8 @@ sig_atomic_t	runner_cmd_and(t_runner_data *run_data, t_fork_flag should_fork)
 	int				i;
 
 	ft_assert(cmd->type == CMD_AND, "expected only cmd_and");
-	run_data->backup_pids = run_data->pids;
+	run_data->backup_pids = ft_arraylist_add(\
+								run_data->backup_pids, run_data->pids);
 	run_data->pids = ft_arraylist_new((t_consumer) free);
 	run_data->cmd = cmd->and->cmd_before;
 	status = runner_cmd(run_data, FORK_NOT);
@@ -91,24 +93,22 @@ sig_atomic_t	runner_cmd_and(t_runner_data *run_data, t_fork_flag should_fork)
 	if (pids_len > 0)
 		waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), &status, 0);
 	ft_arraylist_destroy(run_data->pids);
-	run_data->pids = run_data->backup_pids;
-	run_data->backup_pids = NULL;
+	run_data->pids = ft_arraylist_pop(run_data->backup_pids);
 	if (WIFSIGNALED(status))
 			return (runner_exit_signal(status));
 	if (WIFEXITED(status))
 		run_data->last_cmd_status = (WEXITSTATUS(status));
 	if (run_data->last_cmd_status != 0)
 	{
-		
-		io_handlers_close(cmd->and->cmd_after->io_handlers);
+		command_close_ios(cmd->and->cmd_after);
 		return (run_data->last_cmd_status);
 	}
 	run_data->cmd = cmd->and->cmd_after;
-	return (runner_cmd(run_data, should_fork));
+	return (runner_cmd(run_data, FORK_NOT));
 }
 
 
-sig_atomic_t	runner_cmd_or(t_runner_data *run_data, t_fork_flag should_fork)
+sig_atomic_t	runner_cmd_or(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
 	const t_command cmd = run_data->cmd;
@@ -116,7 +116,8 @@ sig_atomic_t	runner_cmd_or(t_runner_data *run_data, t_fork_flag should_fork)
 	int				i;
 
 	ft_assert(cmd->type == CMD_OR, "expected only cmd_or");
-	run_data->backup_pids = run_data->pids;
+	run_data->backup_pids = ft_arraylist_add(\
+								run_data->backup_pids, run_data->pids);
 	run_data->pids = ft_arraylist_new((t_consumer) free);
 	run_data->cmd = cmd->and->cmd_before;
 	status = runner_cmd(run_data, FORK_NOT);
@@ -128,29 +129,62 @@ sig_atomic_t	runner_cmd_or(t_runner_data *run_data, t_fork_flag should_fork)
 	if (pids_len > 0)
 		waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), &status, 0);
 	ft_arraylist_destroy(run_data->pids);
-	run_data->pids = run_data->backup_pids;
-	run_data->backup_pids = NULL;
+	run_data->pids = ft_arraylist_pop(run_data->backup_pids);
 	if (WIFEXITED(status))
 		run_data->last_cmd_status = (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 		run_data->last_cmd_status = runner_exit_signal(status);
 	if (run_data->last_cmd_status == 0)
 	{
-		io_handlers_close(cmd->or->cmd_after->io_handlers);
+		command_close_ios(cmd->or->cmd_after);
 		return (EXIT_OK);
 	}
 	run_data->cmd = cmd->and->cmd_after;
-	return (runner_cmd(run_data, should_fork));
+	return (runner_cmd(run_data, FORK_NOT));
 }
 
 
 sig_atomic_t	runner_cmd_paren(t_runner_data *run_data)
 {
+	pid_t			*pid;
+	sig_atomic_t	status;
+	int				pids_len;
+	int				i;
 	const t_command cmd = run_data->cmd;
 
 	ft_assert(cmd->type == CMD_PAREN, "expected only cmd_paren");
+	run_data->backup_pids = ft_arraylist_add(							\
+								run_data->backup_pids, run_data->pids);
+	run_data->pids = ft_arraylist_new((t_consumer) free);
 	run_data->cmd = cmd->paren->cmd;
-	return (runner_cmd(run_data, FORK_YES));
+	pid = malloc(sizeof(pid_t));
+	status = EXIT_OK;
+	*pid = fork();
+	if (*pid < 0)
+		exit(EXIT_FORK_FAIL);
+	if (*pid == 0)
+	{
+		free(pid);
+		pid = NULL;
+		status = runner_cmd(run_data, FORK_NOT);
+		status = status << 8;
+		pids_len = ft_arraylist_len(run_data->pids);
+		i = -1;
+		while (++i < pids_len -1)
+			waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), 0, 0);
+		if (pids_len > 0)
+			waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), &status, 0);
+		if (WIFEXITED(status))
+			status = (WEXITSTATUS(status));
+		else if (WIFSIGNALED(status))
+			status = runner_exit_signal(status);
+		runner_cmd_simple_exit_status(run_data, status);
+	}
+	command_close_ios(cmd);
+	ft_arraylist_destroy(run_data->pids);
+	run_data->pids = ft_arraylist_pop(run_data->backup_pids);
+	run_data->pids = ft_arraylist_add(run_data->pids, pid);
+	return (status);
 }
 
 
@@ -170,9 +204,9 @@ sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork)
 	else if (cmd->type == CMD_PIPE)
 		status = runner_cmd_pipe(run_data);
 	else if (cmd->type == CMD_AND)
-		status = runner_cmd_and(run_data, should_fork);
+		status = runner_cmd_and(run_data);
 	else if (cmd->type == CMD_OR)
-		status = runner_cmd_or(run_data, should_fork);
+		status = runner_cmd_or(run_data);
 	else if (cmd->type == CMD_PAREN)
 		status = runner_cmd_paren(run_data);
 	run_data->last_cmd_status = status;
