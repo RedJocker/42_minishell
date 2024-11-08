@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 02:10:37 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/26 07:27:01 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/08 03:17:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,11 @@ void	env_destroy(void)
 	env_vars_destroy(env()->env_var);
 }
 
-bool	env_destroy_single_var(char *key)
+void	env_destroy_single_var(char *key)
 {
 	t_env_var	*env_var;
 
 	env_var = env_get_key(key, env()->env_var);
 	if (env_var)
 		env_var_destroy(env_var);
-	else
-		return (false);
-	return (true);
 }

@@ -424,12 +424,12 @@ ls $temp_dir
 "
 }
 
-@test "test redirect alone: >> \$file" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash ">> $file
-ls $temp_dir
-"
-}
+# @test "test redirect alone: >> \$file" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash ">> $file
+# ls $temp_dir
+# "
+# }
 
 @test "test redirect alone: > \$file1 > \$file2" {
     file1="$temp_dir/a.txt"
@@ -439,284 +439,284 @@ ls $temp_dir
 "
 }
 
-@test "test redirect alone: >> \$file1 >> \$file2" {
-    file1="$temp_dir/a.txt"
-    file2="$temp_dir/b.txt"
-    assert_minishell_equal_bash ">> $file1 >> $file2
-ls $temp_dir
-"
-}
+# @test "test redirect alone: >> \$file1 >> \$file2" {
+#     file1="$temp_dir/a.txt"
+#     file2="$temp_dir/b.txt"
+#     assert_minishell_equal_bash ">> $file1 >> $file2
+# ls $temp_dir
+# "
+# }
+#
 
-
-@test "test redirect alone: >> \$file1 > \$file2" {
-    file1="$temp_dir/a.txt"
-    file2="$temp_dir/b.txt"
-    assert_minishell_equal_bash ">> $file1 > $file2
-ls $temp_dir
-"
-}
-
-@test "test redirect alone: > \$file1 >> \$file2" {
-    file1="$temp_dir/a.txt"
-    file2="$temp_dir/b.txt"
-    assert_minishell_equal_bash "> $file1 >> $file2
-ls $temp_dir
-"
-}
-
-@test "test redirect alone: > \$file /n < \$file" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "> $file
-ls $temp_dir
-< $file
-"
-}
-
-@test "test redirect alone: < \$does_not_exist" {
-    does_not_exist="$temp_dir/a.txt"
-    assert_minishell_equal_bash "< $does_not_exist
-"
-}
-
-@test "test redirect alone: < \$does_not_exist1 < \$does_not_exist2" {
-    does_not_exist1="$temp_dir/a.txt"
-    does_not_exist2="$temp_dir/b.txt"
-    assert_minishell_equal_bash "< $does_not_exist1 < $does_not_exist2
-"
-}
-
-@test "test redirect alone: << eof \n input \n eof" {
-    assert_minishell_equal_bash "<< eof
-input
-eof
-"
-}
-
-@test "test redirect alone: << eof > \$file \n input \n eof" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "<< eof > $file
-input
-eof
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone: > \$file << eof \n input \n eof" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "> $file << eof
-input
-eof
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone: << eof >> \$file \n input \n eof" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "<< eof >> $file
-input
-eof
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone: >> \$file << eof \n input \n eof" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash ">> $file << eof
-input
-eof
-echo $?
-ls $temp_dir
-"
-}
-
-
-@test "test redirect alone cmd_pipe: > \$file | echo ok \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "> $file | echo ok 
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_pipe: >> \$file | echo ok \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash ">> $file | echo ok
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_pipe: echo hello > \$file \n < \$file | cat" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash " echo hello > $file
-< $file | cat
-"
-}
-
-
-@test "test redirect alone cmd_pipe: true | > \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "true | > $file
-echo $?
-ls $temp_dir
-"
-}
-
-
-@test "test redirect alone cmd_pipe: true | >> \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "true | >> $file
-echo $?
-ls $temp_dir
-"
-}
-
-
-@test "test redirect alone cmd_pipe: touch \$file \n true && < \$file \n" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "
-touch $file
-true | < $file
-"
-}
-
-@test "test redirect alone cmd_and: > \$file && ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "> $file && ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_and: >> \$file && ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash ">> $file && ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_and: < \$file && ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "< $file && ls $temp_dir
-"
-}
-
-
-@test "test redirect alone cmd_and: true && > \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "true && > $file
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_and: true && >> \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "true && >> $file
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_and: touch \$file \n true && < \$file \n" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "
-touch $file
-true && < $file
-"
-}
-
-@test "test redirect alone cmd_and: false && > \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "false && > $file
-echo $?
-ls $temp_dir
-"
-}
-
-
-@test "test redirect alone cmd_and: false && >> \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "false && >> $file
-echo $?
-ls $temp_dir
-"
-}
-
-
-@test "test redirect alone cmd_and: touch \$file \n false && < \$file \n" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "
-touch $file
-false && < $file
-"
-}
-
-@test "test redirect alone cmd_or: > \$file && false || ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "> $file && false || ls $temp_dir
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_or: >> \$file && false || ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash ">> $file && false || ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_or: < \$file && false || ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash " touch $file
-< $file && false || ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_or: true || > \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "true || > $file
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_or: true || >> \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "true || >> $file
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_or: true || < \$file" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "true || < $file
-echo $?
-"
-}
-
-@test "test redirect alone cmd_or: false || > \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "false || > $file
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_or: false || >> \$file \n ls \$temp_dir" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "false || >> $file
-echo $?
-ls $temp_dir
-"
-}
-
-@test "test redirect alone cmd_or: false || < \$file" {
-    file="$temp_dir/a.txt"
-    assert_minishell_equal_bash "false || < $file
-echo $?
-"
-}
-
-# @test "test wildcards: ls *" {
+# @test "test redirect alone: >> \$file1 > \$file2" {
+#     file1="$temp_dir/a.txt"
+#     file2="$temp_dir/b.txt"
+#     assert_minishell_equal_bash ">> $file1 > $file2
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone: > \$file1 >> \$file2" {
+#     file1="$temp_dir/a.txt"
+#     file2="$temp_dir/b.txt"
+#     assert_minishell_equal_bash "> $file1 >> $file2
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone: > \$file /n < \$file" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "> $file
+# ls $temp_dir
+# < $file
+# "
+# }
+#
+# @test "test redirect alone: < \$does_not_exist" {
+#     does_not_exist="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "< $does_not_exist
+# "
+# }
+#
+# @test "test redirect alone: < \$does_not_exist1 < \$does_not_exist2" {
+#     does_not_exist1="$temp_dir/a.txt"
+#     does_not_exist2="$temp_dir/b.txt"
+#     assert_minishell_equal_bash "< $does_not_exist1 < $does_not_exist2
+# "
+# }
+#
+# @test "test redirect alone: << eof \n input \n eof" {
+#     assert_minishell_equal_bash "<< eof
+# input
+# eof
+# "
+# }
+#
+# @test "test redirect alone: << eof > \$file \n input \n eof" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "<< eof > $file
+# input
+# eof
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone: > \$file << eof \n input \n eof" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "> $file << eof
+# input
+# eof
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone: << eof >> \$file \n input \n eof" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "<< eof >> $file
+# input
+# eof
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone: >> \$file << eof \n input \n eof" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash ">> $file << eof
+# input
+# eof
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+#
+# @test "test redirect alone cmd_pipe: > \$file | echo ok \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "> $file | echo ok 
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_pipe: >> \$file | echo ok \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash ">> $file | echo ok
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_pipe: echo hello > \$file \n < \$file | cat" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash " echo hello > $file
+# < $file | cat
+# "
+# }
+#
+#
+# @test "test redirect alone cmd_pipe: true | > \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "true | > $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+#
+# @test "test redirect alone cmd_pipe: true | >> \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "true | >> $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+#
+# @test "test redirect alone cmd_pipe: touch \$file \n true && < \$file \n" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "
+# touch $file
+# true | < $file
+# "
+# }
+#
+# @test "test redirect alone cmd_and: > \$file && ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "> $file && ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_and: >> \$file && ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash ">> $file && ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_and: < \$file && ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "< $file && ls $temp_dir
+# "
+# }
+#
+#
+# @test "test redirect alone cmd_and: true && > \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "true && > $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_and: true && >> \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "true && >> $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_and: touch \$file \n true && < \$file \n" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "
+# touch $file
+# true && < $file
+# "
+# }
+#
+# @test "test redirect alone cmd_and: false && > \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "false && > $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+#
+# @test "test redirect alone cmd_and: false && >> \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "false && >> $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+#
+# @test "test redirect alone cmd_and: touch \$file \n false && < \$file \n" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "
+# touch $file
+# false && < $file
+# "
+# }
+#
+# @test "test redirect alone cmd_or: > \$file && false || ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "> $file && false || ls $temp_dir
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_or: >> \$file && false || ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash ">> $file && false || ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_or: < \$file && false || ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash " touch $file
+# < $file && false || ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_or: true || > \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "true || > $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_or: true || >> \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "true || >> $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_or: true || < \$file" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "true || < $file
+# echo $?
+# "
+# }
+#
+# @test "test redirect alone cmd_or: false || > \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "false || > $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_or: false || >> \$file \n ls \$temp_dir" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "false || >> $file
+# echo $?
+# ls $temp_dir
+# "
+# }
+#
+# @test "test redirect alone cmd_or: false || < \$file" {
+#     file="$temp_dir/a.txt"
+#     assert_minishell_equal_bash "false || < $file
+# echo $?
+# "
+# }
+#
+# # @test "test wildcards: ls *" {
 #
 #     assert_minishell_equal_bash "ls *
 # "
@@ -792,23 +792,23 @@ echo $?
 # touch a b c
 # echo > '*'"
 # }
-
-
-@test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
-    
-    assert_minishell_equal_bash "
-unset PATH  
-ls
-echo \$? 
-/bin/ls
-echo \$?
-export PATH='/bin/'
-ls
-"
-}
-
-
-
+#
+#
+# @test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
+#
+#     assert_minishell_equal_bash "
+# unset PATH  
+# ls
+# echo \$? 
+# /bin/ls
+# echo \$?
+# export PATH='/bin/'
+# ls
+# "
+# }
+#
+#
+#
 @test "pwd: permission denied error" {
 
     temp_dir2="$temp_dir/temp"

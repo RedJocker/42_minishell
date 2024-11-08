@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 01:58:35 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/16 03:02:43 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/08 03:18:16 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ sig_atomic_t	runner_cmd_builtin_unset(t_command cmd)
 	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
 		return (status);
 	else
-	{
 		while (cmd->simple->cmd_argv[++i])
-			if (!env_destroy_single_var(cmd->simple->cmd_argv[i]))
-				break ;
-	}
+			env_destroy_single_var(cmd->simple->cmd_argv[i]);
 	return (status);
 }
