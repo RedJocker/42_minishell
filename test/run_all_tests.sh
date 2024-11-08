@@ -3,7 +3,7 @@
 # Clean old test.
 rm -rf test/output_error > /dev/null || true
 # Test serially.
-bats test/*.bats
+bats test/*/*.bats
 
 # Alternative with max system jobs:
 # bats --jobs 4 test/*.bats
