@@ -2,30 +2,37 @@
 
 # Get the absolute path to the project root directory
 export PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-export MINISHELL_PATH="$PROJECT_ROOT/minishell"
+export MINISHELL_PATH="${PROJECT_ROOT}/minishell"
 
 # This ensures thread-safe file operations
 setup_file() {
-    export TEST_TEMP_DIR="./test/temp_${PPID}_${RANDOM}"
-    mkdir -p "$TEST_TEMP_DIR"
+	true
+	# pwd
+	#    export TEST_TEMP_DIR="${PROJECT_ROOT}/test/temp_${PPID}"
+	#    mkdir -p "${TEST_TEMP_DIR}"
 }
 
 teardown_file() {
 	# Cleanup any remaining processes
-    rm -rf "$TEST_TEMP_DIR"
+	rm -rf test/temp
+	true
+    # rm -rf "${TEST_TEMP_DIR}"
 }
 
 setup() {
+	true
+	# pwd
     # Create unique temporary directory for each test
-    export TEST_CASE_DIR="$TEST_TEMP_DIR/case_${BATS_TEST_NUMBER}_${RANDOM}"
-    mkdir -p "$TEST_CASE_DIR"
-    cd "$TEST_CASE_DIR"
+    # export TEST_CASE_DIR="$TEST_TEMP_DIR/case_${BATS_TEST_NUMBER}"
+    # mkdir -p "${TEST_CASE_DIR}"
+    # cd "${TEST_CASE_DIR}"
 }
 
 teardown() {
 	# Cleanup test-specific processes
-    cd "$PROJECT_ROOT"
-    rm -rf "$TEST_CASE_DIR"
+	rm -rf test/temp
+	true
+    # cd "${PROJECT_ROOT}"
 }
 
 bash_execute() {
@@ -61,11 +68,17 @@ minishell_leak_check() {
 }
 
 assert_minishell_equal_bash() {
+	local path_test="$PROJECT_ROOT/test/temp/temp_$PPID/case_$BATS_TEST_NAME"
+	mkdir -p $path_test
+	cd $path_test
+
     run bash_execute "$@"
     local bash_status=$status
 	local bash_output=$(echo "$output" | sed 's/bash: /minishell: /g')
 
     run minishell_execute "$@"
+
+    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
 
     if ! [[ "$bash_output" == "$output" ]]; then
 		mkdir -p $PROJECT_ROOT/test/output_error
