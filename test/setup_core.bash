@@ -3,36 +3,35 @@
 # Get the absolute path to the project root directory
 export PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export MINISHELL_PATH="${PROJECT_ROOT}/minishell"
+export TEST_DIRS=()
 
 # This ensures thread-safe file operations
 setup_file() {
-	true
-	# pwd
-	#    export TEST_TEMP_DIR="${PROJECT_ROOT}/test/temp_${PPID}"
-	#    mkdir -p "${TEST_TEMP_DIR}"
+	export TEST_TEMP_DIR="${PROJECT_ROOT}/test/temp/temp_${PPID}"
+    mkdir -p "${TEST_TEMP_DIR}"
+    TEST_DIRS+=("${TEST_TEMP_DIR}")
 }
 
 teardown_file() {
-	# Cleanup any remaining processes
-	rm -rf test/temp
-	true
-    # rm -rf "${TEST_TEMP_DIR}"
+	# Cleanup all tracked directories
+    for dir in "${TEST_DIRS[@]}"; do
+        if [ -d "$dir" ]; then
+            rm -rf "$dir"
+        fi
+    done
+    # Reset tracked directories
+    TEST_DIRS=()
 }
 
 setup() {
 	true
-	# pwd
-    # Create unique temporary directory for each test
-    # export TEST_CASE_DIR="$TEST_TEMP_DIR/case_${BATS_TEST_NUMBER}"
-    # mkdir -p "${TEST_CASE_DIR}"
-    # cd "${TEST_CASE_DIR}"
 }
 
 teardown() {
-	# Cleanup test-specific processes
-	rm -rf test/temp
-	true
-    # cd "${PROJECT_ROOT}"
+	# Clean up test case directory
+	if [ -d "${PROJECT_ROOT}/test/temp" ]; then
+        rm -rf "${PROJECT_ROOT}/test/temp"
+    fi
 }
 
 bash_execute() {
@@ -68,9 +67,10 @@ minishell_leak_check() {
 }
 
 assert_minishell_equal_bash() {
-	local path_test="$PROJECT_ROOT/test/temp/temp_$PPID/case_$BATS_TEST_NAME"
-	mkdir -p $path_test
-	cd $path_test
+	local path_test="${PROJECT_ROOT}/test/temp/temp_${PPID}/case_${BATS_TEST_NAME}"
+	mkdir -p "$path_test"
+	TEST_DIRS+=("$path_test")
+	cd "$path_test"
 
     run bash_execute "$@"
     local bash_status=$status
@@ -105,11 +105,14 @@ assert_minishell_equal_bash() {
 }
 
 assert_minishell_equal_bash_heredoc() {
-    run bash_execute "$@"
+	local path_test="${PROJECT_ROOT}/test/temp/temp_${PPID}/case_${BATS_TEST_NAME}"
+	mkdir -p "$path_test"
+	TEST_DIRS+=("$path_test")
+	cd "$path_test"
 
+    run bash_execute "$@"
     local bash_status=$status
     local bash_output=$output
-
     local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0} !/here-document/ { print $0}' <<< "$output")
 	local bash_output_heredoc=$(echo "$bash_out_norm" | sed 's/bash: /minishell: /g')
 
