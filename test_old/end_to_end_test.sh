@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/11 18:12:42 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/11 19:25:40 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,7 +106,7 @@ assert_minishell_equal_bash() {
 
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    # echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
+    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
     if ! [[ "$bash_output" == "$output" ]]; then
 	local bash_file="./test/bash_$BATS_TEST_NAME.txt"
         local mini_file="./test/mini_$BATS_TEST_NAME.txt"
@@ -181,6 +181,33 @@ assert_minishell_equal_bash_heredoc() {
 
 # # # Empty `cd` moves to home
 # # cd"
+
+
+@test "test wildcard with pattern: echo *.txt" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch abc.txt abc.t.txt abc.txt.txt abc.tx def.txt
+echo *.txt
+"
+}
+
+
+@test "test wildcard with pattern: echo abc*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch abc.txt abc.t.txt abc.txt.txt abc.tx def.txt
+echo abc*
+"
+}
+
+
+@test "test wildcard with pattern: echo a*.txt" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch abc.txt abc.t.txt abc.txt.txt abc.tx def.txt
+echo a*.txt
+"
+}
 
 
 @test "test paren invalid: )" {
