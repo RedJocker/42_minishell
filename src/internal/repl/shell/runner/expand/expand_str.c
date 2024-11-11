@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/01 00:54:22 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/11 19:14:02 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,11 +164,40 @@ void	ft_arraylist_sort(t_arraylist lst, t_intbifun compare_fun)
 	}
 }
 
+int static star_match_helper(char *star_str, char *filename)
+{
+	int	any_of;
+	int i;
+
+	if (*star_str == '\0')
+		return (*filename == '\0');
+	else if (*filename == '\0')
+		return (0);
+	else if (*star_str != '*' && *star_str != *filename)
+		return (0);
+	else if (*star_str != '*' && *star_str == *filename)
+		return (star_match_helper(star_str + 1, filename + 1));
+	else if (*star_str == '*')
+	{
+		i = 0;
+		while (++i)
+		{
+			any_of = star_match_helper(star_str + 1, filename + i);
+			if (any_of)
+				return (1);
+			else if (filename[i] == '\0')
+				return (0);
+		}
+	}
+	ft_assert(0, "unexpected line executed at star_match_helper");
+	return (0);
+}
+
 int star_match(char *star_str, char *filename)
 {
-	// hide hidden files
-	//TODO make star match
-	return (*filename != '.' && star_str);
+	ft_assert(filename && *filename != '.' && star_str,
+			  "expected only non hidden files and non null params at star_match");
+	return star_match_helper(star_str, filename);
 }
 
 void	expand_str_star(char *str, t_arraylist *out_lst)
