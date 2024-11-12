@@ -2,21 +2,14 @@
    ignore_readline_x86_42
    Memcheck:Leak
    ...
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.0
-   fun:readline
-}
-{
-   ignore_readline_x86_42_daniel_house
-   Memcheck:Leak
-   ...
-   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
    fun:readline
 }
 {
    ignore_readline_arm_m2
    Memcheck:Leak
    ...
-   obj:/usr/lib/aarch64-linux-gnu/libreadline.so.8.2
+   obj:/usr/lib/aarch64-linux-gnu/libreadline.so.*
    fun:readline
 }
 
