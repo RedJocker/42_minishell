@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/11 19:14:02 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/12 22:25:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,16 +152,17 @@ void	ft_arraylist_sort(t_arraylist lst, t_intbifun compare_fun)
 	size_t	top;
 	
 	top = ft_arraylist_len(lst);
-	while (--top > 0)
-	{
-		i = 0;
-		while (++i <= top)
+	if (top > 0)
+		while (--top > 0)
 		{
-			if (compare_fun(ft_arraylist_get(lst, i - 1), \
-							ft_arraylist_get(lst, i)) > 0)
-				ft_arraylist_swap(lst, i - 1, i);
+			i = 0;
+			while (++i <= top)
+			{
+				if (compare_fun(ft_arraylist_get(lst, i - 1), \
+								ft_arraylist_get(lst, i)) > 0)
+					ft_arraylist_swap(lst, i - 1, i);
+			}
 		}
-	}
 }
 
 int static star_match_helper(char *star_str, char *filename)
