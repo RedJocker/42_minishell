@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/11 19:14:02 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/12 23:09:31 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,16 +152,17 @@ void	ft_arraylist_sort(t_arraylist lst, t_intbifun compare_fun)
 	size_t	top;
 	
 	top = ft_arraylist_len(lst);
-	while (--top > 0)
-	{
-		i = 0;
-		while (++i <= top)
+	if (top > 0)
+		while (--top > 0)
 		{
-			if (compare_fun(ft_arraylist_get(lst, i - 1), \
-							ft_arraylist_get(lst, i)) > 0)
-				ft_arraylist_swap(lst, i - 1, i);
+			i = 0;
+			while (++i <= top)
+			{
+				if (compare_fun(ft_arraylist_get(lst, i - 1), \
+								ft_arraylist_get(lst, i)) > 0)
+					ft_arraylist_swap(lst, i - 1, i);
+			}
 		}
-	}
 }
 
 int static star_match_helper(char *star_str, char *filename)
@@ -207,6 +208,7 @@ void	expand_str_star(char *str, t_arraylist *out_lst)
 	struct dirent	*dirp;
 	t_arraylist		lst_files;
 	int				i;
+	int				is_found;
 	//       retrieve files current directory
 	//       verify if has pattern
 	if (!has_star(str))
@@ -235,13 +237,16 @@ void	expand_str_star(char *str, t_arraylist *out_lst)
 		//              sort files case insensitive
 		ft_arraylist_sort(lst_files, (t_intbifun) icompare_str);
 		i = -1;
+		is_found = 0;
 		while (ft_arraylist_get(lst_files, ++i))
-			if (star_match(str, ft_arraylist_get(lst_files, i)))
+			if (star_match(str, ft_arraylist_get(lst_files, i)) && ++is_found)
 				//    add files that match to out_lst
-				ft_arraylist_add(*out_lst, \
+				*out_lst = ft_arraylist_add(*out_lst, \
 					ft_strdup(ft_arraylist_get(lst_files, i)));
+		if (!is_found)
+			*out_lst = ft_arraylist_add(*out_lst, ft_strdup(str));
 		ft_arraylist_destroy(lst_files);
-		closedir(dp);
+		closedir(dp);	
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 01:33:57 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/06 04:31:07 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/12 23:31:01 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	env_update_default_value(t_env_var *env_var, char *key, char *value)
 {
 	char	*value_update;
 
-	if (ft_strncmp("SHLVL", key, ft_strlen(key) == DEFAULT))
+	if (ft_strncmp("SHLVL", key, ft_strlen(key)) == DEFAULT)
 	{
 		value_update = ft_itoa(ft_atoi(env_var->value) + CHAR_BYTE);
 		env_set_value("SHLVL", value_update, true);
