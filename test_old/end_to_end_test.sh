@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/12 22:23:34 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/12 22:50:30 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -263,6 +263,14 @@ echo abc*
     assert_minishell_equal_bash "cd $temp_dir
 touch abc.txt abc.t.txt abc.txt.txt abc.tx def.txt
 echo a*.txt
+"
+}
+
+@test "test wildcard with pattern: echo *.not_found" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch abc.txt abc.t.txt abc.txt.txt abc.tx def.txt
+echo *.not_found
 "
 }
 
