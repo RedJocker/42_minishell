@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/12 22:50:30 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/13 00:16:16 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -182,6 +182,62 @@ assert_minishell_equal_bash_heredoc() {
 # # # Empty `cd` moves to home
 # # cd"
 
+
+@test "test wildcard redirect: cd $temp_dir \n echo empty_star > *" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+echo empty_star > *
+echo \$?
+ls
+"
+}
+
+
+@test "test wildcard redirect: cd $temp_dir \n touch a.txt \n echo write_to_a.txt > *" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a.txt
+echo write_to_a.txt > *
+echo \$?
+cat a.txt
+cat *
+"
+}
+
+@test "test wildcard redirect: cd $temp_dir \n touch a.txt b.txt \n echo ambiguous > *" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a.txt b.txt
+echo ambiguous > *
+echo \$?
+cat a.txt
+cat b.txt
+"
+}
+
+
+@test "test wildcard redirect: cd $temp_dir \n touch a.txt b.txt \n echo b_write > b*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a.txt b.txt
+echo b_write > b*
+echo \$?
+cat a.txt
+cat b.txt
+"
+}
+
+
+@test "test wildcard redirect: cd $temp_dir \n touch a.java b.txt \n echo txt_write > *txt" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a.java b.txt
+echo txt_write > *txt
+echo \$?
+cat a.java
+cat b.txt
+"
+}
 
 
 @test "test wildcard empty dir: cd $temp_dir \n echo *" {
