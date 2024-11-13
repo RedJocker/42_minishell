@@ -78,7 +78,8 @@ assert_minishell_equal_bash() {
 
     run minishell_execute "$@"
 
-    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
+	# for debug output of the test
+    # echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
 
     if ! [[ "$bash_output" == "$output" ]]; then
 		mkdir -p $PROJECT_ROOT/test/output_error
