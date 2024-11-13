@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/12 23:09:31 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:28:22 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ void	ft_arraylist_sort(t_arraylist lst, t_intbifun compare_fun)
 		}
 }
 
-int static star_match_helper(char *star_str, char *filename)
+static int star_match_helper(char *star_str, char *filename)
 {
 	int	any_of;
 	int i;
