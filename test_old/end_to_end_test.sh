@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/11 19:25:40 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/12 22:23:34 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -181,6 +181,63 @@ assert_minishell_equal_bash_heredoc() {
 
 # # # Empty `cd` moves to home
 # # cd"
+
+
+
+@test "test wildcard empty dir: cd $temp_dir \n echo *" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+echo *
+"
+}
+
+@test "test wildcard empty dir: cd $temp_dir && echo *" {
+
+    assert_minishell_equal_bash "cd $temp_dir && echo *
+"
+}
+
+
+@test "test wildcard empty dir: cd $temp_dir \n echo *.txt" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+echo *.txt
+"
+}
+
+@test "test wildcard empty dir: cd $temp_dir && echo *.txt" {
+
+    assert_minishell_equal_bash "cd $temp_dir && echo *.txt
+"
+}
+
+@test "test wildcard empty dir: cd $temp_dir \n ls *" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+ls *
+"
+}
+
+@test "test wildcard empty dir: cd $temp_dir && ls *" {
+
+    assert_minishell_equal_bash "cd $temp_dir && ls *
+"
+}
+
+
+@test "test wildcard empty dir: cd $temp_dir \n ls *.txt" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+ls *.txt
+"
+}
+
+@test "test wildcard empty dir: cd $temp_dir && ls *.txt" {
+
+    assert_minishell_equal_bash "cd $temp_dir && ls *.txt
+"
+}
+
 
 
 @test "test wildcard with pattern: echo *.txt" {
