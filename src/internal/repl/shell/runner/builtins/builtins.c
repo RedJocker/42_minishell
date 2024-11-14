@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/06 15:52:13 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:26:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,10 @@ sig_atomic_t	runner_cmd_builtin(t_builtin_id builtin, t_command cmd)
 	status = EXIT_OK;
 	while (builtins.builtin[++builtins_len].invocation)
 	{
-		if (builtin == builtins.builtin[builtins_len].id)
-		{
-			status = builtins.builtin[builtins_len].fn(cmd);
-			break ;
-		}
+		if (builtin != builtins.builtin[builtins_len].id)
+			continue ;
+		status = builtins.builtin[builtins_len].fn(cmd);
+		break ;
 	}
 	return (status);
 }
