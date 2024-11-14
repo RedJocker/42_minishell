@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/06 16:39:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:54:19 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ void	runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 		runner_cmd_simple_exit_status(run_data, status_code);
 }
 
-void close_fd_lst(t_arraylist fd_lst)
+void	close_fd_lst(t_arraylist fd_lst)
 {
-	int *fd;
+	int	*fd;
 	int	i;
-	int len;
+	int	len;
 
 	i = -1;
 	len = ft_arraylist_len(fd_lst);
@@ -65,100 +65,13 @@ void	runner_cmd_simple_exit_status(
 	exit(status);
 }
 
-static void	runner_cmd_simple_execve_error_eacces(
-	t_runner_data *run_data, int err_num)
-{
-	char		*msg;
-	struct stat	path_stat;
-	const t_command	cmd = run_data->cmd;
-
-	if (cmd->simple->cmd_argv[0][0] == '\0')
-	{
-		ft_asprintf(
-			&msg, "minishell: %s: command not found", cmd->simple->cmd_argv[0]);
-		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
-	}
-	stat(cmd->simple->cmd_argv[0], &path_stat);
-	if (S_ISDIR(path_stat.st_mode))
-	{
-		if (ft_strchr(cmd->simple->cmd_path, '/'))
-		{
-			ft_asprintf(
-				&msg, "minishell: %s: Is a directory", cmd->simple->cmd_argv[0]);
-			runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_EXECUTABLE, true);
-		}
-		else
-		{
-			ft_asprintf(
-				&msg, "minishell: %s: command not found", cmd->simple->cmd_argv[0]);
-			runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
-		}
-	}
-	else
-	{
-		ft_asprintf(
-			&msg, "minishell: %s: %s",
-			cmd->simple->cmd_argv[0], strerror(err_num));
-		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_EXECUTABLE, true);
-	}
-}
-
-static void	runner_cmd_simple_execve_error_enoent(t_runner_data *run_data)
-{
-	char			*msg;
-	const t_command	cmd = run_data->cmd;
-	char			*path;
-
-	path  = env_get_value("PATH");
-	if (ft_strchr(cmd->simple->cmd_path, '/') || !path)
-	{
-		if (path)
-			free(path);
-		ft_asprintf(&msg, "minishell: %s: No such file or directory",
-			cmd->simple->cmd_argv[0]);
-		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
-	}
-	else
-	{
-		if (path)
-			free(path);
-		ft_asprintf(&msg, "minishell: %s: command not found",
-			cmd->simple->cmd_argv[0]);
-		runner_cmd_simple_panic(run_data, msg, EXIT_COMMAND_NOT_FOUND, true);
-	}
-}
-
-static void	runner_cmd_simple_execve_error(t_runner_data *run_data, int err_num)
-{
-	char	*msg;
-	const t_command	cmd = run_data->cmd;
-
-	if (err_num == ENOENT)
-		return (runner_cmd_simple_execve_error_enoent(run_data));
-	else if (err_num == EACCES)
-		return (runner_cmd_simple_execve_error_eacces(run_data, err_num));
-	ft_asprintf(&msg, "minishell: %s: %s",
-		cmd->simple->cmd_argv[0], strerror(err_num));
-	return (runner_cmd_simple_panic(run_data, msg, err_num, true));
-}
-
-sig_atomic_t	runner_cmd_simple_execve(t_runner_data *run_data)
-{
-	const t_command	cmd = run_data->cmd;
-
-	execve(cmd->simple->cmd_path, cmd->simple->cmd_argv, cmd->simple->cmd_envp);
-	runner_cmd_simple_execve_error(run_data, errno);
-	ft_assert(0, "unexpected execution");
-	return (-1);
-}
-
 sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 					t_fork_flag should_fork)
 {
 	pid_t				*pid;
 	sig_atomic_t		status;
 	t_builtin_id		builtin;
-	const t_command	cmd = run_data->cmd;
+	const t_command		cmd = run_data->cmd;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
 	builtin = check_builtin(cmd);

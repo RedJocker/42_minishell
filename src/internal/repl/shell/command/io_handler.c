@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/26 07:14:29 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/13 21:17:06 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,6 @@ void	io_handler_destroy(t_io_handler *io)
 	else if (io->type == IO_ERROR)
 		free(io->error);
 	free(io);
-}
-
-void	io_handler_set_error(t_io_handler *io, int err_no, char *strerr)
-{
-	io->type = IO_ERROR;
-	io->error_status = err_no;
-	io->error = strerr;
-}
-
-void	io_handler_set_path(
-		t_io_handler *io, char *path, int flags_mode[2], t_io_direction io_dir)
-{
-	io->type = IO_PATH;
-	io->path = ft_strdup(path);
-	io->flags = flags_mode[0];
-	io->mode = flags_mode[1];
-	io->direction = io_dir;
 }
 
 void	io_handler_path_to_fd(t_io_handler *io)

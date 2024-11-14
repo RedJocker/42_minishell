@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/07 03:57:30 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/14 01:11:14 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,236 +19,81 @@
 #include "command_internal.h"
 #include "ft_assert.h"
 
-t_command	command_build_simple(
-	t_token **tokens, int endtoken_idx)
+t_command	command_build_simple(t_token **tokens, int endtoken_idx)
 {
-	t_command	cmd;
-	char		*err_msg;
-	t_token		*err_tkn;
-	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
-
 	if (command_simple_is_invalid(tokens, &endtoken_idx))
-	{
-		err_tkn = tokens[endtoken_idx];
-		ft_asprintf(&err_msg, err_template, err_tkn->content);
-		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd);
-	}
+		return (command_build_panic_zero(tokens[endtoken_idx]->content));
 	else
 		return (command_simple_new(tokens, endtoken_idx));
 }
 
-t_command	command_build_pipe(
-	t_token **tokens, int cmd_operator_idx, int tokens_len)
+t_command	command_build_pipe(t_token **tokens, int op_idx, int tokens_len)
 {
 	t_command	cmd_before;
-	t_command   cmd_after;
-	char		*err_msg;
-	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
+	t_command	cmd_after;
 
-	cmd_before = command_build(tokens, cmd_operator_idx);
+	cmd_before = command_build(tokens, op_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
-	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0 && ft_arraylist_len(cmd_before->io_handlers) == 0)
-	{
-		command_destroy(cmd_before);
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
-		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd_before);
-	}
+	else if (command_build_is_empty(cmd_before))
+		return (command_build_panic_one(cmd_before, tokens[op_idx]->content));
 	cmd_after = command_build(
-			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
+			tokens + op_idx + 1, tokens_len - op_idx - 1);
 	if (!cmd_after || cmd_after->type == CMD_INVALID)
 	{
 		command_destroy(cmd_before);
 		return (cmd_after);
 	}
-	else if (cmd_after->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0 && ft_arraylist_len(cmd_after->io_handlers) == 0)
-	{
-		command_destroy(cmd_after);
-		command_destroy(cmd_before);
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx + 1]->content);
-		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd_before);
-	}
+	else if (command_build_is_empty(cmd_after))
+		return (command_build_panic_two(cmd_before,
+				cmd_after, tokens[op_idx + 1]->content));
 	return (command_pipe_new(cmd_before, cmd_after));
 }
 
-t_command	command_build_and(
-	t_token **tokens, int cmd_operator_idx, int tokens_len)
+t_command	command_build_and(t_token **tokens, int op_idx, int tokens_len)
 {
 	t_command	cmd_before;
-	t_command   cmd_after;
-	char		*err_msg;
-	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
+	t_command	cmd_after;
 
-	cmd_before = command_build(tokens, cmd_operator_idx);
+	cmd_before = command_build(tokens, op_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
-	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0 && ft_arraylist_len(cmd_before->io_handlers) == 0)
-	{
-		command_destroy(cmd_before);
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
-		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd_before);
-	}
+	else if (command_build_is_empty(cmd_before))
+		return (command_build_panic_one(cmd_before, tokens[op_idx]->content));
 	cmd_after = command_build(
-			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
+			tokens + op_idx + 1, tokens_len - op_idx - 1);
 	if (!cmd_after || cmd_after->type == CMD_INVALID)
 	{
 		free(cmd_before);
 		return (cmd_after);
 	}
-	else if (cmd_after->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0 && ft_arraylist_len(cmd_after->io_handlers) == 0)
-	{
-		command_destroy(cmd_after);
-		command_destroy(cmd_before);
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx + 1]->content);
-		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd_before);
-	}
+	else if (command_build_is_empty(cmd_after))
+		return (command_build_panic_two(cmd_before,
+				cmd_after, tokens[op_idx + 1]->content));
 	return (command_and_new(cmd_before, cmd_after));
 }
 
-
-t_command	command_build_or(
-	t_token **tokens, int cmd_operator_idx, int tokens_len)
+t_command	command_build_or(t_token **tokens, int op_idx, int tokens_len)
 {
 	t_command	cmd_before;
-	t_command   cmd_after;
-	char		*err_msg;
-	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
+	t_command	cmd_after;
 
-	cmd_before = command_build(tokens, cmd_operator_idx);
+	cmd_before = command_build(tokens, op_idx);
 	if (!cmd_before || cmd_before->type == CMD_INVALID)
 		return (cmd_before);
-	else if (cmd_before->type == CMD_SIMPLE && cmd_before->simple->cmd_argc == 0 && ft_arraylist_len(cmd_before->io_handlers) == 0)
-	{
-		command_destroy(cmd_before);
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
-		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd_before);
-	}
+	else if (command_build_is_empty(cmd_before))
+		return (command_build_panic_one(cmd_before, tokens[op_idx]->content));
 	cmd_after = command_build(
-			tokens + cmd_operator_idx + 1, tokens_len - cmd_operator_idx - 1);
+			tokens + op_idx + 1, tokens_len - op_idx - 1);
 	if (!cmd_after || cmd_after->type == CMD_INVALID)
 	{
 		free(cmd_before);
 		return (cmd_after);
 	}
-	else if (cmd_after->type == CMD_SIMPLE && cmd_after->simple->cmd_argc == 0 && ft_arraylist_len(cmd_after->io_handlers) == 0)
-	{
-		command_destroy(cmd_after);
-		command_destroy(cmd_before);
-		ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx + 1]->content);
-		cmd_before = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd_before);
-	}
+	else if (command_build_is_empty(cmd_after))
+		return (command_build_panic_two(cmd_before,
+				cmd_after, tokens[op_idx + 1]->content));
 	return (command_or_new(cmd_before, cmd_after));
-}
-
-static int	find_paren_end(t_token **tokens, int tokens_len)
-{
-	int open_paren;
-	int	i;
-
-	ft_assert(tokens[0]->type == OP_PAREN_OPEN, "expected paren open");
-	i = 1;
-	open_paren = 1;
-	while (i < tokens_len)
-	{
-		if (tokens[i]->type == OP_PAREN_OPEN)
-			open_paren++;
-		else if (tokens[i]->type == OP_PAREN_CLOSE)
-			open_paren--;
-		if (open_paren == 0)
-			break ;
-		i++;
-	}
-	return (i);
-}
-
-
-int	is_valid_end(t_token *token)
-{
-	return (token
-		&& (token->type == OP_EOF
-			|| token->type == OP_NEWLINE
-			|| token->type == OP_PIPE
-			|| token->type == OP_AND
-			|| token->type == OP_OR
-			|| token->type == OP_PAREN_CLOSE));
-}
-
-
-t_command	command_build_parentheses(
-	t_token **tokens, int cmd_operator_idx, int tokens_len)
-{
-	t_command	cmd;
-	int			paren_close_idx;
-	char		*err_msg;
-	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
-
-	(void) cmd_operator_idx;
-	ft_assert(tokens[0]->type == OP_PAREN_OPEN,
-			  "expected opening paren at command_cuild_parentheses");
-	paren_close_idx = find_paren_end(tokens, tokens_len);
-	//tokens_print(tokens);
-	if (tokens[paren_close_idx]->type != OP_PAREN_CLOSE\
-		|| !is_valid_end(tokens[paren_close_idx + 1])  \
-		|| paren_close_idx < 2)
-	{
-		//ft_puterrl("syntax error invalid end or empty\n");
-		//ft_printf("paren_close_idx + 1: %d\n", paren_close_idx + 1);
-		//ft_printf("tokens[paren_close_idx]->type != OP_PAREN_CLOSE: %d\n", tokens[paren_close_idx]->type != OP_PAREN_CLOSE);
-		//ft_printf("!is_valid_end(tokens[paren_close_idx + 1]):%d\n", !is_valid_end(tokens[paren_close_idx + 1]));
-		//ft_printf("paren_close_idx < 2: %d\n", paren_close_idx < 2);
-		//tokens_print(tokens);
-		paren_close_idx += (!is_valid_end(tokens[paren_close_idx + 1])	\
-											&& paren_close_idx > 1);
-		ft_asprintf(&err_msg, err_template,	tokens[paren_close_idx]->content);
-		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd);
-	}
-	cmd = command_build(tokens + 1, paren_close_idx - 1);
-	//ft_puterrl("cmd\n");
-	if (!cmd || cmd->type == CMD_INVALID)
-		return (cmd);
-	else if (cmd->type == CMD_SIMPLE \
-		&& cmd->simple->cmd_argc == 0		\
-		&& ft_arraylist_len(cmd->io_handlers) == 0)
-	{
-		ft_asprintf(&err_msg, err_template, tokens[paren_close_idx]->content);
-		command_destroy(cmd);
-		cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-		free(err_msg);
-		return (cmd);
-	}
-	//ft_puterrl("ok new\n");
-	return (command_paren_new(cmd));
-}
-
-
-t_command	command_build_paren_err(
-	t_token **tokens, int cmd_operator_idx, int tokens_len)
-{
-	t_command	cmd;
-	char		*err_msg;
-	const char	*err_template = "minishell: syntax error near unexpected token `%s'";
-
-	(void) tokens_len;
-	ft_asprintf(&err_msg, err_template,	tokens[cmd_operator_idx]->content);
-	cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
-	free(err_msg);
-	return (cmd);
 }
 
 t_command	command_build(t_token **tokens, int tokens_len)
@@ -275,27 +120,3 @@ t_command	command_build(t_token **tokens, int tokens_len)
 	ft_assert(0, "unexpected execution at command_build");
 	return (command_invalid_new("temporarily unnexpected", -1));
 }
-
-/*
-
-
-Simple()
-Pipe()
-And()
-Or()
-Group()
-
-
-ls
-Simple(ls)
-
-ls | cat -e
-Pipe(Simple(ls), Simple(cat -e))
-
-ls | cat -e | wc
-(Pipe(ls, Pipe(cat -e, w)))
-
-
-ls | wc && echo yes | wc
-And(Pipe(ls, wc), Pipe(echo yes, wc))
-*/

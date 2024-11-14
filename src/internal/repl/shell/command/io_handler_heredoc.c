@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/31 02:00:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 21:19:44 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,42 +27,7 @@
 #include "io_handler.h"
 #include "stringbuilder.h"
 
-// removes quotes and set heredoc_should_expand
-static void set_heredoc_delim(t_io_handler *io, char *heredoc_limit)
-{
-	int				i;
-	char			open_quote;
-	t_stringbuilder builder;
-
-	io->heredoc_should_expand = true;
-	i = -1;
-	builder = stringbuilder_new();
-	open_quote = 0;
-	while (heredoc_limit[++i])
-	{
-		if (open_quote && heredoc_limit[i] == open_quote)
-			open_quote = 0;
-		else if (!open_quote && (heredoc_limit[i] == '\''	\
-					|| heredoc_limit[i] == '\"'))
-		{
-			open_quote = heredoc_limit[i];
-			io->heredoc_should_expand = false;
-		}
-		else
-			stringbuilder_addchar(builder, heredoc_limit[i]);
-	}
-	io->heredoc_limiter = stringbuilder_build(builder);
-}
-
-void io_handler_set_heredoc(t_io_handler *io, char *heredoc_limit)
-{
-
-	io->type = IO_HEREDOC;
-	io->direction = IO_IN;
-	set_heredoc_delim(io, heredoc_limit);
-}
-
-void io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit)
+void	io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit)
 {
 	t_io_handler	*io;
 
@@ -72,16 +37,15 @@ void io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit)
 }
 
 // tmp_fd[0]: read, tmp_fd[1]: write
-void io_handler_heredoc_prompt(t_io_handler *io)
+void	io_handler_heredoc_prompt(t_io_handler *io)
 {
 	char			*line;
 	int				delim_len;
 	t_stringbuilder	builder;
 	const char		*endline = "\n";
 
-	//ft_printf("io_handler_heredoc %d\n", io->type);
 	if (io->type != IO_HEREDOC)
-		return;
+		return ;
 	delim_len = ft_strlen(io->heredoc_limiter);
 	builder = stringbuilder_new();
 	line = readline("> ");
@@ -96,30 +60,26 @@ void io_handler_heredoc_prompt(t_io_handler *io)
 	while (line && ft_strncmp(line, io->heredoc_limiter, delim_len + 1) != 0 \
 			&& signal_status(DEFAULT, GET) != SIGINT)
 	{
-		// ft_printf("heredoc %s %s\n", io->heredoc_limiter, line);
 		stringbuilder_addstr(&builder, line);
 		stringbuilder_addstr(&builder, (char *) endline);
 		free(line);
 		line = readline("> ");
 	}
 	if (line)
-	{
-		//ft_printf("finish heredoc with %s\n", line);
 		free(line);
-	}
 	else
-		ft_printf("minishell: warning: here-document delimited by "
-				  "end-of-file (wanted `%s')\n", io->heredoc_limiter);
+		ft_printf("minishell: warning: here-document delimited by " \
+		"end-of-file (wanted `%s')\n", io->heredoc_limiter);
 	io->heredoc_input = stringbuilder_build(builder);
 }
 
-void io_handlers_heredoc_prompt(t_arraylist ios)
+void	io_handlers_heredoc_prompt(t_arraylist ios)
 {
 	ft_arraylist_foreach(ios, (t_consumer) io_handler_heredoc_prompt);
 }
 
 // tmp_fd[0]: read, tmp_fd[1]: write
-void io_handler_heredoc_to_fd(t_io_handler *io)
+void	io_handler_heredoc_to_fd(t_io_handler *io)
 {
 	int		tmp_fd[2];
 
@@ -134,7 +94,7 @@ void io_handler_heredoc_to_fd(t_io_handler *io)
 	io->fd = tmp_fd[0];
 }
 
-void io_handlers_heredoc_to_fd(t_arraylist ios)
+void	io_handlers_heredoc_to_fd(t_arraylist ios)
 {
 	ft_arraylist_foreach(ios, (t_consumer) io_handler_heredoc_to_fd);
 }

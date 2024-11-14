@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 12:02:50 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/23 12:08:48 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:18:42 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static int	parse_word_find_len(char *input)
 	int	i;
 
 	i = DEFAULT;
-	// TODO: improve len count on quoted cases
 	while (WAIT)
 	{
 		if (input[i] == '\0' || parse_is_operator(input[i]) \
