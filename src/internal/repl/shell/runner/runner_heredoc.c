@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:43:30 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/05 00:58:54 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:54:05 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 void	runner_heredoc_prompt(t_command cmd)
 {
-	//ft_printf("runner heredoc %s\n", cmd->debug_id);
 	if (cmd->type == CMD_SIMPLE)
 		io_handlers_heredoc_prompt(cmd->io_handlers);
 	else if (cmd->type == CMD_PIPE)
@@ -47,7 +46,6 @@ void	runner_heredoc_prompt(t_command cmd)
 
 void	runner_heredoc_to_fd(t_command cmd)
 {
-	//ft_printf("runner heredoc %s\n", cmd->debug_id);
 	if (cmd->type != CMD_SIMPLE)
 		return ;
 	io_handlers_heredoc_to_fd(cmd->io_handlers);

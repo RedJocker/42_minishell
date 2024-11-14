@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/06 15:49:31 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:38:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,40 +31,6 @@ void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 		command_or_add_pipe_io(cmd, pipe_fd, dir);
 	else if (cmd->type == CMD_PAREN)
 		command_paren_add_pipe_io(cmd, pipe_fd, dir);
-}
-
-void	command_close_ios(t_command cmd);
-
-void command_simple_close_ios(t_command cmd)
-{
-	io_handlers_close(cmd->io_handlers);
-}
-
-void command_pipe_close_ios(t_command cmd)
-{
-	io_handlers_close(cmd->io_handlers);
-	command_close_ios(cmd->pipe->cmd_before);
-	command_close_ios(cmd->pipe->cmd_after);
-}
-
-void command_and_close_ios(t_command cmd)
-{
-	io_handlers_close(cmd->io_handlers);
-	command_close_ios(cmd->and->cmd_before);
-	command_close_ios(cmd->and->cmd_after);
-}
-
-void command_or_close_ios(t_command cmd)
-{
-	io_handlers_close(cmd->io_handlers);
-	command_close_ios(cmd->or->cmd_before);
-	command_close_ios(cmd->or->cmd_after);
-}
-
-void command_paren_close_ios(t_command cmd)
-{
-	io_handlers_close(cmd->io_handlers);
-	command_close_ios(cmd->paren->cmd);
 }
 
 void	command_close_ios(t_command cmd)
@@ -97,34 +63,6 @@ void	command_destroy(t_command cmd)
 		command_eof_destroy(cmd);
 	else if (cmd->type == CMD_INVALID)
 		command_invalid_destroy(cmd);
-}
-
-int	command_operator_idx(t_token **tokens, int tokens_len)
-{
-	int	cmd_operator_idx;
-	int	precedence_cur;
-	int	precedence_next;
-	int i;
-	int open_parens;
-
-	precedence_cur = command_token_precedence(WORD);
-	open_parens = 0;
-	cmd_operator_idx = -1;
-	i = -1;
-	while (++i < tokens_len)
-	{
-		precedence_next = command_token_precedence(tokens[i]->type);
-		if (open_parens == 0 && precedence_next < precedence_cur)
-		{
-			cmd_operator_idx = i;
-			precedence_cur = precedence_next;
-		}
-		if (tokens[i]->type == OP_PAREN_OPEN)
-			open_parens++;
-		else if (tokens[i]->type == OP_PAREN_CLOSE)
-			open_parens--;
-	}
-	return (cmd_operator_idx);
 }
 
 void	command_free(t_command cmd)

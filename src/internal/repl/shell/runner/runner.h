@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:39:11 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/06 15:37:33 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:54:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 typedef struct s_runner_data
 {
 	t_arraylist		pids;
-	t_arraylist     pipes_to_close;
+	t_arraylist		pipes_to_close;
 	t_arraylist		backup_pids;
 	sig_atomic_t	last_cmd_status;
 	t_command		base_cmd;
@@ -48,6 +48,7 @@ void			runner_data_init(
 void			runner_data_clean(t_runner_data *run_data);
 void			runner_heredoc_prompt(t_command cmd);
 void			runner_heredoc_to_fd(t_command cmd);
+sig_atomic_t	runner_cmd_simple_execve(t_runner_data *run_data);
 void			close_fd_lst(t_arraylist fd_lst);
 
 #endif

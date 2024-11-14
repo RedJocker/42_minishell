@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 21:10:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/29 01:47:08 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:06:45 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ void	expand_argv(t_command cmd, sig_atomic_t last_status_code);
 void	expand_io(t_io_handler *io, sig_atomic_t *last_status_code);
 void	expand_str_dollar(char **strptr, sig_atomic_t last_status_code);
 void	expand_str_remove_quote(char **strptr);
-void    expand_str_star(char *str, t_arraylist *out_lst);
+void	expand_str_star(char *str, t_arraylist *out_lst);
 
 #endif

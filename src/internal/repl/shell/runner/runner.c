@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/06 19:30:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/14 00:14:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ sig_atomic_t	runner_exit_signal(sig_atomic_t	status)
 	return (SIG_BASE + signal_num);
 }
 
-
 sig_atomic_t	runner_cmd_invalid(t_command cmd, t_runner_data *runner_data)
 {
 	(void) runner_data;
@@ -52,7 +51,7 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
 	int				pipe_fds[2];
-	const t_command cmd = run_data->cmd;
+	const t_command	cmd = run_data->cmd;
 	int				*to_close;
 
 	ft_assert(cmd->type == CMD_PIPE, "expected only cmd_pipe");
@@ -71,11 +70,10 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 	return (status);
 }
 
-
 sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
-	const t_command cmd = run_data->cmd;
+	const t_command	cmd = run_data->cmd;
 	int				pids_len;
 	int				i;
 
@@ -95,7 +93,7 @@ sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 	ft_arraylist_destroy(run_data->pids);
 	run_data->pids = ft_arraylist_pop(run_data->backup_pids);
 	if (WIFSIGNALED(status))
-			return (runner_exit_signal(status));
+		return (runner_exit_signal(status));
 	if (WIFEXITED(status))
 		run_data->last_cmd_status = (WEXITSTATUS(status));
 	if (run_data->last_cmd_status != 0)
@@ -107,11 +105,10 @@ sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 	return (runner_cmd(run_data, FORK_NOT));
 }
 
-
 sig_atomic_t	runner_cmd_or(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
-	const t_command cmd = run_data->cmd;
+	const t_command	cmd = run_data->cmd;
 	int				pids_len;
 	int				i;
 
@@ -143,22 +140,21 @@ sig_atomic_t	runner_cmd_or(t_runner_data *run_data)
 	return (runner_cmd(run_data, FORK_NOT));
 }
 
-
 sig_atomic_t	runner_cmd_paren(t_runner_data *run_data)
 {
+	const t_command	cmd = run_data->cmd;
 	pid_t			*pid;
-	sig_atomic_t	status;
+	sig_atomic_t	stat;
 	int				pids_len;
 	int				i;
-	const t_command cmd = run_data->cmd;
 
 	ft_assert(cmd->type == CMD_PAREN, "expected only cmd_paren");
-	run_data->backup_pids = ft_arraylist_add(							\
+	run_data->backup_pids = ft_arraylist_add(\
 								run_data->backup_pids, run_data->pids);
 	run_data->pids = ft_arraylist_new((t_consumer) free);
 	run_data->cmd = cmd->paren->cmd;
 	pid = malloc(sizeof(pid_t));
-	status = EXIT_OK;
+	stat = EXIT_OK;
 	*pid = fork();
 	if (*pid < 0)
 		exit(EXIT_FORK_FAIL);
@@ -166,27 +162,26 @@ sig_atomic_t	runner_cmd_paren(t_runner_data *run_data)
 	{
 		free(pid);
 		pid = NULL;
-		status = runner_cmd(run_data, FORK_NOT);
-		status = status << 8;
+		stat = runner_cmd(run_data, FORK_NOT);
+		stat = stat << 8;
 		pids_len = ft_arraylist_len(run_data->pids);
 		i = -1;
 		while (++i < pids_len -1)
 			waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), 0, 0);
 		if (pids_len > 0)
-			waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), &status, 0);
-		if (WIFEXITED(status))
-			status = (WEXITSTATUS(status));
-		else if (WIFSIGNALED(status))
-			status = runner_exit_signal(status);
-		runner_cmd_simple_exit_status(run_data, status);
+			waitpid(*((pid_t *) ft_arraylist_get(run_data->pids, i)), &stat, 0);
+		if (WIFEXITED(stat))
+			stat = (WEXITSTATUS(stat));
+		else if (WIFSIGNALED(stat))
+			stat = runner_exit_signal(stat);
+		runner_cmd_simple_exit_status(run_data, stat);
 	}
 	command_close_ios(cmd);
 	ft_arraylist_destroy(run_data->pids);
 	run_data->pids = ft_arraylist_pop(run_data->backup_pids);
 	run_data->pids = ft_arraylist_add(run_data->pids, pid);
-	return (status);
+	return (stat);
 }
-
 
 sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork)
 {
@@ -196,7 +191,6 @@ sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork)
 	status = DEFAULT;
 	expand(cmd, run_data->last_cmd_status);
 	runner_heredoc_to_fd(cmd);
-	//ft_strarr_printfd(cmd->simple->cmd_argv, 1);
 	if (cmd->type == CMD_SIMPLE)
 		status = runner_cmd_simple(run_data, should_fork);
 	else if (cmd->type == CMD_INVALID)
@@ -213,7 +207,7 @@ sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork)
 	return (status);
 }
 
-void runner_cmd_eof(t_runner_data *run_data)
+void	runner_cmd_eof(t_runner_data *run_data)
 {
 	ft_putendl("exit");
 	runner_cmd_simple_exit_status(run_data, run_data->last_cmd_status);

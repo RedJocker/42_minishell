@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:39:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/06 17:07:24 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:51:59 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "runner.h"
 #include "ft_util.h"
 
-void runner_data_init(
+void	runner_data_init(
 	t_runner_data *run_data, t_command cmd, sig_atomic_t last_cmd_status)
 {
 	run_data->last_cmd_status = last_cmd_status;
@@ -26,7 +26,7 @@ void runner_data_init(
 	run_data->backup_pids = ft_arraylist_new((t_consumer) ft_arraylist_destroy);
 }
 
-void runner_data_clean(t_runner_data *run_data)
+void	runner_data_clean(t_runner_data *run_data)
 {
 	ft_arraylist_destroy(run_data->pids);
 	ft_arraylist_destroy(run_data->pipes_to_close);

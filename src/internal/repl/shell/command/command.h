@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/06 15:49:22 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/13 22:27:44 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_command_or
 	t_command	cmd_after;
 }	t_command_or;
 
-
 typedef struct s_command_paren
 {
 	t_command	cmd;
@@ -76,7 +75,7 @@ struct s_command
 	{
 		t_command_simple	*simple;
 		t_command_invalid	*invalid;
-		t_command_pipe      *pipe;
+		t_command_pipe		*pipe;
 		t_command_and		*and;
 		t_command_or		*or;
 		t_command_paren		*paren;

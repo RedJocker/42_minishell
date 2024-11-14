@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/30 23:04:34 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:40:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ typedef enum e_exit_code
 	EXIT_OUT_OF_MEMORY = 42,
 	EXIT_FORK_FAIL = 99,
 	EXIT_TEMPORARY = 111,
-	EXIT_COMMAND_NOT_EXECUTABLE = 126,
-	EXIT_COMMAND_NOT_FOUND = 127,
+	EXIT_CMD_NOT_EXEC = 126,
+	EXIT_CMD_NOT_FOUND = 127,
 	EXIT_SIGINT = 130,
 }	t_exit_code;
 

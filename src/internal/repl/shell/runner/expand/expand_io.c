@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:41:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/10/30 19:23:18 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/14 00:19:33 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "internal/repl/shell/command/io_handler.h"
 #include <errno.h>
 #include <string.h>
+
+const static char	*g_ambiguous = "minishell: %s: ambiguous redirect";
 
 void	expand_io_dollar(t_io_handler *io, sig_atomic_t last_status_code)
 {
@@ -31,15 +33,17 @@ void	expand_io_dollar(t_io_handler *io, sig_atomic_t last_status_code)
 	}
 }
 
-void	expand_io_split_path(t_io_handler *io, char *original_path)
+void	expand_io_split(t_io_handler *io, char *original_path)
 {
 	char	**split;
 	char	*errmsg;
 
+	if (io->type != IO_PATH)
+		return ;
 	split = expand_split_str(io->path, (t_pred_int) ft_isspace);
 	if (split[0] == NULL || split[1] != NULL)
 	{
-		ft_asprintf(&errmsg, "minishell: %s: ambiguous redirect", original_path);
+		ft_asprintf(&errmsg, g_ambiguous, original_path);
 		free(io->path);
 		ft_strarr_free(split);
 		return (io_handler_set_error(io, errno, errmsg));
@@ -49,12 +53,6 @@ void	expand_io_split_path(t_io_handler *io, char *original_path)
 	ft_strarr_free(split);
 }
 
-void	expand_io_split(t_io_handler *io, char *original_path)
-{
-	if (io->type == IO_PATH)
-		return (expand_io_split_path(io, original_path));
-}
-
 void	expand_io_star(t_io_handler *io, char *original_path)
 {
 	char		**res;
@@ -62,15 +60,14 @@ void	expand_io_star(t_io_handler *io, char *original_path)
 	t_arraylist	lst_new_args;
 
 	if (io->type != IO_PATH)
-		return;
+		return ;
 	lst_new_args = ft_arraylist_new(free);
 	expand_str_star(io->path, &lst_new_args);
 	res = ft_lststr_to_arrstr(lst_new_args);
 	ft_arraylist_destroy(lst_new_args);
 	if (res[0] == NULL || res[1] != NULL)
 	{
-		ft_asprintf(&errmsg, \
-			"minishell: %s: ambiguous redirect", original_path);
+		ft_asprintf(&errmsg, g_ambiguous, original_path);
 		free(io->path);
 		ft_strarr_free(res);
 		return (io_handler_set_error(io, errno, errmsg));
@@ -79,7 +76,6 @@ void	expand_io_star(t_io_handler *io, char *original_path)
 	io->path = ft_strdup(res[0]);
 	ft_strarr_free(res);
 }
-
 
 void	expand_io_remove_quote(t_io_handler *io)
 {

@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/10/31 02:07:24 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/14 01:11:11 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,13 +89,22 @@ SRCS_FILES                      += $(addprefix $(SRCS_SIGNAL_INTERNAL_DIR), sign
 SRCS_FILES                      += $(addprefix $(SRCS_TERMINAL_DIR), terminal.c)
 SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   command_build.c \
+								   command_build_paren.c \
+								   command_build_panic.c \
+								   command_build_util.c \
 								   command_invalid.c \
 								   command_simple.c \
+								   command_simple_fill.c \
 								   command_pipe.c \
+								   command_and.c \
+								   command_or.c \
+								   command_paren.c \
 								   command_eof.c \
 								   command_util.c \
 								   io_handler.c \
+								   io_handler_set.c \
 								   io_handlers.c\
+								   io_handlers_add.c \
 								   io_handler_heredoc.c)
 SRCS_FILES                      += $(addprefix $(SRCS_HISTORY_DIR), history.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
@@ -103,6 +112,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse
 								   parse_word.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c \
                                                                   runner_cmd_simple.c \
+                                                                  runner_cmd_simple_execve.c \
 								  runner_heredoc.c \
 								  runner_data.c)
 SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c \
@@ -119,7 +129,8 @@ SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), builtins.c 
 								   pwd.c \
 								   unset.c)
 SRCS_FILES                      += $(addprefix $(SRCS_SHELL_DIR), shell.c)
-SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c)
+SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_DIR), token.c \
+								  token_type.c)
 SRCS_FILES                      += $(addprefix $(SRCS_TOKEN_INTERNAL_DIR), token_build.c \
 								   token_classify.c \
 								   token_destroy.c)
