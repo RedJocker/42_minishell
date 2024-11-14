@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:41:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 00:19:33 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/14 04:48:58 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <errno.h>
 #include <string.h>
 
-const static char	*g_ambiguous = "minishell: %s: ambiguous redirect";
+static const char	*g_ambiguous = "minishell: %s: ambiguous redirect";
 
 void	expand_io_dollar(t_io_handler *io, sig_atomic_t last_status_code)
 {

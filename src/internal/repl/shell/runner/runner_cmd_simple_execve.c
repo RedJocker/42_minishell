@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 01:05:02 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/14 04:48:28 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-const static char	*g_not_found = "minishell: %s: command not found";
-const static char	*g_is_dir = "minishell: %s: Is a directory";
-const static char	*g_strerr = "minishell: %s: %s";
-const static char	*g_file_not_found = \
+static const char	*g_not_found = "minishell: %s: command not found";
+static const char	*g_is_dir = "minishell: %s: Is a directory";
+static const char	*g_strerr = "minishell: %s: %s";
+static const char	*g_file_not_found = \
 	"minishell: %s: No such file or directory";
 
 static void	runner_cmd_simple_execve_error_eacces(
