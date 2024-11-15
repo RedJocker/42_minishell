@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:22:37 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 03:42:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 04:26:22 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ sig_atomic_t	runner_cmd_or(t_runner_data *run_data)
 		run_data->last_cmd_status = (WEXITSTATUS(status));
 	else if (WIFSIGNALED(status))
 		run_data->last_cmd_status = runner_exit_signal(status);
-	if (run_data->last_cmd_status == 0)
+	if (run_data->last_cmd_status == EXIT_OK
+		|| run_data->last_cmd_status == EXIT_SIGINT)
 	{
 		command_close_ios(cmd->or->cmd_after);
-		return (EXIT_OK);
+		return (run_data->last_cmd_status);
 	}
 	run_data->cmd = cmd->and->cmd_after;
 	return (runner_cmd(run_data, FORK_NOT));
