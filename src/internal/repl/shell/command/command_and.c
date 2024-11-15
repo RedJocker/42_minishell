@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:08:27 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:33:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 02:28:26 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_command	command_and_new(t_command cmd_before, t_command cmd_after)
 	cmd = command_new(CMD_AND, "CMD_AND");
 	if (!cmd)
 		return (NULL);
-	cmd->pipe = ft_calloc(1, sizeof(t_command_and));
+	cmd->and = ft_calloc(1, sizeof(t_command_and));
 	if (!cmd->and)
 		return (ft_free_retnull(cmd));
 	cmd->and->cmd_before = cmd_before;

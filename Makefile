@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/11/14 01:11:11 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/15 04:09:22 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,13 +105,19 @@ SRCS_FILES                      += $(addprefix $(SRCS_COMMAND_DIR), command.c \
 								   io_handler_set.c \
 								   io_handlers.c\
 								   io_handlers_add.c \
-								   io_handler_heredoc.c)
+								   io_handler_heredoc.c \
+								   io_handlers_heredoc.c)
 SRCS_FILES                      += $(addprefix $(SRCS_HISTORY_DIR), history.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_DIR), parse.c)
 SRCS_FILES                      += $(addprefix $(SRCS_PARSE_INTERNAL_DIR), parse_operator.c \
 								   parse_word.c)
 SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c \
+                                                                  runner_cmd.c \
                                                                   runner_cmd_simple.c \
+                                                                  runner_cmd_pipe.c \
+                                                                  runner_cmd_or.c \
+                                                                  runner_cmd_and.c \
+                                                                  runner_cmd_paren.c \
                                                                   runner_cmd_simple_execve.c \
 								  runner_heredoc.c \
 								  runner_data.c)

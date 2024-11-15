@@ -6,12 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:39:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:51:59 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 03:26:32 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
 #include "ft_stdio.h"
+#include "internal/repl/shell/runner/runner_internal.h"
 #include "runner.h"
 #include "ft_util.h"
 

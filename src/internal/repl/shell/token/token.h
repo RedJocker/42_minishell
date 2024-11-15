@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 00:52:37 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:41:53 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/14 23:50:18 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,7 @@ t_token	**tokens_classify(char **arr_str_tokens, int *out_len);
 void	tokens_destroy(t_token **tokens);
 int		token_type_is_redirect(t_token *token);
 int		token_type_is_word(t_token *token);
+int		token_type_is_end_op(t_token *token);
+int		token_type_is_either_nl_eof(t_token *token);
 
 #endif

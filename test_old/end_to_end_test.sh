@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/13 00:16:16 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/15 03:54:49 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -171,6 +171,33 @@ assert_minishell_equal_bash_heredoc() {
     fi
 }
 
+assert_minishell_expected() {
+    local input="$1"
+    local expected_output="$2"
+    local expected_status="$3"
+    
+    run ./minishell <<< "$input"
+    if ! [[ "$expected_output" == "$output" ]]; then
+		echo -e "===> expected_output:\n<$expected_output>\n===> minishell_output:\n<$output>"
+		false
+    fi
+
+    #echo "$output" 1>&3
+
+    if ! [[ "$expected_status" == "$status" ]]; then
+		echo -e "===> expected_status: $expected_status\nminishell_status: $status"
+		false
+    fi
+
+    run minishell_leak_check "$input"
+    
+    if (( status == 33 )); then
+	echo -e "VALGRIND ERROR:\n$output"
+	false
+    fi
+}
+
+
 # TEST BEGIN
 
 
@@ -183,7 +210,45 @@ assert_minishell_equal_bash_heredoc() {
 # # cd"
 
 
-@test "test wildcard redirect: cd $temp_dir \n echo empty_star > *" {
+@test "test paren without close: (ls \n" {
+    local input="(ls
+"
+    local expected_output="RedWillShell$ (ls
+minishell: syntax error near unexpected token \`newline'
+RedWillShell$ 
+RedWillShell\$ exit"
+    local expected_status=2
+    
+    assert_minishell_expected "$input" "$expected_output" "$expected_status"
+}
+
+@test "test single-quote without close: echo 'without-close" {
+    local input="echo 'without-close
+"
+    local expected_output="RedWillShell$ echo 'without-close
+minishell: syntax error near unexpected token \`newline'
+RedWillShell$ 
+RedWillShell\$ exit"
+    local expected_status=2
+    
+    assert_minishell_expected "$input" "$expected_output" "$expected_status"
+}
+
+
+@test "test double-quote without close: echo \"without-close" {
+    local input="echo \"without-close
+"
+    local expected_output="RedWillShell$ echo \"without-close
+minishell: syntax error near unexpected token \`newline'
+RedWillShell$ 
+RedWillShell\$ exit"
+    local expected_status=2
+    
+    assert_minishell_expected "$input" "$expected_output" "$expected_status"
+}
+
+
+@test "test wildcard redirect: cd \$temp_dir \n echo empty_star > *" {
 
     assert_minishell_equal_bash "cd $temp_dir
 echo empty_star > *
@@ -193,7 +258,7 @@ ls
 }
 
 
-@test "test wildcard redirect: cd $temp_dir \n touch a.txt \n echo write_to_a.txt > *" {
+@test "test wildcard redirect: cd \$temp_dir \n touch a.txt \n echo write_to_a.txt > *" {
 
     assert_minishell_equal_bash "cd $temp_dir
 touch a.txt
@@ -204,7 +269,7 @@ cat *
 "
 }
 
-@test "test wildcard redirect: cd $temp_dir \n touch a.txt b.txt \n echo ambiguous > *" {
+@test "test wildcard redirect: cd \$temp_dir \n touch a.txt b.txt \n echo ambiguous > *" {
 
     assert_minishell_equal_bash "cd $temp_dir
 touch a.txt b.txt
@@ -216,7 +281,7 @@ cat b.txt
 }
 
 
-@test "test wildcard redirect: cd $temp_dir \n touch a.txt b.txt \n echo b_write > b*" {
+@test "test wildcard redirect: cd \$temp_dir \n touch a.txt b.txt \n echo b_write > b*" {
 
     assert_minishell_equal_bash "cd $temp_dir
 touch a.txt b.txt
@@ -228,7 +293,7 @@ cat b.txt
 }
 
 
-@test "test wildcard redirect: cd $temp_dir \n touch a.java b.txt \n echo txt_write > *txt" {
+@test "test wildcard redirect: cd \$temp_dir \n touch a.java b.txt \n echo txt_write > *txt" {
 
     assert_minishell_equal_bash "cd $temp_dir
 touch a.java b.txt
@@ -240,55 +305,55 @@ cat b.txt
 }
 
 
-@test "test wildcard empty dir: cd $temp_dir \n echo *" {
+@test "test wildcard empty dir: cd \$temp_dir \n echo *" {
 
     assert_minishell_equal_bash "cd $temp_dir
 echo *
 "
 }
 
-@test "test wildcard empty dir: cd $temp_dir && echo *" {
+@test "test wildcard empty dir: cd \$temp_dir && echo *" {
 
     assert_minishell_equal_bash "cd $temp_dir && echo *
 "
 }
 
 
-@test "test wildcard empty dir: cd $temp_dir \n echo *.txt" {
+@test "test wildcard empty dir: cd \$temp_dir \n echo *.txt" {
 
     assert_minishell_equal_bash "cd $temp_dir
 echo *.txt
 "
 }
 
-@test "test wildcard empty dir: cd $temp_dir && echo *.txt" {
+@test "test wildcard empty dir: cd \$temp_dir && echo *.txt" {
 
     assert_minishell_equal_bash "cd $temp_dir && echo *.txt
 "
 }
 
-@test "test wildcard empty dir: cd $temp_dir \n ls *" {
+@test "test wildcard empty dir: cd \$temp_dir \n ls *" {
 
     assert_minishell_equal_bash "cd $temp_dir
 ls *
 "
 }
 
-@test "test wildcard empty dir: cd $temp_dir && ls *" {
+@test "test wildcard empty dir: cd \$temp_dir && ls *" {
 
     assert_minishell_equal_bash "cd $temp_dir && ls *
 "
 }
 
 
-@test "test wildcard empty dir: cd $temp_dir \n ls *.txt" {
+@test "test wildcard empty dir: cd \$temp_dir \n ls *.txt" {
 
     assert_minishell_equal_bash "cd $temp_dir
 ls *.txt
 "
 }
 
-@test "test wildcard empty dir: cd $temp_dir && ls *.txt" {
+@test "test wildcard empty dir: cd \$temp_dir && ls *.txt" {
 
     assert_minishell_equal_bash "cd $temp_dir && ls *.txt
 "

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 23:54:19 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 04:39:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,33 @@ void	runner_cmd_simple_exit_status(
 	exit(status);
 }
 
+sig_atomic_t	runner_cmd_simple_child(
+	t_runner_data *run_data,
+	t_builtin_id builtin,
+	pid_t *pid,
+	sig_atomic_t *status)
+{
+	const t_command		cmd = run_data->cmd;
+
+	free(pid);
+	if (!io_handlers_redirect(cmd->io_handlers))
+		runner_cmd_simple_panic(run_data, \
+			ft_strdup(io_handlers_get_error(cmd->io_handlers)), \
+				EXIT_REDIRECT_FAIL, true);
+	if (cmd->simple->cmd_argc == DEFAULT)
+		runner_cmd_simple_exit_status(run_data, EXIT_OK);
+	cmd->simple->cmd_envp = get_envp(ENVP_DEFAULT);
+	cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
+	signals_afterfork();
+	if (builtin)
+	{
+		*status = runner_cmd_builtin(builtin, cmd);
+		runner_cmd_simple_exit_status(run_data, *status);
+		ft_assert(0, "unexpected line executed");
+	}
+	return (runner_cmd_simple_execve(run_data));
+}
+
 sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 					t_fork_flag should_fork)
 {
@@ -83,25 +110,7 @@ sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 	if (*pid < 0)
 		exit(EXIT_FORK_FAIL);
 	if (*pid == 0)
-	{
-		free(pid);
-		if (!io_handlers_redirect(cmd->io_handlers))
-			runner_cmd_simple_panic(run_data, \
-				ft_strdup(io_handlers_get_error(cmd->io_handlers)), \
-					EXIT_REDIRECT_FAIL, true);
-		if (cmd->simple->cmd_argc == DEFAULT)
-			runner_cmd_simple_exit_status(run_data, EXIT_OK);
-		cmd->simple->cmd_envp = get_envp(ENVP_DEFAULT);
-		cmd->simple->cmd_path = env_get_bin(cmd->simple->cmd_argv[DEFAULT]);
-		signals_afterfork();
-		if (builtin)
-		{
-			status = runner_cmd_builtin(builtin, cmd);
-			runner_cmd_simple_exit_status(run_data, status);
-			ft_assert(0, "unexpected line executed");
-		}
-		return (runner_cmd_simple_execve(run_data));
-	}
+		return (runner_cmd_simple_child(run_data, builtin, pid, &status));
 	else
 	{
 		run_data->pids = ft_arraylist_add(run_data->pids, pid);

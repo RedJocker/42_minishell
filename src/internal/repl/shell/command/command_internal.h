@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 01:06:48 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 04:00:25 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void		command_free(t_command cmd);
 int			command_operator_idx(t_token **tokens, int tokens_len);
 t_command	command_invalid_new(char *message, int status);
 void		command_invalid_destroy(t_command cmd);
-void		command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
 //
 t_command	command_simple_new(
 				t_token **tokens, int endtoken_idx);

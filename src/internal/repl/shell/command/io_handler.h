@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 20:55:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 03:59:43 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IO_HANDLER_H
 # define IO_HANDLER_H
 
-# include "internal/repl/shell/command/command.h"
+# include "collection/ft_arraylist.h"
 # include <stdbool.h>
 
 typedef enum e_io_handler_type
@@ -86,4 +86,6 @@ void	io_handlers_heredoc_to_fd(t_arraylist ios);
 void	io_handler_set_heredoc(t_io_handler *io, char *heredoc_limit);
 void	io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit);
 void	io_handlers_heredoc_prompt(t_arraylist ios);
+void	io_handler_heredoc_prompt(t_io_handler *io);
+
 #endif

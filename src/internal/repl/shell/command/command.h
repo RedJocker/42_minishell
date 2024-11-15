@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:27:44 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 04:00:12 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define COMMAND_H
 
 # include "collection/ft_arraylist.h"
+# include "internal/repl/shell/command/io_handler.h"
 # include "internal/repl/shell/token/token.h"
 
 typedef struct s_command	*t_command;
@@ -85,5 +86,6 @@ struct s_command
 t_command	command_build(t_token **tokens, int tokens_len);
 void		command_destroy(t_command cmd);
 void		command_close_ios(t_command cmd);
+void		command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
 
 #endif

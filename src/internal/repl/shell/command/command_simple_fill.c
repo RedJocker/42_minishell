@@ -6,12 +6,13 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:32:09 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 00:40:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 04:01:39 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include "ft_string.h"
+#include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/io_handler.h"
 
 void	command_simple_fill_redirect_in(
