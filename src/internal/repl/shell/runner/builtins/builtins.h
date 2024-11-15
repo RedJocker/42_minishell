@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:56:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/24 02:17:06 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/15 03:25:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "internal/default.h"
 # include "internal/repl/shell/command/command.h"
 # include "internal/repl/shell/runner/runner.h"
+# include "internal/repl/shell/runner/runner_internal.h"
 
 typedef enum e_builtin_id	t_builtin_id;
 enum e_builtin_id
