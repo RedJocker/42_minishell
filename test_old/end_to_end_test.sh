@@ -7,12 +7,12 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/15 03:54:49 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/15 23:57:11 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 setup_file() {
-    #echo "START TEST" 1>&3
+    echo "START TEST $(date)" 1>&3
     true
     rm -f ./test/bash_*.txt > /dev/null || true
     rm -f ./test/mini_*.txt > /dev/null || true
@@ -29,7 +29,7 @@ teardown() {
 }
 
 teardown_file() {
-    #echo "END TEST" 1>&3
+    echo "END TEST $(date)" 1>&3
     true
     delete_temp_folder
 }
