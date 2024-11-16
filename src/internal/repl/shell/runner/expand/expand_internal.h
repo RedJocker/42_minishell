@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 21:10:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 00:13:56 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 02:47:51 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "stringbuilder.h"
 # include "collection/ft_arraylist.h"
-# include "internal/ft_extension.h"
 # include "internal/repl/shell/command/command.h"
 # include "internal/repl/shell/command/io_handler.h"
 # include <signal.h>

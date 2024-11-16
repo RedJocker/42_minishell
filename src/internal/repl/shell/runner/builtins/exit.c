@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 05:02:21 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/15 23:06:46 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/16 02:48:41 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "ft_stdio.h"
 #include "ft_string.h"
 #include "internal/default.h"
-#include "internal/ft_extension.h"
 #include "internal/repl/shell/command/command.h"
 
 static void	print_exit_error(char *cmd);
