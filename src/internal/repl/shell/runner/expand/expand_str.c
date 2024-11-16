@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 23:52:13 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 02:48:29 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include "internal/default.h"
 #include "ft_memlib.h"
 #include "internal/env/env.h"
-#include "internal/ft_extension.h"
 #include <unistd.h>
 #include <dirent.h>
 

@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/11/16 00:15:08 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/16 02:45:34 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -13,7 +13,7 @@
 #                                REQUIREMENTS                                  #
 #******************************************************************************#
 
-LIBFTX_VERSION                   := 1.1.1
+LIBFTX_VERSION                   := 1.2.0
 
 #******************************************************************************#
 #                                   COLOR                                      #
@@ -71,8 +71,6 @@ LIBS                            := ./lib/libftx/libft.a
 NAME                            = minishell
 
 SRCS_FILES                      += $(addprefix $(SRCS_DIR), main.c)
-SRCS_FILES                      += $(addprefix $(SRCS_INTERNAL_DIR), ft_splitfun.c \
-								   ft_strtoll.c)
 SRCS_FILES                      += $(addprefix $(SRCS_ENV_DIR), env.c \
 								   env_properties.c \
 								   envp.c)
