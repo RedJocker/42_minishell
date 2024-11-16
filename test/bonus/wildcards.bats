@@ -48,7 +48,7 @@ cd test && echo *.txt
 echo $?"
 }
 
-@test "test wildcard(with pattern): echo  *.txt" {
+@test "test wildcard(with pattern): echo *.txt" {
 	assert_minishell_equal_bash "touch abc.txt abc.t.txt abc.txt.txt abc.tx def.txt
 echo *.txt
 echo $?"
@@ -163,3 +163,14 @@ cat a.java
 cat b.txt"
 }
 
+@test "test wildcard: echo \"*\"a\"*\"a" {
+    assert_minishell_equal_bash "touch a aa aaa
+echo *a*a
+echo $?"
+}
+
+@test "test wildcard: echo a\"*\"a" {
+    assert_minishell_equal_bash "touch a aa aaa
+echo \"*\"a
+echo $?"
+}
