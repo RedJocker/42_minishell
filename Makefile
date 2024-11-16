@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/11/15 04:09:22 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/16 00:15:08 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -122,9 +122,11 @@ SRCS_FILES                      += $(addprefix $(SRCS_RUNNER_DIR), runner.c \
 								  runner_heredoc.c \
 								  runner_data.c)
 SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c \
+								  expand_icompare_str.c \
 								  expand_split_str.c \
 								  expand_argv.c \
 								  expand_str.c \
+								  expand_str_star.c \
 								  expand_io.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), builtins.c \
 								   cd.c \
