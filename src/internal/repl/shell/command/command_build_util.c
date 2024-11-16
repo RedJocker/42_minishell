@@ -6,11 +6,12 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 01:08:32 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 01:09:38 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:19:13 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command_internal.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/command_internal.h"
 
 int	command_build_is_empty(t_command cmd)
 {

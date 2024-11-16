@@ -6,19 +6,17 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/13 22:26:39 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:08:07 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <unistd.h>
 #include "ft_string.h"
-#include "ft_util.h"
 #include "internal/default.h"
 #include "internal/env/envp.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/builtins/builtins.h"
-#include "internal/repl/shell/runner/runner.h"
 #include "internal/repl/shell/command/command.h"
 
 static t_builtins	builtins_init(void);

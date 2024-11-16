@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:14 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 21:17:06 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:14:52 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "ft_stdio.h"
-#include "ft_string.h"
 #include "internal/repl/shell/command/io_handler.h"
 
 void	io_handler_destroy(t_io_handler *io)

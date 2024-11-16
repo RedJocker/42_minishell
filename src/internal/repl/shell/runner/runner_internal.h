@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:17:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 04:07:04 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:49:55 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <signal.h>
 # include <stdbool.h>
 # include "internal/repl/shell/command/command.h"
-# include <signal.h>
 
 typedef struct s_runner_data
 {
@@ -43,7 +42,6 @@ sig_atomic_t	runner_cmd_and(t_runner_data *run_data);
 sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data);
 sig_atomic_t	runner_cmd_invalid(t_command cmd, t_runner_data *runner_data);
 void			runner_cmd_eof(t_runner_data *run_data);
-//
 void			runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 					sig_atomic_t status_code, bool should_exit);
 void			runner_cmd_simple_exit_status(

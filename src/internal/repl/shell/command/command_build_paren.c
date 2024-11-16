@@ -6,18 +6,16 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:05:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 00:13:01 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:19:32 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
+#include "ft_assert.h"
 #include "ft_stdio.h"
 #include "internal/default.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/token/token.h"
-#include "command_internal.h"
-#include "ft_assert.h"
 
 static const char	*g_err_template = "minishell: syntax error "\
 							"near unexpected token `%s'";

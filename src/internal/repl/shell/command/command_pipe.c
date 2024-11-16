@@ -6,15 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 02:18:39 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:33:00 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:16:12 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
+#include "ft_assert.h"
+#include "ft_memlib.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
-#include "ft_memlib.h"
-#include "ft_assert.h"
-#include <unistd.h>
 
 t_command	command_pipe_new(t_command cmd_before, t_command cmd_after)
 {

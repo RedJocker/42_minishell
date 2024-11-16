@@ -6,28 +6,22 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 04:48:28 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:53:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "ft_assert.h"
-#include "ft_stdio.h"
-#include "ft_string.h"
-#include "ft_util.h"
-#include "internal/default.h"
-#include "internal/env/envp.h"
-#include "internal/env/env.h"
-#include "internal/repl/shell/command/io_handler.h"
-#include "internal/repl/shell/runner/builtins/builtins.h"
-#include "internal/signal/signal.h"
-#include "runner.h"
-#include <fcntl.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "ft_assert.h"
+#include "ft_stdio.h"
+#include "ft_string.h"
+#include "internal/default.h"
+#include "internal/env/env.h"
+#include "internal/repl/shell/runner/runner_internal.h"
 
 static const char	*g_not_found = "minishell: %s: command not found";
 static const char	*g_is_dir = "minishell: %s: Is a directory";
@@ -35,8 +29,8 @@ static const char	*g_strerr = "minishell: %s: %s";
 static const char	*g_file_not_found = \
 	"minishell: %s: No such file or directory";
 
-static void	runner_cmd_simple_execve_error_eacces(
-	t_runner_data *run_data, int err_num)
+static void	runner_cmd_simple_execve_error_eacces(t_runner_data *run_data, \
+				int err_num)
 {
 	char			*msg;
 	struct stat		path_stat;

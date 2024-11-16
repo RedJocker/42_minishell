@@ -6,16 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/01 16:59:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 21:23:51 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:10:40 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "ft_assert.h"
-#include "ft_memlib.h"
-#include "internal/repl/shell/command/command.h"
-#include "internal/repl/shell/command/io_handler.h"
 #include <unistd.h>
+#include "ft_assert.h"
+#include "collection/ft_arraylist.h"
+#include "internal/repl/shell/command/io_handler.h"
 
 int	io_handlers_redirect(t_arraylist lst_iohandlers)
 {

@@ -6,11 +6,10 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/20 05:02:21 by dande-je          #+#    #+#             */
-/*   Updated: 2024/10/28 02:31:06 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:06:46 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <limits.h>
 #include <signal.h>
 #include <unistd.h>
 #include "ft_stdio.h"

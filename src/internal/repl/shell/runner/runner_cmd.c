@@ -6,17 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 04:03:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 04:08:45 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:02:10 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_assert.h"
 #include "ft_stdio.h"
 #include "internal/default.h"
 #include "internal/repl/shell/runner/expand/expand.h"
-#include "runner_internal.h"
-#include "ft_assert.h"
-#include "ft_util.h"
-#include <sys/wait.h>
+#include "internal/repl/shell/runner/runner_internal.h"
 
 sig_atomic_t	runner_cmd_invalid(t_command cmd, t_runner_data *runner_data)
 {

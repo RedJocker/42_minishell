@@ -6,26 +6,18 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 02:35:18 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:14:00 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/readline.h>
 #include "collection/ft_arraylist.h"
 #include "ft_memlib.h"
-#include "internal/default.h"
-#include "internal/repl/shell/command/command.h"
-#include "internal/repl/shell/command/io_handler.h"
-#include <readline/readline.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include "ft_stdio.h"
 #include "ft_string.h"
-#include "ft_util.h"
-#include "internal/signal/signal.h"
-#include "io_handler.h"
 #include "stringbuilder.h"
+#include "internal/repl/shell/command/io_handler.h"
+#include "internal/signal/signal.h"
 
 static const char		*g_endl = "\n";
 
@@ -47,7 +39,6 @@ void	io_handler_heredoc_clear(
 	io_handler_set_error(io, 1, ft_strdup(""));
 }
 
-// tmp_fd[0]: read, tmp_fd[1]: write
 void	io_handler_heredoc_prompt(t_io_handler *io)
 {
 	char			*line;
@@ -77,7 +68,6 @@ void	io_handler_heredoc_prompt(t_io_handler *io)
 	io->heredoc_input = stringbuilder_build(builder);
 }
 
-// tmp_fd[0]: read, tmp_fd[1]: write
 void	io_handler_heredoc_to_fd(t_io_handler *io)
 {
 	int		tmp_fd[2];

@@ -6,14 +6,11 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:08 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 00:36:35 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:15:27 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
-#include "collection/ft_arraylist.h"
-#include "ft_stdio.h"
-#include "ft_string.h"
 #include "ft_memlib.h"
 #include "ft_util.h"
 #include "internal/repl/shell/command/command.h"

@@ -6,18 +6,16 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:39:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 03:26:32 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:51:08 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "ft_stdio.h"
-#include "internal/repl/shell/runner/runner_internal.h"
-#include "runner.h"
 #include "ft_util.h"
+#include "collection/ft_arraylist.h"
+#include "internal/repl/shell/runner/runner_internal.h"
 
-void	runner_data_init(
-	t_runner_data *run_data, t_command cmd, sig_atomic_t last_cmd_status)
+void	runner_data_init(t_runner_data *run_data, t_command cmd, \
+			sig_atomic_t last_cmd_status)
 {
 	run_data->last_cmd_status = last_cmd_status;
 	run_data->base_cmd = cmd;

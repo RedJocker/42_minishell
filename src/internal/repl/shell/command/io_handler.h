@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/29 19:07:28 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 03:59:43 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:14:12 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	io_handlers_add_pipe(
 			t_io_direction io_dir);
 void	io_handlers_close(t_arraylist lst_iohandlers);
 int		io_handlers_redirect(t_arraylist lst_iohandlers);
-/////
 void	io_handler_heredoc_to_fd(t_io_handler *io);
 void	io_handlers_heredoc_to_fd(t_arraylist ios);
 void	io_handler_set_heredoc(t_io_handler *io, char *heredoc_limit);

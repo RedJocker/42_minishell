@@ -6,15 +6,13 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 01:57:56 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 02:03:23 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:09:59 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
-#include "internal/repl/shell/command/command.h"
 #include "ft_util.h"
-#include "internal/signal/signal.h"
-#include "io_handler.h"
+#include "internal/repl/shell/command/io_handler.h"
 
 void	io_handlers_heredoc_to_fd(t_arraylist ios)
 {

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:14:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 04:19:09 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:58:30 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,16 @@
 #include <unistd.h>
 #include "collection/ft_arraylist.h"
 #include "ft_assert.h"
-#include "ft_stdio.h"
 #include "ft_util.h"
 #include "internal/default.h"
 #include "internal/repl/shell/command/command.h"
-#include "internal/repl/shell/command/command_internal.h"
-#include "internal/repl/shell/command/io_handler.h"
-#include "internal/repl/shell/runner/expand/expand.h"
-#include "runner.h"
-#include "internal/signal/signal.h"
-#include "signal.h"
-#include "runner_internal.h"
+#include "internal/repl/shell/runner/runner_internal.h"
 
-static void	runner_cmd_paren_init(
-	t_runner_data *run_data, t_command cmd, pid_t **pid, sig_atomic_t *stat)
+static void	runner_cmd_paren_init(t_runner_data *run_data, t_command cmd, \
+				pid_t **pid, sig_atomic_t *stat)
 {
-	run_data->backup_pids = ft_arraylist_add(\
-								run_data->backup_pids, run_data->pids);
+	run_data->backup_pids = ft_arraylist_add(run_data->backup_pids, \
+								run_data->pids);
 	run_data->pids = ft_arraylist_new((t_consumer) free);
 	run_data->cmd = cmd->paren->cmd;
 	*pid = malloc(sizeof(pid_t));

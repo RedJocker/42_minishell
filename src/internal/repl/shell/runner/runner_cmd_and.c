@@ -6,14 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:27:40 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 03:41:08 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:01:21 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "runner_internal.h"
+#include <signal.h>
 #include "ft_assert.h"
 #include "ft_util.h"
-#include <sys/wait.h>
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/runner/runner_internal.h"
 
 sig_atomic_t	runner_cmd_and(t_runner_data *run_data)
 {

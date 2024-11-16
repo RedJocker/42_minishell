@@ -6,14 +6,13 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:43:30 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:54:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:50:38 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal/repl/shell/command/command.h"
-#include "runner.h"
-#include "internal/repl/shell/command/io_handler.h"
 #include "ft_assert.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/io_handler.h"
 
 void	runner_heredoc_prompt(t_command cmd)
 {
@@ -35,9 +34,7 @@ void	runner_heredoc_prompt(t_command cmd)
 		runner_heredoc_prompt(cmd->or->cmd_after);
 	}
 	else if (cmd->type == CMD_PAREN)
-	{
 		runner_heredoc_prompt(cmd->paren->cmd);
-	}
 	else if (cmd->type == CMD_INVALID)
 		;
 	else

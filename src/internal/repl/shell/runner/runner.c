@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 01:38:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 04:06:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:04:03 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,10 @@
 #include "collection/ft_arraylist.h"
 #include "ft_assert.h"
 #include "ft_stdio.h"
-#include "ft_util.h"
 #include "internal/default.h"
 #include "internal/repl/shell/command/command.h"
-#include "internal/repl/shell/command/command_internal.h"
-#include "internal/repl/shell/command/io_handler.h"
-#include "internal/repl/shell/runner/expand/expand.h"
+#include "internal/repl/shell/runner/runner_internal.h"
 #include "internal/signal/signal.h"
-#include "runner.h"
-#include "runner_internal.h"
-#include "signal.h"
 
 sig_atomic_t	runner_exit_signal(sig_atomic_t	status)
 {

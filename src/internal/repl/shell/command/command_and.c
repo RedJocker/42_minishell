@@ -6,15 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:08:27 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 02:28:26 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:21:24 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "command.h"
-#include "command_internal.h"
-#include "ft_memlib.h"
-#include "ft_assert.h"
 #include <unistd.h>
+#include "ft_assert.h"
+#include "ft_memlib.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/command/command_internal.h"
 
 t_command	command_and_new(t_command cmd_before, t_command cmd_after)
 {

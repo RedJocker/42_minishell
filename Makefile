@@ -161,7 +161,7 @@ COMP_MESSAGE                    = Building C object
 #******************************************************************************#
 
 CC                             := cc
-CFLAGS                         = -Wall -Wextra -Werror -g3# -Ofast
+CFLAGS                         = -Wall -Wextra -Werror -Ofast
 CPPFLAGS                       := $(addprefix -I,$(INCS)) -MMD -MP
 DFLAGS                         := -Wall -Wextra -Werror -g3
 LFLAGS                         := -march=native

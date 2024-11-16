@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:38:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:22:03 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/command/io_handler.h"
-#include "internal/repl/shell/token/token.h"
 
 void	command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir)
 {

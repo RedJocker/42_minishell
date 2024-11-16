@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:15:13 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/13 22:27:21 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:10:54 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "ft_string.h"
 #include "stringbuilder.h"
 
-// removes quotes and set heredoc_should_expand
 static void	set_heredoc_delim(t_io_handler *io, char *heredoc_limit)
 {
 	int				i;

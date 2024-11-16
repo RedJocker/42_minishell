@@ -6,14 +6,11 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 17:18:25 by maurodri          #+#    #+#             */
-/*   Updated: 2024/09/25 00:28:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:18:33 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
-#include "ft_util.h"
-#include "ft_memlib.h"
 
 t_command	command_eof_new(void)
 {

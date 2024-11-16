@@ -6,18 +6,14 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 01:11:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:20:48 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "ft_stdio.h"
-#include "internal/default.h"
+#include "ft_assert.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/command/command_internal.h"
 #include "internal/repl/shell/token/token.h"
-#include "command_internal.h"
-#include "ft_assert.h"
 
 t_command	command_build_simple(t_token **tokens, int endtoken_idx)
 {

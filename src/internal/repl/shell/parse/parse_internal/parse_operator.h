@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 01:16:25 by dande-je          #+#    #+#             */
-/*   Updated: 2024/09/24 04:02:34 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:09:00 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ enum e_operator
 typedef struct s_operator	t_operator;
 struct s_operator
 {
-	char			*chr;
-	char			*double_chr;
-	char			*msg;
+	char	*chr;
+	char	*double_chr;
+	char	*msg;
 };
 
 typedef struct s_operators	t_operators;

@@ -6,19 +6,16 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:55:15 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 04:02:31 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:56:56 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "internal/default.h"
-#include "internal/repl/shell/command/command_internal.h"
-#include "runner_internal.h"
-#include "ft_assert.h"
-#include "ft_util.h"
 #include <sys/wait.h>
 #include <unistd.h>
+#include "internal/default.h"
+#include "runner_internal.h"
+#include "ft_assert.h"
 
-// pipe_fds[0] read, pipe_fds[1] write
 sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 {
 	sig_atomic_t	status;
@@ -33,8 +30,8 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 	command_add_pipe_io(cmd->pipe->cmd_after, pipe_fds[0], IO_IN);
 	to_close = malloc(sizeof(int));
 	*to_close = pipe_fds[0];
-	run_data->pipes_to_close = ft_arraylist_add(
-			run_data->pipes_to_close, to_close);
+	run_data->pipes_to_close = ft_arraylist_add(run_data->pipes_to_close, \
+								to_close);
 	run_data->cmd = cmd->pipe->cmd_before;
 	runner_cmd(run_data, FORK_YES);
 	run_data->cmd = cmd->pipe->cmd_after;

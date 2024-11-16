@@ -6,28 +6,24 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 04:39:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:56:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <fcntl.h>
+#include <signal.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "collection/ft_arraylist.h"
 #include "ft_assert.h"
 #include "ft_stdio.h"
 #include "ft_string.h"
-#include "ft_util.h"
 #include "internal/default.h"
 #include "internal/env/envp.h"
 #include "internal/env/env.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/builtins/builtins.h"
 #include "internal/signal/signal.h"
-#include "runner.h"
-#include <fcntl.h>
-#include <errno.h>
-#include <signal.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 void	runner_cmd_simple_panic(t_runner_data *run_data, char *msg, \
 	sig_atomic_t status_code, bool should_exit)
@@ -65,11 +61,8 @@ void	runner_cmd_simple_exit_status(
 	exit(status);
 }
 
-sig_atomic_t	runner_cmd_simple_child(
-	t_runner_data *run_data,
-	t_builtin_id builtin,
-	pid_t *pid,
-	sig_atomic_t *status)
+sig_atomic_t	runner_cmd_simple_child(t_runner_data *run_data, \
+					t_builtin_id builtin, pid_t *pid, sig_atomic_t *status)
 {
 	const t_command		cmd = run_data->cmd;
 
@@ -95,10 +88,10 @@ sig_atomic_t	runner_cmd_simple_child(
 sig_atomic_t	runner_cmd_simple(t_runner_data *run_data, \
 					t_fork_flag should_fork)
 {
-	pid_t				*pid;
-	sig_atomic_t		status;
-	t_builtin_id		builtin;
-	const t_command		cmd = run_data->cmd;
+	pid_t			*pid;
+	sig_atomic_t	status;
+	t_builtin_id	builtin;
+	const t_command	cmd = run_data->cmd;
 
 	ft_assert(cmd->type == CMD_SIMPLE, "expected only cmd_simple");
 	builtin = check_builtin(cmd);
