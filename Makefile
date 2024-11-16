@@ -229,8 +229,6 @@ define fclean
 endef
 
 define debug
-	$(call clean)
-	$(call fclean)
 	$(MAKE) WITH_DEBUG=TRUE
 endef
 
@@ -259,7 +257,7 @@ $(NAME): $(LIBFTX) $(call reset_count, -$(words $(OBJS))) $(OBJS)
 $(LIBFTX):
 	$(call submodule_update_libftx)
 
-etags: $(NAME)
+etags: debug
 	etags $$(find . -name '*.[ch]')
 
 bonus:
@@ -276,7 +274,7 @@ re: fclean all
 debug:
 	$(call debug)
 
-test: all
+test: debug
 	$(call test)
 
 .PHONY: all clean fclean re debug etags
