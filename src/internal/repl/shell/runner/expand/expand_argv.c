@@ -6,15 +6,16 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:20:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 00:20:28 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:12:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
-#include "expand_internal.h"
 #include "ft_util.h"
 #include "ft_string.h"
 #include "ft_ctype.h"
+#include "internal/repl/shell/command/command.h"
+#include "internal/repl/shell/runner/expand/expand_internal.h"
 
 void	expand_argv_remove_quote(t_command cmd)
 {

@@ -6,21 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 00:12:27 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 02:48:14 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:12:06 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "expand_internal.h"
-#include "ft_assert.h"
+#include <dirent.h>
+#include <unistd.h>
 #include "ft_string.h"
 #include "ft_ctype.h"
-#include "ft_util.h"
-#include "internal/default.h"
-#include "ft_memlib.h"
-#include "internal/env/env.h"
-#include <unistd.h>
-#include <dirent.h>
+#include "internal/repl/shell/runner/expand/expand_internal.h"
 
 static char	ch_tolower(unsigned int i, char ch)
 {

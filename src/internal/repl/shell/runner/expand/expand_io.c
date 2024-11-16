@@ -6,18 +6,18 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:41:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 04:48:58 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:11:34 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "expand_internal.h"
-#include "ft_ctype.h"
-#include "ft_string.h"
-#include "ft_util.h"
-#include "ft_stdio.h"
-#include "internal/repl/shell/command/io_handler.h"
 #include <errno.h>
 #include <string.h>
+#include "ft_ctype.h"
+#include "ft_string.h"
+#include "ft_stdio.h"
+#include "ft_util.h"
+#include "internal/repl/shell/command/io_handler.h"
+#include "internal/repl/shell/runner/expand/expand_internal.h"
 
 static const char	*g_ambiguous = "minishell: %s: ambiguous redirect";
 

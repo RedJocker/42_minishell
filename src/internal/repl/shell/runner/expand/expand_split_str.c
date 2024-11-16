@@ -6,11 +6,11 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 19:32:44 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 02:48:24 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:10:57 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_string.h"
 #include "ft_util.h"
 
 static size_t	count_splits(char const *str, t_pred_int should_split)

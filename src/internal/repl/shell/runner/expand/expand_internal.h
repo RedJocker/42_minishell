@@ -6,14 +6,13 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 21:10:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 02:47:51 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:11:42 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPAND_INTERNAL_H
 # define EXPAND_INTERNAL_H
 
-# include "stringbuilder.h"
 # include "collection/ft_arraylist.h"
 # include "internal/repl/shell/command/command.h"
 # include "internal/repl/shell/command/io_handler.h"

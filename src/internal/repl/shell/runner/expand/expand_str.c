@@ -6,21 +6,20 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 02:48:29 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:10:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "expand_internal.h"
+#include <dirent.h>
+#include <signal.h>
+#include <unistd.h>
+#include "stringbuilder.h"
 #include "ft_assert.h"
 #include "ft_string.h"
 #include "ft_ctype.h"
-#include "ft_util.h"
-#include "internal/default.h"
 #include "ft_memlib.h"
+#include "internal/default.h"
 #include "internal/env/env.h"
-#include <unistd.h>
-#include <dirent.h>
 
 static int	expand_str_dollar_question(t_stringbuilder *builder, \
 				sig_atomic_t last_status_code)
@@ -33,7 +32,6 @@ static int	expand_str_dollar_question(t_stringbuilder *builder, \
 	return (1);
 }
 
-// return len parsed
 static int	expand_str_dollar_variable(char *str, t_stringbuilder *builder,	\
 				sig_atomic_t last_status_code)
 {

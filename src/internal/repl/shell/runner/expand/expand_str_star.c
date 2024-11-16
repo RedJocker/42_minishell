@@ -6,21 +6,17 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:43:32 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 02:48:34 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 04:07:56 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "collection/ft_arraylist.h"
-#include "expand_internal.h"
-#include "ft_assert.h"
-#include "ft_string.h"
-#include "ft_ctype.h"
-#include "ft_util.h"
-#include "internal/default.h"
-#include "ft_memlib.h"
-#include "internal/env/env.h"
-#include <unistd.h>
 #include <dirent.h>
+#include <unistd.h>
+#include "ft_assert.h"
+#include "collection/ft_arraylist.h"
+#include "ft_string.h"
+#include "ft_util.h"
+#include "internal/repl/shell/runner/expand/expand_internal.h"
 
 static int	has_star(char *str)
 {
@@ -56,8 +52,8 @@ static int	star_match_helper(char *star_str, char *filename)
 		return (star_match_helper(star_str + 1, filename + 1));
 	else if (*star_str == '*')
 	{
-		i = 0;
-		while (++i)
+		i = -1;
+		while (++i >= 0)
 		{
 			any_of = star_match_helper(star_str + 1, filename + i);
 			if (any_of)
