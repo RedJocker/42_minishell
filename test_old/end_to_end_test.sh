@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/15 23:57:11 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/16 18:04:56 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -209,6 +209,85 @@ assert_minishell_expected() {
 # # # Empty `cd` moves to home
 # # cd"
 
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a'*'" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a'*'
+echo a'*'
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a\"*\"" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a'*'
+echo a\"*\"
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo *'*'" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a'*'
+echo *'*'
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo *\"*\"" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a'*'
+echo *\"*\"
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a'*'*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a'*'
+echo a'*'*
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a\"*\"*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a'*'
+echo a\"*\"*
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch \"*1\" \n echo '*'*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch \"*1\"
+echo '*'*
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch \"*1\" \n echo \"*\"*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch \"*1\"
+echo \"*\"*
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch \"1*\" \n echo *'*'" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch \"1*\"
+echo *'*'
+"
+}
+
+@test "test wildcard pattern with quote: cd \$temp_dir \n touch \"1*\" \n echo *\"*\"" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch \"1*\"
+echo *\"*\"
+"
+}
 
 @test "test paren without close: (ls \n" {
     local input="(ls
@@ -395,6 +474,45 @@ echo *.not_found
 "
 }
 
+@test "test wildcard star matches zero: cd \$temp_dir \n touch a \n echo *a" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a
+echo *a
+"
+}
+
+@test "test wildcard star matches zero: cd \$temp_dir \n touch a \n echo a*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a
+echo a*
+"
+}
+
+@test "test wildcard star matches zero: cd \$temp_dir \n touch a \n echo *a*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a
+echo *a*
+"
+}
+
+@test "test wildcard star matches zero: cd \$temp_dir \n touch a aa aaa \n echo *a*a" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a aa aaa
+echo *a*a 
+"
+}
+
+@test "test wildcard star matches zero: cd \$temp_dir \n touch a aa aaa \n echo a*a*" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch a aa aaa
+echo a*a* 
+"
+}
 
 @test "test paren invalid: )" {
 
@@ -2765,8 +2883,9 @@ unset
 @test "test builtin: unset HELLO" {
     assert_minishell_equal_bash "
 export HELLO=hello
-echo $HELLO
+echo \$HELLO
 unset HELLO
+echo \$HELLO
 "
 }
 
@@ -2779,18 +2898,21 @@ unset HELLO1 HELLO2
 @test "test builtin: unset HOME" {
     assert_minishell_equal_bash "
 unset HOME
+echo \$HOME
 "
 }
 
 @test "test builtin: unset PATH" {
     assert_minishell_equal_bash "
 unset PATH
+echo \$PATH
 "
 }
 
 @test "test builtin: unset SHELL" {
     assert_minishell_equal_bash "
 unset SHELL
+echo \$SHELL
 "
 }
 
