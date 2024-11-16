@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 22:54:34 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/04 22:44:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/16 00:46:55 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static bool	token_is_invalid_quote(char *str_token)
 	return (open_quote > DEFAULT);
 }
 
-// TODO: classify remaining operators
 t_token	*token_classify(char *str_token)
 {
 	if (!str_token)
