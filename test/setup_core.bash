@@ -73,6 +73,11 @@ assert_minishell_equal_bash() {
 	cd "$path_test"
 
     run bash_execute "$@"
+
+	rm -rf "$path_test"
+	mkdir -p "$path_test"
+	cd "$path_test"
+
     local bash_status=$status
 	local bash_output=$(echo "$output" | sed 's/bash: /minishell: /g')
 
@@ -116,6 +121,10 @@ assert_minishell_equal_bash_heredoc() {
     local bash_output=$output
     local bash_out_norm=$(awk 'NR > 2 && /here-document at line/ { gsub(/at line [0-9]+ /, "", $0); print $0} !/here-document/ { print $0}' <<< "$output")
 	local bash_output_heredoc=$(echo "$bash_out_norm" | sed 's/bash: /minishell: /g')
+
+	rm -rf "$path_test"
+	mkdir -p "$path_test"
+	cd "$path_test"
 
     run minishell_execute "$@"
 
