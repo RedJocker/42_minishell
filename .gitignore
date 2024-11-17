@@ -8,6 +8,7 @@
 tovog/
 .vscode
 minishell
+minishell_bonus
 *commands.json
 .cache/
 *out.txt
