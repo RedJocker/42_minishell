@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/18 18:36:09 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/18 19:15:02 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -208,6 +208,8 @@ assert_minishell_expected() {
 
 # # # Empty `cd` moves to home
 # # cd"
+
+
 
 @test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a'*'" {
 
@@ -1332,6 +1334,55 @@ cat $file
 ls $temp_dir
 "
 }
+
+@test "test redirect builtin: echo < \$does_not_exit < \$exist < \$exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $does_not_exist < $exist < $exist
+"
+}
+
+@test "test redirect builtin: echo < \$exist < \$does_not_exit < \$exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $exist < $does_not_exist < $exist
+"
+}
+
+@test "test redirect builtin: echo < \$exist < \$exit < \$does_not_exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $exist < $exist < $does_not_exist
+"
+}
+
+@test "test redirect builtin: echo < \$exist < \$does_not_exist < \$does_not_exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $exist < $does_not_exist < $does_not_exist
+"
+}
+
+@test "test redirect builtin: echo < \$does_not_exist < \$exist < \$does_not_exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $does_not_exist < $exist < $does_not_exist
+"
+}
+
+@test "test redirect builtin: echo < \$does_not_exist < \$does_not_exist < \$exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $does_not_exist < $does_not_exist < $exist
+"
+}
+
 
 @test "test builtin echo with invalid redirect syntax > >" {
     file1="$temp_dir/a.txt"

@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/17 04:07:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:10:18 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,21 +68,22 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 	int				copy_fds[FD_SIZE];
 	sig_atomic_t	status;
 	char			*err_msg;
-	const t_command	cmd = run_data->cmd;
 
 	copy_fds[FD_IN] = dup(STDIN_FILENO);
 	copy_fds[FD_OUT] = dup(STDOUT_FILENO);
-	cmd->simple->cmd_envp = get_envp(ENVP_DEFAULT);
-	if (!io_handlers_redirect(cmd->io_handlers))
+	run_data->cmd->simple->cmd_envp = get_envp(ENVP_DEFAULT);
+	if (!io_handlers_redirect(run_data->cmd->io_handlers))
 	{
-		err_msg = io_handlers_get_error(cmd->io_handlers);
+		err_msg = io_handlers_get_error(run_data->cmd->io_handlers);
+		dup2(copy_fds[FD_IN], STDIN_FILENO);
+		dup2(copy_fds[FD_OUT], STDOUT_FILENO);
 		close(copy_fds[FD_IN]);
 		close(copy_fds[FD_OUT]);
 		runner_cmd_simple_panic(
 			run_data, ft_strdup(err_msg), EXIT_REDIRECT_FAIL, false);
 		return (EXIT_REDIRECT_FAIL);
 	}
-	status = runner_cmd_builtin(builtin, cmd);
+	status = runner_cmd_builtin(builtin, run_data->cmd);
 	dup2(copy_fds[FD_IN], STDIN_FILENO);
 	dup2(copy_fds[FD_OUT], STDOUT_FILENO);
 	close(copy_fds[FD_IN]);

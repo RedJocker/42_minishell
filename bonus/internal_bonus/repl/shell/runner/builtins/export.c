@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:06:34 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:11:08 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static void	export_print_vars(char **envp)
 		envp_i = DEFAULT_INIT;
 		builder_new_envp = stringbuilder_new();
 		while (envp[DEFAULT][++envp_i])
-		{	
+		{
 			if (envp[DEFAULT][envp_i] == '$')
 				builder_new_envp = stringbuilder_addchar(\
 					builder_new_envp, '\\');
