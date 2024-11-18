@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/11/16 17:56:25 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/18 18:31:45 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -362,7 +362,7 @@ $(LIBFTX):
 	$(call submodule_update_libftx)
 
 etags: debug
-	etags $$(find . -name '*.[ch]')
+	etags $$(find ./src -name '*.[ch]')
 
 bonus:
 	$(call bonus)

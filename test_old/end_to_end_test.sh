@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/16 18:04:56 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/18 18:36:09 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -2898,6 +2898,7 @@ unset HELLO1 HELLO2
 @test "test builtin: unset HOME" {
     assert_minishell_equal_bash "
 unset HOME
+echo $?
 echo \$HOME
 "
 }
@@ -2905,6 +2906,7 @@ echo \$HOME
 @test "test builtin: unset PATH" {
     assert_minishell_equal_bash "
 unset PATH
+echo $?
 echo \$PATH
 "
 }
@@ -2912,6 +2914,7 @@ echo \$PATH
 @test "test builtin: unset SHELL" {
     assert_minishell_equal_bash "
 unset SHELL
+echo $?
 echo \$SHELL
 "
 }
