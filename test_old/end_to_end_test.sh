@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/18 19:15:02 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/18 19:56:51 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -208,8 +208,6 @@ assert_minishell_expected() {
 
 # # # Empty `cd` moves to home
 # # cd"
-
-
 
 @test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a'*'" {
 
@@ -2857,6 +2855,22 @@ missing.out
 @test "test_invocations: \$?" {
     assert_minishell_equal_bash "
 \$?
+"
+}
+
+@test "test_invocations: README.md" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch README.md
+README.md
+"
+}
+
+@test "test_invocations: ./README.md" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch README.md
+./README.md
 "
 }
 
