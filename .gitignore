@@ -14,6 +14,7 @@ minishell_bonus
 *out.txt
 mini_*.txt
 bash_*.txt
+*.log
 
 ## emacs temp
 *~

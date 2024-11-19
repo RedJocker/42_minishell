@@ -1,8 +1,6 @@
 #!/usr/bin/env bats
 
-setup() {
-    load ../setup_core
-}
+load ../setup_core
 
 @test "test unset: unset PATH" {
     assert_minishell_equal_bash "unset PATH
