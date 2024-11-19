@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:10:07 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/19 05:02:17 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_command	command_build_and(t_token **tokens, int op_idx, int tokens_len)
 			tokens + op_idx + 1, tokens_len - op_idx - 1);
 	if (!cmd_after || cmd_after->type == CMD_INVALID)
 	{
-		free(cmd_before);
+		command_destroy(cmd_before);
 		return (cmd_after);
 	}
 	else if (command_build_is_empty(cmd_after))
@@ -83,7 +83,7 @@ t_command	command_build_or(t_token **tokens, int op_idx, int tokens_len)
 			tokens + op_idx + 1, tokens_len - op_idx - 1);
 	if (!cmd_after || cmd_after->type == CMD_INVALID)
 	{
-		free(cmd_before);
+		command_destroy(cmd_before);
 		return (cmd_after);
 	}
 	else if (command_build_is_empty(cmd_after))

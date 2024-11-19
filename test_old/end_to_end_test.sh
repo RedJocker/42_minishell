@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/18 19:56:51 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/19 05:04:53 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -208,6 +208,167 @@ assert_minishell_expected() {
 
 # # # Empty `cd` moves to home
 # # cd"
+
+@test "test precedence: echo 42 && echo 21" {
+    assert_minishell_equal_bash "echo 42 && echo 21
+"
+}
+
+@test "test precedence: echo 42 || echo 21" {
+    assert_minishell_equal_bash "echo 42 || echo 21
+"
+}
+
+@test "test precedence: 42 && echo 21" {
+    assert_minishell_equal_bash "42 && echo 21
+"
+}
+
+@test "test precedence: 42 || echo 21" {
+    assert_minishell_equal_bash "42 || echo 21
+"
+}
+
+@test "test precedence: echo 1 && echo 2 && echo 3 && echo 4 && echo 5" {
+    assert_minishell_equal_bash "echo 1 && echo 2 && echo 3 && echo 4 && echo 5
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 && echo 3)" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 && echo 3)
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && echo 4
+"
+}
+
+@test "test precedence: 1 || 2 || 3 || 4 || echo 5" {
+    assert_minishell_equal_bash "1 || 2 || 3 || 4 || echo 5
+"
+}
+
+@test "test precedence: echo 1 || (echo 2 && echo 3) || echo 4" {
+    assert_minishell_equal_bash "echo 1 || (echo 2 && echo 3) || echo 4
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && echo 4 && (echo 5 || echo 6)" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && echo 4 && (echo 5 || echo 6)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || (echo 3 && echo 4) && (echo 5 || echo 6)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || (echo 3 && echo 4) && (echo 5 || echo 6)
+"
+}
+
+@test "test precedence: ((((echo 1 || (echo 2 || 3) && echo 4) || echo 5) && echo 6) || echo 7)" {
+    assert_minishell_equal_bash "((((echo 1 || (echo 2 || 3) && echo 4) || echo 5) && echo 6) || echo 7)
+"
+}
+
+@test "test precedence: 1 || (echo 2 && ((echo 3 || echo 4) && echo 5))" {
+    assert_minishell_equal_bash "1 || (echo 2 && ((echo 3 || echo 4) && echo 5))
+"
+}
+
+@test "test precedence: 1 || (echo 2 && ((3 || echo 4) || echo 5))" {
+    assert_minishell_equal_bash "1 || (echo 2 && ((3 || echo 4) || echo 5))
+"
+}
+
+@test "test precedence: ((echo 1 && echo 2) || (echo 3 && echo 4))" {
+    assert_minishell_equal_bash "((echo 1 && echo 2) || (echo 3 && echo 4))
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || (echo 3 && echo 4)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || (echo 3 && echo 4)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || echo 3" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || echo 3
+"
+}
+
+@test "test precedence: echo 1 || (echo 2 && echo 3) && echo 4" {
+    assert_minishell_equal_bash "echo 1 || (echo 2 && echo 3) && echo 4
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && (echo 3 || echo 4)" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && (echo 3 || echo 4)
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) || echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) || echo 4
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) && (echo 3 || echo 4)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) && (echo 3 || echo 4)
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && (echo 3 || echo 4) && (echo 5 || echo 6)" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && (echo 3 || echo 4) && (echo 5 || echo 6)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || (echo 3 || echo 4) || (echo 5 && echo 6)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || (echo 3 || echo 4) || (echo 5 && echo 6)
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && (echo 3 || echo 4) || (echo 5 && echo 6)" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && (echo 3 || echo 4) || (echo 5 && echo 6)
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && echo 3 || echo 4" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && echo 3 || echo 4
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && () && echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && () && echo 4
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && () || echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) || () && echo 4
+"
+}
+
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && () | echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) || () | echo 4
+"
+}
+
+@test "test precedence: ((echo 1 && echo 2) || (echo 3 || echo 4)) && (echo 5 && echo 6)" {
+    assert_minishell_equal_bash "((echo 1 && echo 2) || (echo 3 || echo 4)) && (echo 5 && echo 6)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || ((echo 3 || echo 4) && (echo 5 || echo 6)) || (echo 7 && echo 8)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || ((echo 3 || echo 4) && (echo 5 || echo 6)) || (echo 7 && echo 8)
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && (echo 4 || (echo 5 && (echo 6 || echo 7 && (echo 8 || (echo 9 && echo 10)))))" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && (echo 4 || (echo 5 && (echo 6 || echo 7 && (echo 8 || (echo 9 && echo 10)))))
+"
+}
+
+@test "test precedence: echo 1 || (echo 2 || echo 3 || echo 4 || echo 5 || echo 6 || echo 7 || echo 8 || echo 9 || echo 10 || echo 11 || echo 12 || echo 13 || echo14 || echo 15 || echo 16 || echo 17 || echo 18 || echo 19 || echo 20)" {
+    assert_minishell_equal_bash "echo 1 || (echo 2 || echo 3 || echo 4 || echo 5 || echo 6 || echo 7 || echo 8 || echo 9 || echo 10 || echo 11 || echo 12 || echo 13 || echo14 || echo 15 || echo 16 || echo 17 || echo 18 || echo 19 || echo 20)
+"
+}
 
 @test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a'*'" {
 
