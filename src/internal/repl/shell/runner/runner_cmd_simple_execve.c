@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 22:53:14 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/18 19:55:03 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static void	runner_cmd_simple_execve_error_eacces(t_runner_data *run_data, \
 		runner_cmd_simple_panic(run_data, msg, EXIT_CMD_NOT_FOUND, true);
 	}
 	stat(cmd->simple->cmd_argv[0], &path_stat);
-	if (S_ISDIR(path_stat.st_mode))
+	if (S_ISDIR(path_stat.st_mode) || (S_ISREG(path_stat.st_mode)
+			&& !ft_strchr(cmd->simple->cmd_path, '/')))
 	{
 		if (ft_strchr(cmd->simple->cmd_path, '/'))
 		{

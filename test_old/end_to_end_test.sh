@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/16 18:04:56 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/18 19:56:51 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -1332,6 +1332,55 @@ cat $file
 ls $temp_dir
 "
 }
+
+@test "test redirect builtin: echo < \$does_not_exit < \$exist < \$exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $does_not_exist < $exist < $exist
+"
+}
+
+@test "test redirect builtin: echo < \$exist < \$does_not_exit < \$exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $exist < $does_not_exist < $exist
+"
+}
+
+@test "test redirect builtin: echo < \$exist < \$exit < \$does_not_exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $exist < $exist < $does_not_exist
+"
+}
+
+@test "test redirect builtin: echo < \$exist < \$does_not_exist < \$does_not_exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $exist < $does_not_exist < $does_not_exist
+"
+}
+
+@test "test redirect builtin: echo < \$does_not_exist < \$exist < \$does_not_exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $does_not_exist < $exist < $does_not_exist
+"
+}
+
+@test "test redirect builtin: echo < \$does_not_exist < \$does_not_exist < \$exist" {
+    exist="$temp_dir/a.txt"
+    does_not_exist="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $exist
+echo < $does_not_exist < $does_not_exist < $exist
+"
+}
+
 
 @test "test builtin echo with invalid redirect syntax > >" {
     file1="$temp_dir/a.txt"
@@ -2809,6 +2858,22 @@ missing.out
 "
 }
 
+@test "test_invocations: README.md" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch README.md
+README.md
+"
+}
+
+@test "test_invocations: ./README.md" {
+
+    assert_minishell_equal_bash "cd $temp_dir
+touch README.md
+./README.md
+"
+}
+
 
 @test "test builtin: pwd" {
     assert_minishell_equal_bash "
@@ -2898,6 +2963,7 @@ unset HELLO1 HELLO2
 @test "test builtin: unset HOME" {
     assert_minishell_equal_bash "
 unset HOME
+echo $?
 echo \$HOME
 "
 }
@@ -2905,6 +2971,7 @@ echo \$HOME
 @test "test builtin: unset PATH" {
     assert_minishell_equal_bash "
 unset PATH
+echo $?
 echo \$PATH
 "
 }
@@ -2912,6 +2979,7 @@ echo \$PATH
 @test "test builtin: unset SHELL" {
     assert_minishell_equal_bash "
 unset SHELL
+echo $?
 echo \$SHELL
 "
 }
