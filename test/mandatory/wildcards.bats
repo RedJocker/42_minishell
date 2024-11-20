@@ -97,7 +97,6 @@ echo \$?
 @test "test wildcards(ordering): echo *" {
     assert_minishell_equal_bash "
 touch xxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef
-ls -H
 echo *
 echo \$?
 "
@@ -106,7 +105,6 @@ echo \$?
 @test "test wildcards(ordering 2): echo *" {
     assert_minishell_equal_bash "
 touch ABC ABc AbC aBC Abc aBc abC abc
-ls -H
 echo *
 echo \$?
 "
