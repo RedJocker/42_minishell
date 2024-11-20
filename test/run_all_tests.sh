@@ -2,5 +2,11 @@
 
 # Clean old test.
 rm -rf test/output_error > /dev/null || true
+rm -rf test/temp > /dev/null || true
+rm -rf test/logs > /dev/null || true
 # Test serially.
-bats --jobs 4 test/*/*.bats
+THREADS=$(($(nproc) - 1))
+echo "THREADS = ${THREADS}"
+bats --jobs $THREADS test/*/*.bats
+# Clean folder.
+rm -rf test/temp > /dev/null || true

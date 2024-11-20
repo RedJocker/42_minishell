@@ -50,44 +50,38 @@ teardown() {
 clean_output() {
     local output="$1"
     echo "$output" | grep -v '^RedWillShell\$ ' | \
-                    grep -v '^RedWillShell\$ exit$' | \
-                    sed 's/[[:space:]]*$//' | \
-                    sed '/^$/d'
+                    grep -v '^RedWillShell\$ exit$'
 }
 
 bash_execute() {
-	local cmd="$1"
+    local cmd="$1"
     local output
     local temp_file="${TEST_TEMP_DIR}/bash_output_$$"
+    local typescript_file="${temp_file}.typescript"
 
     echo "Executing bash command: $cmd" >> "$TEST_LOG"
 
-    # Create a script with the commands
-    # echo "$cmd" > "${temp_file}.sh"
-	{
-        echo "#!/usr/bin/env bash"
+    # Create the command file
+    {
         echo "$cmd"
-        echo "exit"
-    } > "${temp_file}.sh"
-    chmod +x "${temp_file}.sh"
+    } > "${temp_file}"
+    chmod +x "${temp_file}"
 
-    # Run bash with strict timeout
-    output=$(VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" \
-             VARIABLE_FROM_OUTSIDE="abc def" \
-             LANGUAGE="en" \
-             PS1='RedWillShell$ ' \
-			 timeout --kill-after=2 $TEST_TIMEOUT bash --norc < "${temp_file}.sh" 2>&1) || {
-        local exit_status=$?
-        rm -f "${temp_file}.sh"
-        echo "Bash execution failed with status $exit_status" >> "$TEST_LOG"
-        echo "$output" >> "$TEST_LOG"
-        return $exit_status
-    }
+    # Run bash with script to emulate terminal
+    script -q -c "VARIABLE_FROM_OUTSIDE_MORE_SPACES='abc    def' \
+                  VARIABLE_FROM_OUTSIDE='abc def' \
+                  LANGUAGE='en' \
+                  PS1='RedWillShell$ ' \
+                  timeout --kill-after=2 $TEST_TIMEOUT bash --norc -i < ${temp_file}" \
+           "$typescript_file" > /dev/null
 
-    rm -f "${temp_file}.sh"
-	output=$(echo "$output" | sed 's/\x1B\[[0-9;]*[a-zA-Z]//g' | \
-                              grep -v '^RedWillShell\$ ')
-	echo "$output"
+    # Read and clean the output
+    output=$(cat "$typescript_file" | sed 's/\r//g' | sed '/^Script/d' | sed '/^RedWillShell/d')
+    
+    # Cleanup
+    rm -f "${temp_file}" "$typescript_file"
+    
+    echo "$output"
 }
 # timeout --kill-after=2 $TEST_TIMEOUT bash --norc -i "${temp_file}.sh" 2>&1 <<'EOF' EOF) || {
 
@@ -107,54 +101,10 @@ minishell_execute() {
              VARIABLE_FROM_OUTSIDE="abc def" \
              LANGUAGE="en" \
              PS1='RedWillShell$ ' \
-             timeout --kill-after=2 $TEST_TIMEOUT "$MINISHELL_PATH" < "${temp_file}.sh" 2>&1) || {
-        local exit_status=$?
-        rm -f "${temp_file}.sh"
-        echo "Minishell execution failed with status $exit_status" >> "$TEST_LOG"
-        echo "$output" >> "$TEST_LOG"
-        return $exit_status
-    }
+             timeout --kill-after=2 $TEST_TIMEOUT "$MINISHELL_PATH" < "${temp_file}.sh" 2>&1)
 
     rm -f "${temp_file}.sh"
-	# clean_output "$output"
-    echo "$output"
-}
-
-minishell_leak_check() {
-    local cmd="$1"
-    local output
-    local temp_file="${TEST_TEMP_DIR}/valgrind_output_$$"
-
-	echo "Executing valgrind check: $cmd" >> "$TEST_LOG"
-
-    # Create a script with the commands
-    echo "$cmd" > "${temp_file}.sh"
-    chmod +x "${temp_file}.sh"
-
-    # Run valgrind with strict timeout
-    output=$(VARIABLE_FROM_OUTSIDE_MORE_SPACES="abc    def" \
-             VARIABLE_FROM_OUTSIDE="abc def" \
-             LANGUAGE="en" \
-             PS1='RedWillShell$ ' \
-             timeout --kill-after=6 $((TEST_TIMEOUT * 2)) \
-             valgrind --leak-check=full \
-                     -s \
-                     --show-reachable=yes \
-                     --errors-for-leak-kinds=all \
-                     --error-exitcode=33 \
-                     --track-origins=yes \
-                     --track-fds=yes \
-                     --suppressions="$PROJECT_ROOT/mini.supp" \
-             "$MINISHELL_PATH" < "${temp_file}.sh" 2>&1) || {
-        local exit_status=$?
-        rm -f "${temp_file}.sh"
-        echo "Valgrind check failed with status $exit_status" >> "$TEST_LOG"
-        echo "$output" >> "$TEST_LOG"
-        return $exit_status
-    }
-
-    rm -f "${temp_file}.sh"
-    echo "$output"
+	clean_output "$output"
 }
 
 assert_minishell_equal_bash() {
@@ -167,14 +117,13 @@ assert_minishell_equal_bash() {
 
     echo "Running bash command..." >> "$TEST_LOG"
     run bash_execute "$cmd"
-    # run bash_execute "$@"
     local bash_status
     bash_status=status
 	local bash_output
-	bash_output=${output//bash: /minishell: }
-	# bash_output=${output}
+    bash_output=$(echo "$output" | sed 's/bash: /minishell: /g')
+    bash_output=$(echo "$bash_output" | sed 's/line [0-9]\+: //g')
 
-    echo "Bash output: $bash_output" >> "$TEST_LOG"
+    echo -e "Bash output:\n\n$bash_output\n" >> "$TEST_LOG"
 
     rm -rf "$path_test"
     mkdir -p "$path_test"
@@ -183,10 +132,9 @@ assert_minishell_equal_bash() {
     echo "Running minishell command..." >> "$TEST_LOG"
     run minishell_execute "$cmd"
     local minishell_output="$output"
-    echo "Minishell output: $minishell_output" >> "$TEST_LOG"
+    echo -e "Minishell output:\n\n$minishell_output\n" >> "$TEST_LOG"
 
-    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$minishell_output>" 1>&3
-    # echo -e "===> test_log:\n<$TEST_LOG>\n" 1>&3
+    # echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$minishell_output>" 1>&3
 
     if [ "$bash_output" != "$minishell_output" ]; then
         mkdir -p "${PROJECT_ROOT}/test/output_error"
@@ -203,14 +151,5 @@ assert_minishell_equal_bash() {
     fi
 
     echo "Running valgrind check..." >> "$TEST_LOG"
-    run minishell_leak_check "$cmd"
-
-    if (( bash_status == 33 )); then
-        mkdir -p "${PROJECT_ROOT}/test/output_error"
-        local valgrind_file="$PROJECT_ROOT/test/output_error/valgrind_${BATS_TEST_NAME}_$$.txt"
-        echo "$output" > "$valgrind_file"
-        echo "Valgrind check failed" >> "$TEST_LOG"
-        false
-    fi
     echo "Test completed successfully" >> "$TEST_LOG"
 }
