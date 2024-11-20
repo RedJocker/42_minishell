@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/20 01:33:23 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/20 02:38:36 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ static sig_atomic_t	return_buildin_status(t_builtin_id builtin, \
 		else if (status == EXIT_FAILURE)
 			print_exit_error(NULL);
 	}
-	if (builtin == BUILTIN_EXIT										\
+	if (builtin == BUILTIN_EXIT \
 		&& (status == EXIT_SYNTAX_ERROR || status != EXIT_FAILURE))
 		runner_cmd_simple_exit_status(run_data, status);
 	return (status);

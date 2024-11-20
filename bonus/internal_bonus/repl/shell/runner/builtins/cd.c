@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 02:17:40 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/17 04:07:01 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/20 02:52:31 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,14 @@ sig_atomic_t	runner_cmd_builtin_cd(t_command cmd)
 
 static sig_atomic_t	cd_change_folder(char *path, sig_atomic_t status)
 {
+	struct stat		path_stat;
+
+	stat(path, &path_stat);
 	if (access(path, F_OK))
 		status = print_cd_error("No such file or directory", path, \
+			EXIT_FAILURE);
+	else if (!S_ISDIR(path_stat.st_mode))
+		status = print_cd_error("Not a directory", path, \
 			EXIT_FAILURE);
 	else if (access(path, R_OK))
 		status = print_cd_error("Permission denied", path, EXIT_FAILURE);
