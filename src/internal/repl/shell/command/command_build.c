@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 20:19:59 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/19 03:16:40 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/19 21:50:30 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ t_command	command_build(t_token **tokens, int tokens_len)
 	else if (tokens[cmd_operator_idx]->type == OP_OR)
 		return (command_build_or(tokens, cmd_operator_idx, tokens_len));
 	else if (tokens[cmd_operator_idx]->type == OP_PAREN_OPEN)
-		return (command_build_parentheses(tokens, 0, tokens_len));
+		return (command_build_parentheses(tokens, cmd_operator_idx, tokens_len));
 	else if (tokens[cmd_operator_idx]->type == OP_PAREN_CLOSE)
 		return (command_build_paren_err(tokens, cmd_operator_idx, tokens_len));
 	ft_assert(0, "unexpected execution at command_build");

@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/19 05:04:53 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/19 22:36:19 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -208,6 +208,162 @@ assert_minishell_expected() {
 
 # # # Empty `cd` moves to home
 # # cd"
+
+@test "test paren syntax: (ls) -l" {
+    assert_minishell_equal_bash "(ls) -l
+"
+}
+
+@test "test paren syntax: (ls) -l -a" {
+    assert_minishell_equal_bash "(ls) -l -a
+"
+}
+
+@test "test paren syntax: -l (ls)" {
+    assert_minishell_equal_bash "-l (ls)
+"
+}
+
+@test "test paren syntax: word (echo nope)" {
+    assert_minishell_equal_bash "word (echo nope)
+"
+}
+
+@test "test paren syntax: > word (ls)" {
+    assert_minishell_equal_bash "> word (ls)
+"
+}
+
+@test "test paren syntax: < word (wc -l)" {
+    assert_minishell_equal_bash "< word (wc -l)
+"
+}
+
+@test "test paren syntax: ls && ls (ls)" {
+    assert_minishell_equal_bash "ls && ls (ls)
+"
+}
+
+@test "test paren syntax: ls || ls (ls)" {
+    assert_minishell_equal_bash "ls || ls (ls)
+"
+}
+
+@test "test paren syntax: ls | ls (ls)" {
+    assert_minishell_equal_bash "ls | ls (ls)
+"
+}
+
+@test "test paren syntax: pwd && pwd (pwd)" {
+    assert_minishell_equal_bash "pwd && pwd (pwd)
+"
+}
+
+@test "test paren syntax: pwd || pwd (pwd)" {
+    assert_minishell_equal_bash "pwd || pwd (pwd)
+"
+}
+
+@test "test paren syntax: pwd | pwd (pwd)" {
+    assert_minishell_equal_bash "pwd | pwd (pwd)
+"
+}
+
+@test "test paren syntax: (echo nope) word" {
+    assert_minishell_equal_bash "(echo nope) word
+"
+}
+
+@test "test paren syntax optional: (ls) > word" {
+    local input="echo 'optional syntax error'
+(ls) > word
+"
+    local expected_output="RedWillShell$ echo 'optional syntax error'
+optional syntax error
+RedWillShell$ (ls) > word
+minishell: syntax error near unexpected token \`>'
+RedWillShell$ 
+RedWillShell$ exit"
+    local expected_status=2
+    
+    assert_minishell_expected "$input" "$expected_output" "$expected_status"
+}
+
+
+@test "test paren syntax optional: (wc -l) < word" {
+    local input="echo 'optional syntax error'
+(wc -l) < word
+"
+    local expected_output="RedWillShell$ echo 'optional syntax error'
+optional syntax error
+RedWillShell$ (wc -l) < word
+minishell: syntax error near unexpected token \`<'
+RedWillShell$ 
+RedWillShell$ exit"
+    local expected_status=2
+    
+    assert_minishell_expected "$input" "$expected_output" "$expected_status"
+}
+
+@test "test paren syntax: (ls) ls && ls" {
+    assert_minishell_equal_bash "(ls) ls && ls
+"
+}
+
+@test "test paren syntax: (ls) ls || ls" {
+    assert_minishell_equal_bash "(ls) ls || ls
+"
+}
+
+@test "test paren syntax: (ls) ls | ls" {
+    assert_minishell_equal_bash "(ls) ls | ls
+"
+}
+
+@test "test paren syntax: (pwd) pwd && pwd" {
+    assert_minishell_equal_bash "(pwd) pwd && pwd
+"
+}
+
+@test "test paren syntax: (pwd) pwd || pwd" {
+    assert_minishell_equal_bash "(pwd) pwd || pwd
+"
+}
+
+@test "test paren syntax: (pwd) pwd | pwd" {
+    assert_minishell_equal_bash "(pwd) pwd | pwd
+"
+}
+
+@test "test paren syntax: (ls (ls))" {
+    assert_minishell_equal_bash "(ls (ls))
+"
+}
+
+@test "test paren syntax: (< word (ls))" {
+    assert_minishell_equal_bash "(< word (ls))
+"
+}
+
+@test "test paren syntax: ((ls) ls)" {
+    assert_minishell_equal_bash "((ls) ls)
+"
+}
+
+@test "test paren syntax: (pwd (pwd))" {
+    assert_minishell_equal_bash "(pwd (pwd))
+"
+}
+
+@test "test paren syntax: (< word (pwd))" {
+    assert_minishell_equal_bash "(< word (pwd))
+"
+}
+
+@test "test paren syntax: ((pwd) pwd)" {
+    assert_minishell_equal_bash "((pwd) pwd)
+"
+}
 
 @test "test precedence: echo 42 && echo 21" {
     assert_minishell_equal_bash "echo 42 && echo 21
