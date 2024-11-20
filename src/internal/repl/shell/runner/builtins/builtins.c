@@ -6,19 +6,14 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/20 02:38:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:40:48 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
 #include <unistd.h>
-#include "ft_stdio.h"
 #include "ft_string.h"
-#include "internal/default.h"
 #include "internal/env/envp.h"
-#include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/builtins/builtins.h"
-#include "internal/repl/shell/command/command.h"
 
 static t_builtins	builtins_init(void);
 static sig_atomic_t	return_buildin_status(t_builtin_id builtin, \
@@ -96,17 +91,12 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 static sig_atomic_t	return_buildin_status(t_builtin_id builtin, \
 						sig_atomic_t status, t_runner_data *run_data)
 {
-	if (builtin == BUILTIN_EXIT && run_data->is_main)
-	{
-		ft_putendl("exit");
-		if (status == EXIT_SYNTAX_ERROR)
-			print_exit_error(run_data->cmd->simple->cmd_argv[DEFAULT_BEGIN]);
-		else if (status == EXIT_FAILURE)
-			print_exit_error(NULL);
-	}
+	print_builtin_exit(builtin, run_data, status);
 	if (builtin == BUILTIN_EXIT \
-		&& (status == EXIT_SYNTAX_ERROR || status != EXIT_FAILURE))
+		&& (status == EXIT_SYNTAX_ERROR || status != -1))
 		runner_cmd_simple_exit_status(run_data, status);
+	if (status == -1)
+		status = 1;
 	return (status);
 }
 

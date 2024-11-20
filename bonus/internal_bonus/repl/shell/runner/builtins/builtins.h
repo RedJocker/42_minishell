@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:56:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/20 01:34:20 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:44:30 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ t_builtin_id	check_builtin(t_command cmd);
 sig_atomic_t	runner_cmd_builtin(t_builtin_id builtin, t_command cmd);
 sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 					t_runner_data *run_data);
-void			print_exit_error(char *cmd);
+void			print_builtin_exit(
+					t_builtin_id builtin,
+					t_runner_data *run_data,
+					sig_atomic_t status);
 
 #endif
