@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 09:39:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:03:10 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/20 01:40:15 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	runner_data_init(t_runner_data *run_data, t_command cmd, \
 	run_data->pids = ft_arraylist_new(free);
 	run_data->pipes_to_close = ft_arraylist_new(free);
 	run_data->backup_pids = ft_arraylist_new((t_consumer) ft_arraylist_destroy);
+	run_data->is_main = 1;
 }
 
 void	runner_data_clean(t_runner_data *run_data)

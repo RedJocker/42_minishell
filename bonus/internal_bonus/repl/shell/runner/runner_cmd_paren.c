@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:14:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:04:28 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/20 01:38:14 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ sig_atomic_t	runner_cmd_paren(t_runner_data *run_data)
 		exit(EXIT_FORK_FAIL);
 	if (*pid == 0)
 	{
+		run_data->is_main = 0;
 		free(pid);
 		pid = NULL;
 		stat = runner_cmd(run_data, FORK_NOT);

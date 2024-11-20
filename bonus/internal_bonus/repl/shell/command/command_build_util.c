@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 01:08:32 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:09:24 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/19 05:03:57 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ int	command_operator_idx(t_token **tokens, int tokens_len)
 	int	i;
 	int	open_parens;
 
-	precedence_cur = command_token_precedence(WORD);
+	precedence_cur = command_token_precedence(OP_EOF);
 	open_parens = 0;
 	cmd_operator_idx = -1;
 	i = -1;
 	while (++i < tokens_len)
 	{
 		precedence_next = command_token_precedence(tokens[i]->type);
-		if (open_parens == 0 && precedence_next < precedence_cur)
+		if (open_parens == 0 && precedence_next <= precedence_cur)
 		{
 			cmd_operator_idx = i;
 			precedence_cur = precedence_next;

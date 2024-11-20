@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/18 19:56:51 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/20 02:53:51 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -203,11 +203,415 @@ assert_minishell_expected() {
 
 ## NEW TESTS #########################
 
-# # # This should not change the current directory
-# # cd .. hi
+@test "test cd: cd \n pwd" {
 
-# # # Empty `cd` moves to home
-# # cd"
+    assert_minishell_equal_bash "
+cd
+pwd
+"
+}
+
+@test "test cd: export HOME=/usr/bin/ \n cd \n pwd" {
+
+    assert_minishell_equal_bash "
+export HOME='/usr/bin/'
+cd
+pwd
+"
+}
+
+@test "test cd: cd does_not_exist" {
+
+    assert_minishell_equal_bash "cd does_not_exist
+echo \$?
+pwd
+"
+}
+
+@test "test cd: cd .. word" {
+
+    assert_minishell_equal_bash "cd .. word
+echo \$?
+pwd
+"
+}
+
+@test "test cd: cd \$existing_dir" {
+    existing_dir="$temp_dir/temp"
+    
+    assert_minishell_equal_bash "mkdir -p \"$existing_dir\"
+cd \"$existing_dir\"
+echo \$?
+pwd
+"
+}
+
+@test "test cd: cd /dev" {
+    assert_minishell_equal_bash "cd /dev
+echo \$?
+pwd
+"
+}
+
+@test "test cd: cd \$forbidden_dir" {
+    forbidden_dir="$temp_dir/forbidden"
+    assert_minishell_equal_bash "mkdir -p \"$forbidden_dir\"
+chmod 0 \"$forbidden_dir\"
+cd \"$forbidden_dir\"
+echo \$?
+pwd
+"
+}
+
+@test "test cd: cd \$existing_file" {
+    existing_file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "touch $existing_file
+cd $existing_file
+echo \$?
+pwd
+"
+}
+
+@test "test cd: cd forbidden_file" {
+    forbidden_file="$temp_dir/a.txt"
+    assert_minishell_equal_bash "touch $forbidden_file
+chmod 0 $forbidden_file
+cd $forbidden_file
+echo \$?
+pwd
+"
+}
+@test "test cd: cd ../../../../../../../../../../../../../../../../../../../../../../" {
+    assert_minishell_equal_bash "cd ../../../../../../../../../../../../../../../../../../../../../../
+echo \$?
+pwd
+"
+}
+
+@test "test cd: cd $HOME" {
+    assert_minishell_equal_bash "cd $HOME
+echo \$?
+pwd
+"
+}
+
+
+@test "test paren syntax: (ls) -l" {
+    assert_minishell_equal_bash "(ls) -l
+"
+}
+
+@test "test paren syntax: (ls) -l -a" {
+    assert_minishell_equal_bash "(ls) -l -a
+"
+}
+
+@test "test paren syntax: -l (ls)" {
+    assert_minishell_equal_bash "-l (ls)
+"
+}
+
+@test "test paren syntax: word (echo nope)" {
+    assert_minishell_equal_bash "word (echo nope)
+"
+}
+
+@test "test paren syntax: > word (ls)" {
+    assert_minishell_equal_bash "> word (ls)
+"
+}
+
+@test "test paren syntax: < word (wc -l)" {
+    assert_minishell_equal_bash "< word (wc -l)
+"
+}
+
+@test "test paren syntax: ls && ls (ls)" {
+    assert_minishell_equal_bash "ls && ls (ls)
+"
+}
+
+@test "test paren syntax: ls || ls (ls)" {
+    assert_minishell_equal_bash "ls || ls (ls)
+"
+}
+
+@test "test paren syntax: ls | ls (ls)" {
+    assert_minishell_equal_bash "ls | ls (ls)
+"
+}
+
+@test "test paren syntax: pwd && pwd (pwd)" {
+    assert_minishell_equal_bash "pwd && pwd (pwd)
+"
+}
+
+@test "test paren syntax: pwd || pwd (pwd)" {
+    assert_minishell_equal_bash "pwd || pwd (pwd)
+"
+}
+
+@test "test paren syntax: pwd | pwd (pwd)" {
+    assert_minishell_equal_bash "pwd | pwd (pwd)
+"
+}
+
+@test "test paren syntax: (echo nope) word" {
+    assert_minishell_equal_bash "(echo nope) word
+"
+}
+
+@test "test paren syntax optional: (ls) > word" {
+    local input="echo 'optional syntax error'
+(ls) > word
+"
+    local expected_output="RedWillShell$ echo 'optional syntax error'
+optional syntax error
+RedWillShell$ (ls) > word
+minishell: syntax error near unexpected token \`>'
+RedWillShell$ 
+RedWillShell$ exit"
+    local expected_status=2
+    
+    assert_minishell_expected "$input" "$expected_output" "$expected_status"
+}
+
+
+@test "test paren syntax optional: (wc -l) < word" {
+    local input="echo 'optional syntax error'
+(wc -l) < word
+"
+    local expected_output="RedWillShell$ echo 'optional syntax error'
+optional syntax error
+RedWillShell$ (wc -l) < word
+minishell: syntax error near unexpected token \`<'
+RedWillShell$ 
+RedWillShell$ exit"
+    local expected_status=2
+    
+    assert_minishell_expected "$input" "$expected_output" "$expected_status"
+}
+
+@test "test paren syntax: (ls) ls && ls" {
+    assert_minishell_equal_bash "(ls) ls && ls
+"
+}
+
+@test "test paren syntax: (ls) ls || ls" {
+    assert_minishell_equal_bash "(ls) ls || ls
+"
+}
+
+@test "test paren syntax: (ls) ls | ls" {
+    assert_minishell_equal_bash "(ls) ls | ls
+"
+}
+
+@test "test paren syntax: (pwd) pwd && pwd" {
+    assert_minishell_equal_bash "(pwd) pwd && pwd
+"
+}
+
+@test "test paren syntax: (pwd) pwd || pwd" {
+    assert_minishell_equal_bash "(pwd) pwd || pwd
+"
+}
+
+@test "test paren syntax: (pwd) pwd | pwd" {
+    assert_minishell_equal_bash "(pwd) pwd | pwd
+"
+}
+
+@test "test paren syntax: (ls (ls))" {
+    assert_minishell_equal_bash "(ls (ls))
+"
+}
+
+@test "test paren syntax: (< word (ls))" {
+    assert_minishell_equal_bash "(< word (ls))
+"
+}
+
+@test "test paren syntax: ((ls) ls)" {
+    assert_minishell_equal_bash "((ls) ls)
+"
+}
+
+@test "test paren syntax: (pwd (pwd))" {
+    assert_minishell_equal_bash "(pwd (pwd))
+"
+}
+
+@test "test paren syntax: (< word (pwd))" {
+    assert_minishell_equal_bash "(< word (pwd))
+"
+}
+
+@test "test paren syntax: ((pwd) pwd)" {
+    assert_minishell_equal_bash "((pwd) pwd)
+"
+}
+
+@test "test precedence: echo 42 && echo 21" {
+    assert_minishell_equal_bash "echo 42 && echo 21
+"
+}
+
+@test "test precedence: echo 42 || echo 21" {
+    assert_minishell_equal_bash "echo 42 || echo 21
+"
+}
+
+@test "test precedence: 42 && echo 21" {
+    assert_minishell_equal_bash "42 && echo 21
+"
+}
+
+@test "test precedence: 42 || echo 21" {
+    assert_minishell_equal_bash "42 || echo 21
+"
+}
+
+@test "test precedence: echo 1 && echo 2 && echo 3 && echo 4 && echo 5" {
+    assert_minishell_equal_bash "echo 1 && echo 2 && echo 3 && echo 4 && echo 5
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 && echo 3)" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 && echo 3)
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && echo 4
+"
+}
+
+@test "test precedence: 1 || 2 || 3 || 4 || echo 5" {
+    assert_minishell_equal_bash "1 || 2 || 3 || 4 || echo 5
+"
+}
+
+@test "test precedence: echo 1 || (echo 2 && echo 3) || echo 4" {
+    assert_minishell_equal_bash "echo 1 || (echo 2 && echo 3) || echo 4
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && echo 4 && (echo 5 || echo 6)" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && echo 4 && (echo 5 || echo 6)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || (echo 3 && echo 4) && (echo 5 || echo 6)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || (echo 3 && echo 4) && (echo 5 || echo 6)
+"
+}
+
+@test "test precedence: ((((echo 1 || (echo 2 || 3) && echo 4) || echo 5) && echo 6) || echo 7)" {
+    assert_minishell_equal_bash "((((echo 1 || (echo 2 || 3) && echo 4) || echo 5) && echo 6) || echo 7)
+"
+}
+
+@test "test precedence: 1 || (echo 2 && ((echo 3 || echo 4) && echo 5))" {
+    assert_minishell_equal_bash "1 || (echo 2 && ((echo 3 || echo 4) && echo 5))
+"
+}
+
+@test "test precedence: 1 || (echo 2 && ((3 || echo 4) || echo 5))" {
+    assert_minishell_equal_bash "1 || (echo 2 && ((3 || echo 4) || echo 5))
+"
+}
+
+@test "test precedence: ((echo 1 && echo 2) || (echo 3 && echo 4))" {
+    assert_minishell_equal_bash "((echo 1 && echo 2) || (echo 3 && echo 4))
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || (echo 3 && echo 4)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || (echo 3 && echo 4)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || echo 3" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || echo 3
+"
+}
+
+@test "test precedence: echo 1 || (echo 2 && echo 3) && echo 4" {
+    assert_minishell_equal_bash "echo 1 || (echo 2 && echo 3) && echo 4
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && (echo 3 || echo 4)" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && (echo 3 || echo 4)
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) || echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) || echo 4
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) && (echo 3 || echo 4)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) && (echo 3 || echo 4)
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && (echo 3 || echo 4) && (echo 5 || echo 6)" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && (echo 3 || echo 4) && (echo 5 || echo 6)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || (echo 3 || echo 4) || (echo 5 && echo 6)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || (echo 3 || echo 4) || (echo 5 && echo 6)
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && (echo 3 || echo 4) || (echo 5 && echo 6)" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && (echo 3 || echo 4) || (echo 5 && echo 6)
+"
+}
+
+@test "test precedence: (echo 1 || echo 2) && echo 3 || echo 4" {
+    assert_minishell_equal_bash "(echo 1 || echo 2) && echo 3 || echo 4
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && () && echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && () && echo 4
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && () || echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) || () && echo 4
+"
+}
+
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && () | echo 4" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) || () | echo 4
+"
+}
+
+@test "test precedence: ((echo 1 && echo 2) || (echo 3 || echo 4)) && (echo 5 && echo 6)" {
+    assert_minishell_equal_bash "((echo 1 && echo 2) || (echo 3 || echo 4)) && (echo 5 && echo 6)
+"
+}
+
+@test "test precedence: (echo 1 && echo 2) || ((echo 3 || echo 4) && (echo 5 || echo 6)) || (echo 7 && echo 8)" {
+    assert_minishell_equal_bash "(echo 1 && echo 2) || ((echo 3 || echo 4) && (echo 5 || echo 6)) || (echo 7 && echo 8)
+"
+}
+
+@test "test precedence: echo 1 && (echo 2 || echo 3) && (echo 4 || (echo 5 && (echo 6 || echo 7 && (echo 8 || (echo 9 && echo 10)))))" {
+    assert_minishell_equal_bash "echo 1 && (echo 2 || echo 3) && (echo 4 || (echo 5 && (echo 6 || echo 7 && (echo 8 || (echo 9 && echo 10)))))
+"
+}
+
+@test "test precedence: echo 1 || (echo 2 || echo 3 || echo 4 || echo 5 || echo 6 || echo 7 || echo 8 || echo 9 || echo 10 || echo 11 || echo 12 || echo 13 || echo14 || echo 15 || echo 16 || echo 17 || echo 18 || echo 19 || echo 20)" {
+    assert_minishell_equal_bash "echo 1 || (echo 2 || echo 3 || echo 4 || echo 5 || echo 6 || echo 7 || echo 8 || echo 9 || echo 10 || echo 11 || echo 12 || echo 13 || echo14 || echo 15 || echo 16 || echo 17 || echo 18 || echo 19 || echo 20)
+"
+}
 
 @test "test wildcard pattern with quote: cd \$temp_dir \n touch a'*' \n echo a'*'" {
 
@@ -828,7 +1232,7 @@ eof
     assert_minishell_equal_bash "<< eof > $file
 input
 eof
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -838,7 +1242,7 @@ ls $temp_dir
     assert_minishell_equal_bash "> $file << eof
 input
 eof
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -848,7 +1252,7 @@ ls $temp_dir
     assert_minishell_equal_bash "<< eof >> $file
 input
 eof
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -858,7 +1262,7 @@ ls $temp_dir
     assert_minishell_equal_bash ">> $file << eof
 input
 eof
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -889,7 +1293,7 @@ ls $temp_dir
 @test "test redirect alone cmd_pipe: true | > \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "true | > $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -898,7 +1302,7 @@ ls $temp_dir
 @test "test redirect alone cmd_pipe: true | >> \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "true | >> $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -934,7 +1338,7 @@ true | < $file
 @test "test redirect alone cmd_and: true && > \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "true && > $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -942,7 +1346,7 @@ ls $temp_dir
 @test "test redirect alone cmd_and: true && >> \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "true && >> $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -958,7 +1362,7 @@ true && < $file
 @test "test redirect alone cmd_and: false && > \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "false && > $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -967,7 +1371,7 @@ ls $temp_dir
 @test "test redirect alone cmd_and: false && >> \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "false && >> $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -1004,7 +1408,7 @@ ls $temp_dir
 @test "test redirect alone cmd_or: true || > \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "true || > $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -1012,7 +1416,7 @@ ls $temp_dir
 @test "test redirect alone cmd_or: true || >> \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "true || >> $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -1020,14 +1424,14 @@ ls $temp_dir
 @test "test redirect alone cmd_or: true || < \$file" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "true || < $file
-echo $?
+echo \$?
 "
 }
 
 @test "test redirect alone cmd_or: false || > \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "false || > $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -1035,7 +1439,7 @@ ls $temp_dir
 @test "test redirect alone cmd_or: false || >> \$file \n ls \$temp_dir" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "false || >> $file
-echo $?
+echo \$?
 ls $temp_dir
 "
 }
@@ -1043,7 +1447,7 @@ ls $temp_dir
 @test "test redirect alone cmd_or: false || < \$file" {
     file="$temp_dir/a.txt"
     assert_minishell_equal_bash "false || < $file
-echo $?
+echo \$?
 "
 }
 
@@ -2023,14 +2427,14 @@ cat $file3
 @test "test pipe and echo: echo redirected  > \$file1 | cat" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "echo to file > $file1 | cat
-echo $?
+echo \$?
 cat $file1"
 }
 
 @test "test pipe and echo: ls | echo to file > \$file1" {
     file1="$temp_dir/a.txt"
     assert_minishell_equal_bash "ls | echo to file > $file1
-echo $?
+echo \$?
 cat $file1
 "
 }
@@ -2527,15 +2931,15 @@ eof
 }
 
 @test "test command and: false && echo \$?" {
-    assert_minishell_equal_bash "false && echo $?"
+    assert_minishell_equal_bash "false && echo \$?"
 }
 
 @test "test command and: true && echo \$?" {
-    assert_minishell_equal_bash "true && echo $?"
+    assert_minishell_equal_bash "true && echo \$?"
 }
 
 @test "test command and: echo ok && echo \$?" {
-    assert_minishell_equal_bash "echo ok && echo $?"
+    assert_minishell_equal_bash "echo ok && echo \$?"
 }
 
 ## OR TESTS #########################
@@ -2561,15 +2965,15 @@ eof
 }
 
 @test "test command or: false || echo \$?" {
-    assert_minishell_equal_bash "false || echo $?"
+    assert_minishell_equal_bash "false || echo \$?"
 }
 
 @test "test command or: true || echo \$?" {
-    assert_minishell_equal_bash "true || echo $?"
+    assert_minishell_equal_bash "true || echo \$?"
 }
 
 @test "test command or: echo ok || echo \$?" {
-    assert_minishell_equal_bash "echo ok || echo $?"
+    assert_minishell_equal_bash "echo ok || echo \$?"
 }
 
 ## PIPE WITH AND TESTS #########################
@@ -2963,7 +3367,7 @@ unset HELLO1 HELLO2
 @test "test builtin: unset HOME" {
     assert_minishell_equal_bash "
 unset HOME
-echo $?
+echo \$?
 echo \$HOME
 "
 }
@@ -2971,7 +3375,7 @@ echo \$HOME
 @test "test builtin: unset PATH" {
     assert_minishell_equal_bash "
 unset PATH
-echo $?
+echo \$?
 echo \$PATH
 "
 }
@@ -2979,7 +3383,7 @@ echo \$PATH
 @test "test builtin: unset SHELL" {
     assert_minishell_equal_bash "
 unset SHELL
-echo $?
+echo \$?
 echo \$SHELL
 "
 }
@@ -3009,7 +3413,6 @@ echo > \$
 ls
 "  
 }
-
 
 @test "test builtin: exit 123" {
     assert_minishell_equal_bash "
@@ -3078,5 +3481,25 @@ uname
     assert_minishell_equal_bash "
 exit 42 world
 uname
+"
+}
+
+@test "test exit forked: exit | grep exit" {
+    assert_minishell_equal_bash "exit | grep exit
+"
+}
+
+@test "test exit forked: exit | wc -l" {
+    assert_minishell_equal_bash "exit | wc -l
+"
+}
+
+@test "test exit forked: ls | exit" {
+    assert_minishell_equal_bash "ls | exit
+"
+}
+
+@test "test exit forked: (exit)" {
+    assert_minishell_equal_bash "(exit)
 "
 }

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:17:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:02:58 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/20 01:41:02 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_runner_data
 	sig_atomic_t	last_cmd_status;
 	t_command		base_cmd;
 	t_command		cmd;
+	bool			is_main;
 }	t_runner_data;
 
 typedef enum e_fork_flag

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:05:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:09:31 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/19 22:48:18 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,29 @@ static int	find_paren_end(t_token **tokens, int tokens_len)
 	return (i);
 }
 
+int	has_redirect_before(t_token **tokens, int op_idx)
+{
+	int	i;
+
+	i = -1;
+	while (++i < op_idx)
+	{
+		if (token_type_is_redirect(tokens[i]))
+			return (1);
+	}
+	return (0);
+}
+
 t_command	command_build_parentheses(
 	t_token **tokens, int op_idx, int tokens_len)
 {
 	t_command	cmd;
 	int			close_i;
 
-	(void) op_idx;
-	ft_assert(tokens[0]->type == OP_PAREN_OPEN,
-		"expected opening paren at command_cuild_parentheses");
+	if (tokens[0]->type != OP_PAREN_OPEN && has_redirect_before(tokens, op_idx))
+		return (command_build_panic_zero(tokens[op_idx]->content));
+	else if (tokens[0]->type != OP_PAREN_OPEN)
+		return (command_build_panic_zero(tokens[op_idx + 1]->content));
 	close_i = find_paren_end(tokens, tokens_len);
 	if (tokens[close_i]->type != OP_PAREN_CLOSE \
 		|| !token_type_is_end_op(tokens[close_i + 1]) \
