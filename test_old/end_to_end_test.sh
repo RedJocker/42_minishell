@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/19 22:36:19 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/20 01:41:48 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -3327,7 +3327,6 @@ ls
 "  
 }
 
-
 @test "test builtin: exit 123" {
     assert_minishell_equal_bash "
 exit 123
@@ -3395,5 +3394,25 @@ uname
     assert_minishell_equal_bash "
 exit 42 world
 uname
+"
+}
+
+@test "test exit forked: exit | grep exit" {
+    assert_minishell_equal_bash "exit | grep exit
+"
+}
+
+@test "test exit forked: exit | wc -l" {
+    assert_minishell_equal_bash "exit | wc -l
+"
+}
+
+@test "test exit forked: ls | exit" {
+    assert_minishell_equal_bash "ls | exit
+"
+}
+
+@test "test exit forked: (exit)" {
+    assert_minishell_equal_bash "(exit)
 "
 }

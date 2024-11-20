@@ -6,12 +6,13 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/18 19:10:18 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/20 01:33:03 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <unistd.h>
+#include "ft_stdio.h"
 #include "ft_string.h"
 #include "internal_bonus/default.h"
 #include "internal_bonus/env/envp.h"
@@ -95,7 +96,15 @@ sig_atomic_t	runner_cmd_builtin_without_fork(t_builtin_id builtin, \
 static sig_atomic_t	return_buildin_status(t_builtin_id builtin, \
 						sig_atomic_t status, t_runner_data *run_data)
 {
-	if (builtin == BUILTIN_EXIT \
+	if (builtin == BUILTIN_EXIT && run_data->is_main)
+	{
+		ft_putendl("exit");
+		if (status == EXIT_SYNTAX_ERROR)
+			print_exit_error(run_data->cmd->simple->cmd_argv[DEFAULT_BEGIN]);
+		else if (status == EXIT_FAILURE)
+			print_exit_error(NULL);
+	}
+	if (builtin == BUILTIN_EXIT										\
 		&& (status == EXIT_SYNTAX_ERROR || status != EXIT_FAILURE))
 		runner_cmd_simple_exit_status(run_data, status);
 	return (status);
