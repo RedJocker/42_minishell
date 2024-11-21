@@ -117,8 +117,6 @@ assert_minishell_equal_bash() {
 
     echo "Running bash command..." >> "$TEST_LOG"
     run bash_execute "$cmd"
-    local bash_status
-    bash_status=status
 	local bash_output
     bash_output=$(echo "$output" | sed 's/bash: /minishell: /g')
     bash_output=$(echo "$bash_output" | sed 's/line [0-9]\+: //g')

@@ -6,7 +6,7 @@ rm -rf test/temp > /dev/null || true
 rm -rf test/logs > /dev/null || true
 # Test serially.
 THREADS=$(($(nproc) - 1))
-echo "THREADS = ${THREADS}"
+echo "Starting test with ${THREADS} threads"
 bats --jobs $THREADS test/*/*.bats
 # Clean folder.
 rm -rf test/temp > /dev/null || true
