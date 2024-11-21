@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/20 02:53:51 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/20 23:42:32 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -202,6 +202,336 @@ assert_minishell_expected() {
 
 
 ## NEW TESTS #########################
+
+@test "test export: export hello" {
+
+    assert_minishell_equal_bash "export hello
+"
+}
+
+@test "test export: export HELLO=123" {
+
+    assert_minishell_equal_bash "export HELLO=123
+echo \$?
+echo \$HELLO
+"
+}
+
+@test "test export: export A-" {
+
+    assert_minishell_equal_bash "export A-
+"
+}
+
+@test "test export: export HELLO=123 A" {
+
+    assert_minishell_equal_bash "export HELLO=123 A
+echo \$?
+echo \$HELLO
+export | grep 'declare -x A'
+"
+}
+
+@test "test export: export HELLO=\"123 A-\"" {
+
+    assert_minishell_equal_bash "export HELLO=\"123 A-\"
+echo \$?
+echo \$HELLO
+"
+}
+
+@test "test export: export hello world" {
+
+    assert_minishell_equal_bash "export hello world
+echo \$?
+export | grep 'declare -x hello'
+export | grep 'declare -x world'
+"
+}
+
+@test "test export: export HELLO-=123" {
+
+    assert_minishell_equal_bash "export HELLO-=123
+echo \$?
+echo \$HELLO
+echo \$HELLO-
+"
+}
+
+@test "test export: export =" {
+
+    assert_minishell_equal_bash "export =
+"
+}
+
+@test "test export: export 123" {
+
+    assert_minishell_equal_bash "export 123
+"
+}
+
+@test "test export: export var01=filename && cat infile1 > \"\"\$var01\"\"" {
+
+    file_in="$temp_dir/a.txt"
+    file_out="$temp_dir/b.txt"
+    assert_minishell_equal_bash "echo hello > $file_in
+export var01=\"$file_out\" && cat $file_in > \"\"\$var01\"\"
+echo \$?
+cat $file_out 
+"
+}
+
+@test "test export: export var01=filename && cat \"\"\$var01\"\"" {
+
+    file_in="$temp_dir/a.txt"
+    assert_minishell_equal_bash "echo hello > $file_in
+export var01=\"$file_in\" && cat \"\"\$var01\"\"
+"
+}
+
+@test "test export: export carol=55 && echo \$carol" {
+
+    assert_minishell_equal_bash "export carol=55 && echo \$carol
+"
+}
+
+@test "test export: export carol=55 && echo \"\$carol\"" {
+
+    assert_minishell_equal_bash "export carol=55 && echo \"\$carol\"
+"
+}
+
+@test "test export: export carol=55 && echo '$carol'" {
+
+    assert_minishell_equal_bash "export carol=55 && echo '$carol'
+"
+}
+
+@test "test export: export carol=55 && echo \$carolbia\$" {
+
+    assert_minishell_equal_bash "export carol=55 && echo \$carolbia\$
+"
+}
+
+@test "test export: export carol=55 && echo \$carolbia\$ hi" {
+
+    assert_minishell_equal_bash "export carol=55 && echo \$carolbia\$ hi
+"
+}
+
+@test "test export: export carol=55 && echo \$carol\$?bia\$ hi" {
+
+    assert_minishell_equal_bash "export carol=55 && echo \$carol\$?bia\$ hi
+"
+}
+
+
+@test "test export: export carol=55 var=\"o hello\" var50=\"abc      def\" && ech\$var" {
+
+    assert_minishell_equal_bash "export carol=55 var=\"o hello\" var50=\"abc      def\" && ech\$var
+"
+}
+
+@test "test export: export carol=55 var=\"o hello\" var50=\"abc      def\" && echo \$var50" {
+
+    assert_minishell_equal_bash "export carol=55 var=\"o hello\" var50=\"abc      def\" && echo \$var50
+"
+}
+
+@test "test export: export \"\"" {
+
+    assert_minishell_equal_bash "export \"\"
+"
+}
+
+@test "test export: export \" \"" {
+
+    assert_minishell_equal_bash "export \" \"
+"
+}
+
+@test "test export: export ''" {
+
+    assert_minishell_equal_bash "export ''
+"
+}
+
+@test "test export: export ' '" {
+
+    assert_minishell_equal_bash "export ' '
+"
+}
+
+@test "test export: export var=oi | echo hey" {
+
+    assert_minishell_equal_bash "export var=oi | echo hey
+"
+}
+
+@test "test export: export var=variable && export \$var=123" {
+
+    assert_minishell_equal_bash "export var=variable && export \$var=123
+"
+}
+
+@test "test export: export carol=55 && \$USER\$carol" {
+
+    assert_minishell_equal_bash "export carol=55 && \$USER\$carol
+"
+}
+
+@test "test export: export carol=55 && export var=variable && \$USER\$var" {
+
+    assert_minishell_equal_bash "export carol=55 && export var=variable && \$USER\$var
+"
+}
+
+@test "test export: (export var=carol) && export | grep var=" {
+
+    assert_minishell_equal_bash "(export var=carol) && export | grep var=
+"
+}
+
+@test "test export: (export var=carol && echo \$var) && echo \$var" {
+
+    assert_minishell_equal_bash "
+(export var=carol && echo \$var) && echo \$var
+"
+}
+
+@test "test export: EXPORT" {
+
+    assert_minishell_equal_bash "EXPORT
+"
+}
+
+@test "test export: Export" {
+
+    assert_minishell_equal_bash "Export
+"
+}
+
+@test "test export: export 42" {
+
+    assert_minishell_equal_bash "export 42
+"
+}
+
+@test "test export: export A" {
+
+    assert_minishell_equal_bash "export A
+"
+}
+
+@test "test export: export 1" {
+
+    assert_minishell_equal_bash "export 1
+"
+}
+
+@test "test export: export 1=" {
+
+    assert_minishell_equal_bash "export 1=
+"
+}
+
+@test "test export: export 1=a" {
+
+    assert_minishell_equal_bash "export 1=a
+"
+}
+
+@test "test export: export HELLOWORLD =a" {
+
+    assert_minishell_equal_bash "export HELLOWORLD =a
+"
+}
+
+@test "test export: export HELLOWORLD= a" {
+
+    assert_minishell_equal_bash "export HELLOWORLD= a
+"
+}
+
+@test "test export: export HELLO'WORLD'=a" {
+
+    assert_minishell_equal_bash "export HELLO'WORLD'=a
+echo \$?
+echo \$HELLOWORLD
+"
+}
+
+@test "test export: export HELLO\"WORLD\"=a" {
+
+    assert_minishell_equal_bash "export HELLO\"WORLD\"=a
+"
+}
+
+@test "test export: export HELLO\$WORLD=a" {
+
+    assert_minishell_equal_bash "export HELLO\$WORLD=a
+"
+}
+
+
+@test "test export: export WORLD=b && export HELLO\$WORLD=a" {
+
+    assert_minishell_equal_bash "export WORLD=B && export HELLO\$WORLD=a
+echo \$?
+echo \$HELLOB
+"
+}
+
+
+@test "test export: export HELLO_WORLD=a" {
+
+    assert_minishell_equal_bash "export HELLO_WORLD=a
+echo \$?
+echo \$HELLO_WORLD
+"
+}
+
+@test "test export: export 'HELLO@'=hello" {
+
+    assert_minishell_equal_bash "export 'HELLO@'=hello
+"
+}
+
+@test "test export: export \"HELLO\'\"=hello" {
+
+    assert_minishell_equal_bash "export \"HELLO\'\"=hello
+"
+}
+
+@test "test export: export 'HELLO\"'=hello" {
+
+assert_minishell_equal_bash "export 'HELLO\"'=hello
+"
+}
+ 
+ @test "test export: export 'HELLO!'=hello" {
+
+     assert_minishell_equal_bash "export 'HELLO!'=hello
+"
+}
+
+@test "test export: export 'HELLO|'=hello" {
+
+assert_minishell_equal_bash "export 'HELLO|'=hello
+"
+}
+
+@test "test export: export 'HELLO&'=hello" {
+
+assert_minishell_equal_bash "export 'HELLO&'=hello
+"
+}
+
+@test "test export: export 'HELLO\\'=hello" {
+
+assert_minishell_equal_bash "export 'HELLO\\'=hello
+"
+}
 
 @test "test cd: cd \n pwd" {
 
@@ -2694,6 +3024,17 @@ echo \$?HELLO
 "
 }
 
+@test "test expansion: echo \"'\$VARIABLE_FROM_OUTSIDE'\"" {
+
+    assert_minishell_equal_bash "echo \"'\$VARIABLE_FROM_OUTSIDE'\"
+"
+}
+
+@test "test expansion: echo '\"\$VARIABLE_FROM_OUTSIDE\"'" {
+
+    assert_minishell_equal_bash "echo '\"\$VARIABLE_FROM_OUTSIDE\"'
+"
+}
 
 ## HEREDOC TESTS #########################
 
@@ -3501,5 +3842,323 @@ uname
 
 @test "test exit forked: (exit)" {
     assert_minishell_equal_bash "(exit)
+"
+}
+
+@test "test exit: exit" {
+
+    assert_minishell_equal_bash "exit
+"
+}
+
+@test "test exit: Exit" {
+
+    assert_minishell_equal_bash "Exit
+"
+}
+
+@test "test exit: EXIT" {
+
+    assert_minishell_equal_bash "EXIT
+"
+}
+
+@test "test exit: exit 42" {
+
+    assert_minishell_equal_bash "exit 42
+"
+}
+
+@test "test exit: exit 240" {
+
+    assert_minishell_equal_bash "exit 240
+"
+}
+
+@test "test exit: exit +42" {
+
+    assert_minishell_equal_bash "exit +42
+"
+}
+
+@test "test exit: exit -42" {
+
+    assert_minishell_equal_bash "exit -42
+"
+}
+
+@test "test exit: exit 00000000000000000000000000000000000000000000001" {
+
+    assert_minishell_equal_bash "exit 00000000000000000000000000000000000000000000001
+"
+}
+
+@test "test exit: exit 00000000000000000000000000000000000000000000000" {
+
+    assert_minishell_equal_bash "exit 00000000000000000000000000000000000000000000000
+"
+}
+
+@test "test exit: exit -00000000000000000000000000000000000000000000001" {
+
+    assert_minishell_equal_bash "exit -00000000000000000000000000000000000000000000001
+"
+}
+
+@test "test exit: exit -00000000000000000000000000000000000000000000000" {
+
+    assert_minishell_equal_bash "exit -00000000000000000000000000000000000000000000000
+"
+}
+
+@test "test exit: exit --42" {
+
+    assert_minishell_equal_bash "exit --42
+"
+}
+
+@test "test exit: exit ++42" {
+
+    assert_minishell_equal_bash "exit ++42
+"
+}
+
+@test "test exit: exit - 42" {
+
+    assert_minishell_equal_bash "exit - 42
+"
+}
+
+@test "test exit: exit + 42" {
+
+    assert_minishell_equal_bash "exit + 42
+"
+}
+
+@test "test exit: exit \"0\"" {
+
+    assert_minishell_equal_bash "exit \"0\"
+"
+}
+
+@test "test exit: exit '0'" {
+
+    assert_minishell_equal_bash "exit '0'
+"
+}
+
+@test "test exit: exit \"\"" {
+
+    assert_minishell_equal_bash "exit \"\"
+"
+}
+
+@test "test exit: exit ''" {
+
+    assert_minishell_equal_bash "exit ''
+"
+}
+
+@test "test exit: exit \" \"" {
+
+    assert_minishell_equal_bash "exit \" \"
+"
+}
+
+@test "test exit: exit ' '" {
+
+    assert_minishell_equal_bash "exit ' '
+"
+}
+
+@test "test exit: exit ' 5'" {
+
+    assert_minishell_equal_bash "exit ' 5'
+"
+}
+
+@test "test exit: exit '5 '" {
+
+    assert_minishell_equal_bash "exit '5 '
+"
+}
+
+@test "test exit: exit '5     x'" {
+
+    assert_minishell_equal_bash "exit '5     x'
+"
+}
+
+@test "test exit: exit 42 41" {
+
+    assert_minishell_equal_bash "exit 42 41
+"
+}
+
+@test "test exit: exit abc" {
+
+    assert_minishell_equal_bash "exit abc
+"
+}
+
+@test "test exit: exit 42 abc" {
+
+    assert_minishell_equal_bash "exit 42 abc
+"
+}
+
+@test "test exit: exit abc 42" {
+
+    assert_minishell_equal_bash "exit abc 42
+"
+}
+
+@test "test exit: exit 2147483647" {
+
+    assert_minishell_equal_bash "exit 2147483647
+"
+}
+
+@test "test exit: exit 2147483648" {
+
+    assert_minishell_equal_bash "exit 2147483648
+"
+}
+
+@test "test exit: exit -2147483648" {
+
+    assert_minishell_equal_bash "exit -2147483648
+"
+}
+
+@test "test exit: exit -2147483649" {
+
+    assert_minishell_equal_bash "exit -2147483649
+"
+}
+
+@test "test exit: exit 9223372036854775807" {
+
+    assert_minishell_equal_bash "exit 9223372036854775807
+"
+}
+
+@test "test exit: exit -9223372036854775808" {
+
+    assert_minishell_equal_bash "exit -9223372036854775808
+"
+}
+
+@test "test exit: exit 9223372036854775808" {
+
+    assert_minishell_equal_bash "exit 9223372036854775808
+"
+}
+
+@test "test exit: exit -9223372036854775810" {
+
+    assert_minishell_equal_bash "exit -9223372036854775810
+"
+}
+
+@test "test exit: exit 9999999999999999999999999999999999999999999999" {
+
+    assert_minishell_equal_bash "exit 9999999999999999999999999999999999999999999999
+"
+}
+
+@test "test exit: exit -9999999999999999999999999999999999999999999999" {
+
+    assert_minishell_equal_bash "exit -9999999999999999999999999999999999999999999999
+"
+}
+
+@test "test exit: exit _0" {
+
+    assert_minishell_equal_bash "exit _0
+"
+}
+
+@test "test exit: exit 0_" {
+
+    assert_minishell_equal_bash "exit 0_
+"
+}
+
+@test "test exit: exit 5 < valid_infile_1" {
+
+    assert_minishell_equal_bash "exit 5 < valid_infile_1
+"
+}
+
+@test "test exit: exit 1 | exit 0" {
+
+    assert_minishell_equal_bash "exit 1 | exit 0
+"
+}
+
+@test "test exit: exit 0 | exit 1" {
+
+    assert_minishell_equal_bash "exit 0 | exit 1
+"
+}
+
+@test "test exit: ls | exit" {
+
+    assert_minishell_equal_bash "ls | exit
+"
+}
+
+@test "test exit: ls | exit 42" {
+
+    assert_minishell_equal_bash "ls | exit 42
+"
+}
+
+@test "test exit: ls | exit 12 abc" {
+
+    assert_minishell_equal_bash "ls | exit 12 abc
+"
+}
+
+@test "test exit: ls | exit abc 12" {
+
+    assert_minishell_equal_bash "ls | exit abc 12
+"
+}
+
+@test "test exit: exit | ls" {
+
+    assert_minishell_equal_bash "exit | ls
+"
+}
+
+@test "test exit: exit 42 | ls" {
+
+    assert_minishell_equal_bash "exit 42 | ls
+"
+}
+
+@test "test exit: exit 12 abc | ls" {
+
+    assert_minishell_equal_bash "exit 12 abc | ls
+"
+}
+
+@test "test exit: exit abc 12 | ls" {
+
+    assert_minishell_equal_bash "exit abc 12 | ls
+"
+}
+
+@test "test exit: ls > \$file | exit" {
+    file="$temp_dir/text"
+    assert_minishell_equal_bash "ls > \$file | exit
+"
+}
+
+@test "test exit: ls -l > \$file | exit | wc -l" {
+    file1="$temp_dir/text"
+    assert_minishell_equal_bash "ls -l > \$file | exit | wc -l
 "
 }

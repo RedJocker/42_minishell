@@ -6,16 +6,14 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 02:17:40 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/20 02:48:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/20 20:55:32 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include "ft_stdio.h"
 #include "ft_string.h"
-#include "internal/default.h"
 #include "internal/env/env.h"
 #include "internal/repl/shell/command/command.h"
 

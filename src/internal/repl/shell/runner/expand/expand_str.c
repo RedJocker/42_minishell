@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:55:46 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 04:10:14 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/20 23:34:47 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,18 @@ void	expand_str_dollar(char **strptr, sig_atomic_t last_status_code)
 {
 	t_stringbuilder	builder;
 	int				i;
-	int				is_singlequoted;
+	char			quote;
 
 	builder = stringbuilder_new();
-	is_singlequoted = 0;
+	quote = 0;
 	i = -1;
 	while ((*strptr)[++i])
 	{
-		if (!is_singlequoted && (*strptr)[i] == '\'')
-			is_singlequoted = '\'';
-		else if (is_singlequoted && (*strptr)[i] == '\'')
-			is_singlequoted = 0;
-		if (!is_singlequoted && (*strptr)[i] == '$')
+		if (!quote && ((*strptr)[i] == '\'' || (*strptr)[i] == '\"'))
+			quote = (*strptr)[i];
+		else if (quote && (*strptr)[i] == quote)
+			quote = 0;
+		if (quote != '\'' && (*strptr)[i] == '$')
 			i += expand_str_dollar_variable((*strptr) + i, \
 				&builder, last_status_code);
 		else
