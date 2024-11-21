@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/20 23:06:45 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/20 23:42:32 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -106,7 +106,7 @@ assert_minishell_equal_bash() {
 
     #local mini_output=$(awk '!/^RedWillShell\$/ {print $0}' <<< "$output")
 
-    echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
+    #echo -e "===> bash_output:\n<$bash_output>\n===> minishell_output:\n<$output>" 1>&3 
     if ! [[ "$bash_output" == "$output" ]]; then
 	local bash_file="./test/bash_$BATS_TEST_NAME.txt"
         local mini_file="./test/mini_$BATS_TEST_NAME.txt"
@@ -3024,6 +3024,17 @@ echo \$?HELLO
 "
 }
 
+@test "test expansion: echo \"'\$VARIABLE_FROM_OUTSIDE'\"" {
+
+    assert_minishell_equal_bash "echo \"'\$VARIABLE_FROM_OUTSIDE'\"
+"
+}
+
+@test "test expansion: echo '\"\$VARIABLE_FROM_OUTSIDE\"'" {
+
+    assert_minishell_equal_bash "echo '\"\$VARIABLE_FROM_OUTSIDE\"'
+"
+}
 
 ## HEREDOC TESTS #########################
 
