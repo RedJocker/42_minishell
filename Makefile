@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Updated: 2024/11/18 18:31:45 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/20 23:14:40 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -147,6 +147,7 @@ SRCS_FILES                      += $(addprefix $(SRCS_EXPAND_DIR), expand.c \
 								  expand_str_star.c \
 								  expand_io.c)
 SRCS_FILES                      += $(addprefix $(SRCS_BUILTINS_DIR), builtins.c \
+								   builtin_util.c \
 								   cd.c \
 								   echo.c \
 								   env.c \
@@ -218,6 +219,7 @@ SRCS_BONUS_FILES                += $(addprefix $(SRCS_EXPAND_BONUS_DIR), expand.
 								  expand_str_star.c \
 								  expand_io.c)
 SRCS_BONUS_FILES                += $(addprefix $(SRCS_BUILTINS_BONUS_DIR), builtins.c \
+								   builtin_util.c \
 								   cd.c \
 								   echo.c \
 								   env.c \

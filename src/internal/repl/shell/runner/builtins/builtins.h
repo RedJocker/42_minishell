@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/07 04:56:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/20 20:23:09 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/20 21:48:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ void			print_builtin_exit(
 					t_builtin_id builtin,
 					t_runner_data *run_data,
 					sig_atomic_t status);
+int				is_identifier(char *maybe_identifier);
 
 #endif

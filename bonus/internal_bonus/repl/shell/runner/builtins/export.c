@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/18 19:11:08 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/20 23:17:16 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "ft_stdio.h"
 #include "ft_util.h"
 #include "stringbuilder.h"
+#include "builtins.h"
 #include "internal_bonus/default.h"
 #include "internal_bonus/env/env.h"
 #include "internal_bonus/env/env_internal/env_internal.h"
@@ -62,8 +63,7 @@ static sig_atomic_t	export_args(char *cmd, char *key, sig_atomic_t status)
 	error_msg = NULL;
 	if (*cmd == '-' && !ft_strnstr(key, "=", ft_strlen(key)))
 		status = EXIT_OK;
-	else if (*cmd != '=' && !ft_isdigit(*key) \
-		&& !ft_strnstr(key, "-", ft_strlen(key)))
+	else if (is_identifier(key))
 		export_valid_arg(cmd);
 	else
 		ft_asprintf(&error_msg, \
