@@ -41,7 +41,7 @@ echo Status code: $?"
 echo Status code: $?"
 }
 
-@test "wildcards:(v2) echo *.txt" {
+@test "wildcards: echo *.txt (v2)" {
 	assert_minishell_equal_bash "touch abc.txt abc.t.txt abc.txt.txt abc.tx def.txt
 echo *.txt
 echo Status code: $?"
@@ -70,13 +70,13 @@ echo Status code: $?"
 echo Status code: $?"
 }
 
-@test "wildcards:(v2) echo *" {
+@test "wildcards: echo * (v2)" {
     assert_minishell_equal_bash "touch xxx#ab xxx%ab xxx.ab xxxcd xxx#ef xxx%ef xxx.ef
 echo *
 echo Status code: $?"
 }
 
-@test "wildcards:(v3) echo *" {
+@test "wildcards: echo * (v3)" {
     assert_minishell_equal_bash "touch ABC ABc AbC aBC Abc aBc abC abc
 echo *
 echo Status code: $?"
