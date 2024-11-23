@@ -228,3 +228,15 @@ echo Status code: \$?"
     assert_minishell_equal_bash "(  (  (  ls  )  )  )
 echo Status code: \$?"
 }
+
+@test "parenthesis: (ls -l)" {
+	assert_minishell_equal_bash "(ls -l)
+echo Status code: \$?"
+}
+
+@test "parenthesis: (ls -la)" {
+	assert_minishell_equal_bash "touch a b c d
+mkdir tes/
+(ls -l)
+echo Status code: \$?"
+}
