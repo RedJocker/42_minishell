@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 01:33:57 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/17 04:11:06 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/23 01:43:20 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	env_update_default_values(void)
 		env_update_default_value(env_var, "SHLVL", NULL);
 	env_var = env_get_key("PS1", env()->env_var);
 	if (!env_var)
-		env_add_default_value("PS1", "RedWillShell$ ");
+		env_add_default_value("PS1=", "RedWillShell$ ");
 	else
 		env_update_default_value(env_var, "PS1", "RedWillShell$ ");
 }
