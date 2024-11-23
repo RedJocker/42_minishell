@@ -6,24 +6,23 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 00:46:01 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/20 23:17:16 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/23 01:01:05 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <signal.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "ft_ctype.h"
 #include "ft_string.h"
 #include "ft_stdio.h"
 #include "ft_util.h"
 #include "stringbuilder.h"
-#include "builtins.h"
 #include "internal_bonus/default.h"
 #include "internal_bonus/env/env.h"
 #include "internal_bonus/env/env_internal/env_internal.h"
 #include "internal_bonus/env/envp.h"
 #include "internal_bonus/repl/shell/command/command.h"
+#include "internal_bonus/repl/shell/runner/builtins/builtins.h"
 
 static sig_atomic_t	export_args(char *cmd, char *key, sig_atomic_t status);
 static void			export_valid_arg(char *cmd);

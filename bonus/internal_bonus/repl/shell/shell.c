@@ -6,11 +6,12 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 06:34:42 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/17 04:01:26 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/23 00:58:22 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
+#include "internal_bonus/default.h"
 #include "internal_bonus/repl/shell/parse/parse.h"
 #include "internal_bonus/repl/shell/runner/runner.h"
 #include "internal_bonus/repl/shell/shell.h"
@@ -25,6 +26,7 @@ void	shell_set_input(t_shell *shell)
 	ps1 = env_get_value("PS1");
 	signals_initializer(true);
 	shell->input = readline(ps1);
+	signal_status(DEFAULT, SET);
 	free(ps1);
 	signals_initializer(false);
 }
