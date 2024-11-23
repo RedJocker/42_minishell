@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:08:13 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/23 03:32:53 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	io_handler_heredoc_prompt(t_io_handler *io)
 	int				delim_len;
 	t_stringbuilder	builder;
 
-	if (io->type != IO_HEREDOC)
+	if (io->type != IO_HEREDOC || signal_status(DEFAULT, GET) == SIGINT)
 		return ;
 	delim_len = ft_strlen(io->heredoc_limiter);
 	builder = stringbuilder_new();
