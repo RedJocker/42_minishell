@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 01:58:35 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/22 22:01:55 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/22 22:05:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static sig_atomic_t	unset_cmds(t_command cmd, sig_atomic_t status);
 sig_atomic_t	runner_cmd_builtin_unset(t_command cmd)
 {
 	sig_atomic_t	status;
+
 	status = EXIT_OK;
 	if (DEFAULT_BEGIN == cmd->simple->cmd_argc)
 		return (status);
@@ -44,7 +45,8 @@ static sig_atomic_t	unset_cmds(t_command cmd, sig_atomic_t status)
 			env_destroy_single_var(cmd->simple->cmd_argv[i]);
 		else
 			ft_asprintf(&error_msg, \
-				"minishell: unset: `%s': not a valid identifier\n", cmd->simple->cmd_argv[i]);
+				"minishell: unset: `%s': not a valid identifier\n", \
+				cmd->simple->cmd_argv[i]);
 		if (error_msg)
 		{
 			status = EXIT_FAILURE;
