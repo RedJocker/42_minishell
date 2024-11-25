@@ -6,13 +6,13 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 00:48:32 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 01:05:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:09:17 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_stdio.h"
 #include "internal/default.h"
-#include "command_internal.h"
+#include "internal/repl/shell/command/command_internal.h"
 
 static const char	*g_err_template = "minishell: syntax error "\
 							"near unexpected token `%s'";

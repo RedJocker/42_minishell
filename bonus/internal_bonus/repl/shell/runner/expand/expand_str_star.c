@@ -6,16 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:43:32 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:22:06 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:58:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dirent.h>
 #include <unistd.h>
-#include "collection/ft_arraylist.h"
 #include "ft_assert.h"
+#include "collection/ft_arraylist.h"
 #include "ft_string.h"
-#include "ft_util.h"
 #include "internal_bonus/repl/shell/runner/expand/expand_internal.h"
 
 static int	has_star(char *str)
@@ -37,31 +36,43 @@ static int	has_star(char *str)
 	return (0);
 }
 
-static int	star_match_helper(char *star_str, char *filename)
+static int	star_match_helper(char *star_str, char *filename, char open_quote);
+
+static int	star_match_helper_star_case(
+	char *star_str, char *filename, char open_quote)
 {
 	int	any_of;
 	int	i;
 
+	i = -1;
+	while (++i >= 0)
+	{
+		any_of = star_match_helper(star_str + 1, filename + i, open_quote);
+		if (any_of)
+			return (1);
+		else if (filename[i] == '\0')
+			return (0);
+	}
+	ft_assert(0, "unexpected line executed at star_match_helper_star_case");
+	return (-1);
+}
+
+static int	star_match_helper(char *star_str, char *filename, char open_quote)
+{
 	if (*star_str == '\0')
 		return (*filename == '\0');
-	else if (*filename == '\0')
+	else if (open_quote && *star_str == open_quote)
+		return (star_match_helper(star_str + 1, filename, 0));
+	else if (!open_quote && (*star_str == '\"' || *star_str == '\''))
+		return (star_match_helper(star_str + 1, filename, *star_str));
+	else if (*filename == '\0' && *star_str != '*')
 		return (0);
-	else if (*star_str != '*' && *star_str != *filename)
+	else if ((*star_str != '*' || open_quote) && *star_str != *filename)
 		return (0);
-	else if (*star_str != '*' && *star_str == *filename)
-		return (star_match_helper(star_str + 1, filename + 1));
+	else if ((*star_str != '*' || open_quote) && *star_str == *filename)
+		return (star_match_helper(star_str + 1, filename + 1, open_quote));
 	else if (*star_str == '*')
-	{
-		i = -1;
-		while (++i >= 0)
-		{
-			any_of = star_match_helper(star_str + 1, filename + i);
-			if (any_of)
-				return (1);
-			else if (filename[i] == '\0')
-				return (0);
-		}
-	}
+		return (star_match_helper_star_case(star_str, filename, open_quote));
 	ft_assert(0, "unexpected line executed at star_match_helper");
 	return (0);
 }
@@ -70,30 +81,7 @@ static int	star_match(char *star_str, char *filename)
 {
 	ft_assert(filename && *filename != '.' && star_str,
 		"expected only non hidden files and non null params at star_match");
-	return (star_match_helper(star_str, filename));
-}
-
-static void	lst_files_init(t_arraylist	*lst_files)
-{
-	char			*cwd;
-	DIR				*dp;
-	struct dirent	*dirp;
-
-	cwd = NULL;
-	cwd = getcwd(cwd, 0);
-	dp = opendir(cwd);
-	free(cwd);
-	*lst_files = ft_arraylist_new(free);
-	dirp = readdir(dp);
-	while (dirp)
-	{
-		if (dirp->d_name[0] != '.')
-			*lst_files = ft_arraylist_add(*lst_files, \
-			ft_strdup(dirp->d_name));
-		dirp = readdir(dp);
-	}
-	closedir(dp);
-	ft_arraylist_sort(*lst_files, (t_intbifun) expand_icompare_str);
+	return (star_match_helper(star_str, filename, 0));
 }
 
 void	expand_str_star(char *str, t_arraylist *out_lst)

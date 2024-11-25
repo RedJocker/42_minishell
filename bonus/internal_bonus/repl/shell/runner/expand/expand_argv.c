@@ -6,14 +6,14 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:20:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:22:42 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:01:36 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "collection/ft_arraylist.h"
-#include "ft_ctype.h"
-#include "ft_string.h"
 #include "ft_util.h"
+#include "ft_string.h"
+#include "ft_ctype.h"
 #include "internal_bonus/repl/shell/command/command.h"
 #include "internal_bonus/repl/shell/runner/expand/expand_internal.h"
 

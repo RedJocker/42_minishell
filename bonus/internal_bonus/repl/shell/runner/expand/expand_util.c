@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 17:54:06 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/25 20:12:29 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:57:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "collection/ft_arraylist.h"
 #include "ft_string.h"
 #include "ft_util.h"
-#include "internal/repl/shell/runner/expand/expand_internal.h"
+#include "internal_bonus/repl/shell/runner/expand/expand_internal.h"
 
 void	lst_files_init(t_arraylist	*lst_files)
 {

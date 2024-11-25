@@ -6,17 +6,17 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 21:10:58 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 17:55:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:00:50 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPAND_INTERNAL_H
 # define EXPAND_INTERNAL_H
 
+# include <signal.h>
 # include "collection/ft_arraylist.h"
 # include "internal/repl/shell/command/command.h"
 # include "internal/repl/shell/command/io_handler.h"
-# include <signal.h>
 
 char	**expand_split_str(char const *str, t_pred_int should_split);
 void	expand_argv(t_command cmd, sig_atomic_t last_status_code);

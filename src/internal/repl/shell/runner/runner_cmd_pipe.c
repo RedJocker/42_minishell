@@ -6,15 +6,15 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:55:15 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 22:56:56 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:06:26 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/wait.h>
 #include <unistd.h>
-#include "internal/default.h"
-#include "runner_internal.h"
 #include "ft_assert.h"
+#include "internal/default.h"
+#include "internal/repl/shell/runner/runner_internal.h"
 
 sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 {

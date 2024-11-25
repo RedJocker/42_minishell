@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 23:43:32 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 17:59:36 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:58:44 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "ft_assert.h"
 #include "collection/ft_arraylist.h"
 #include "ft_string.h"
-#include "ft_util.h"
 #include "internal/repl/shell/runner/expand/expand_internal.h"
 
 static int	has_star(char *str)

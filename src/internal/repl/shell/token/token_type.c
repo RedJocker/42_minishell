@@ -6,11 +6,11 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 20:51:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/14 23:51:29 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:05:10 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "token.h"
+#include "internal/repl/shell/token/token.h"
 
 int	token_type_is_redirect(t_token *token)
 {

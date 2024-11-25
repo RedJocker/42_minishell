@@ -10,12 +10,6 @@
 # **************************************************************************** #
 
 #******************************************************************************#
-#                                REQUIREMENTS                                  #
-#******************************************************************************#
-
-LIBFTX_VERSION                   := 1.2.0
-
-#******************************************************************************#
 #                                   COLOR                                      #
 #******************************************************************************#
 
@@ -211,7 +205,8 @@ SRCS_BONUS_FILES                += $(addprefix $(SRCS_RUNNER_BONUS_DIR), runner.
 								   runner_cmd_simple_execve.c \
 								   runner_heredoc.c \
 								   runner_data.c)
-SRCS_BONUS_FILES                += $(addprefix $(SRCS_EXPAND_BONUS_DIR), expand.c \
+SRCS_BONUS_FILES                 += $(addprefix $(SRCS_EXPAND_BONUS_DIR), expand.c \
+								  expand_util.c \
 								  expand_icompare_str.c \
 								  expand_split_str.c \
 								  expand_argv.c \
@@ -290,16 +285,8 @@ define create_dir
 	$(MKDIR) $(dir $@)
 endef
 
-define submodule_update_libftx
+define build_libftx
 	printf "$(PURPLE)Building library Libftx\n$(RESET)"
-	git submodule update --init --remote >/dev/null 2>&1 || true
-	git submodule foreach -q \
-		'branch="$(git config -f $toplevel/.gitmodules submodule.libftx)"; \
-		git pull origin master; \
-		git fetch; \
-		git checkout v$(LIBFTX_VERSION)' \
-		>/dev/null 2>&1 || true
-	$(SLEEP)
 	$(MAKE) -C $(LIBFTX_DIR)
 endef
 
@@ -338,10 +325,6 @@ define debug
 	$(MAKE) WITH_DEBUG=TRUE
 endef
 
-define test
-	bats test_old/end_to_end_test.sh
-endef
-
 define reset_count
 	$(eval COUNT=$(1))
 	$(eval OBJS_COUNT=$(words $(SRCS_FILES)))
@@ -361,10 +344,7 @@ $(NAME): $(LIBFTX) $(call reset_count, -$(words $(OBJS))) $(OBJS)
 	$(call comp_exe)
 
 $(LIBFTX):
-	$(call submodule_update_libftx)
-
-etags: debug
-	etags $$(find ./src -name '*.[ch]')
+	$(call build_libftx)
 
 bonus:
 	$(call bonus)
@@ -379,9 +359,6 @@ re: fclean all
 
 debug:
 	$(call debug)
-
-test: debug
-	$(call test)
 
 .PHONY: all clean fclean re debug etags bonus
 .DEFAULT_GOAL := all
