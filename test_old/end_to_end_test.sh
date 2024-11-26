@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/26 01:45:51 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/26 02:06:15 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -1857,22 +1857,6 @@ cd $temp_dir
 touch a b c
 echo > '*'"
 }
-
-
-@test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
-
-    assert_minishell_equal_bash "
-unset PATH  
-ls
-echo \$? 
-/bin/ls
-echo \$?
-export PATH='/bin/'
-ls
-"
-}
-
-
 
 @test "pwd: permission denied error" {
 
@@ -3726,6 +3710,39 @@ echo \$PATH
 unset SHELL
 echo \$?
 echo \$SHELL
+"
+}
+
+@test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
+
+    assert_minishell_equal_bash "
+unset PATH  
+ls
+echo \$? 
+/bin/ls
+echo \$?
+export PATH='/bin/'
+ls
+"
+}
+
+@test "test builtin: echo implementation dependent \n unset @invalid" {
+    assert_minishell_equal_bash "echo implementation dependent
+unset @invalid
+"
+}
+
+
+@test "test builtin: echo implementation dependent \n unset HELLO-" {
+    assert_minishell_equal_bash "echo implementation dependent
+unset HELLO-
+"
+}
+
+
+@test "test builtin: echo implementation dependent \n unset 2 abc" {
+    assert_minishell_equal_bash "echo implementation dependent
+unset 2 abc
 "
 }
 
