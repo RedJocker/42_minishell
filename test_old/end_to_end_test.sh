@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/20 23:42:32 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/26 01:45:51 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -3863,6 +3863,18 @@ uname
 "
 }
 
+@test "test exit: exit 1" {
+
+    assert_minishell_equal_bash "exit 1
+"
+}
+
+@test "test exit: exit 2" {
+
+    assert_minishell_equal_bash "exit 2
+"
+}
+
 @test "test exit: exit 42" {
 
     assert_minishell_equal_bash "exit 42
@@ -4109,9 +4121,27 @@ uname
 "
 }
 
+@test "test exit: ls | exit 1" {
+
+    assert_minishell_equal_bash "ls | exit 1
+"
+}
+
+@test "test exit: ls | exit 2" {
+
+    assert_minishell_equal_bash "ls | exit 2
+"
+}
+
 @test "test exit: ls | exit 42" {
 
     assert_minishell_equal_bash "ls | exit 42
+"
+}
+
+@test "test exit: ls | exit _42" {
+
+    assert_minishell_equal_bash "ls | exit _42
 "
 }
 
@@ -4160,5 +4190,42 @@ uname
 @test "test exit: ls -l > \$file | exit | wc -l" {
     file1="$temp_dir/text"
     assert_minishell_equal_bash "ls -l > \$file | exit | wc -l
+"
+}
+
+
+@test "test exit: (exit 1)" {
+
+    assert_minishell_equal_bash "(exit 1)
+"
+}
+
+@test "test exit: (exit 2)" {
+
+    assert_minishell_equal_bash "(exit 2)
+"
+}
+
+@test "test exit: (exit 42)" {
+
+    assert_minishell_equal_bash "(exit 42)
+"
+}
+
+@test "test exit: (exit _42)" {
+
+    assert_minishell_equal_bash "(exit _42)
+"
+}
+
+@test "test exit: (exit 12 abc)" {
+
+    assert_minishell_equal_bash "(exit 12 abc)
+"
+}
+
+@test "test exit: (exit abc 12)" {
+
+    assert_minishell_equal_bash "(exit abc 12)
 "
 }

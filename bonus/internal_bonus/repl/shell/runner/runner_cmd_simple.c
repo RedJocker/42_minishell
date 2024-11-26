@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/20 20:52:38 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 01:39:37 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ sig_atomic_t	runner_cmd_simple_child(t_runner_data *run_data, \
 	{
 		*status = runner_cmd_builtin(builtin, cmd);
 		print_builtin_exit(builtin, run_data, *status);
-		if (*status == -1)
-			*status = 1;
+		if (*status < 0 && builtin == BUILTIN_EXIT)
+			*status *= -1;
 		runner_cmd_simple_exit_status(run_data, *status);
 		ft_assert(0, "unexpected line executed");
 	}

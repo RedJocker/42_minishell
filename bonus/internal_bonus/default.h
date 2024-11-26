@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 01:31:47 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/13 23:40:41 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 01:33:12 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ typedef enum e_exit_code
 {
 	EXIT_OK = 0,
 	EXIT_REDIRECT_FAIL = 1,
+	EXIT_TOO_MANY = -1,
 	EXIT_SYNTAX_ERROR = 2,
+	EXIT_NOT_NUMERIC = -2,
 	EXIT_OUT_OF_MEMORY = 42,
 	EXIT_FORK_FAIL = 99,
 	EXIT_TEMPORARY = 111,
