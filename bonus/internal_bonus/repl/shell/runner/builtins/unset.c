@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 01:58:35 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/23 00:59:48 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/27 19:01:27 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ static sig_atomic_t	unset_cmds(t_command cmd, sig_atomic_t status)
 	char	*error_msg;
 
 	i = DEFAULT;
-	error_msg = NULL;
 	while (cmd->simple->cmd_argv[++i])
 	{
+		error_msg = NULL;
 		if (is_identifier(cmd->simple->cmd_argv[i]))
 			env_destroy_single_var(cmd->simple->cmd_argv[i]);
 		else
