@@ -203,12 +203,14 @@ assert_minishell_expected() {
 
 ## NEW TESTS #########################
 
+# copy
 @test "test export: export hello" {
 
     assert_minishell_equal_bash "export hello
 "
 }
 
+# copy
 @test "test export: export HELLO=123" {
 
     assert_minishell_equal_bash "export HELLO=123
@@ -217,12 +219,14 @@ echo \$HELLO
 "
 }
 
+# copy
 @test "test export: export A-" {
 
     assert_minishell_equal_bash "export A-
 "
 }
 
+# copy
 @test "test export: export HELLO=123 A" {
 
     assert_minishell_equal_bash "export HELLO=123 A
@@ -232,6 +236,7 @@ export | grep 'declare -x A'
 "
 }
 
+# copy
 @test "test export: export HELLO=\"123 A-\"" {
 
     assert_minishell_equal_bash "export HELLO=\"123 A-\"
@@ -240,6 +245,7 @@ echo \$HELLO
 "
 }
 
+# copy
 @test "test export: export hello world" {
 
     assert_minishell_equal_bash "export hello world
@@ -249,6 +255,7 @@ export | grep 'declare -x world'
 "
 }
 
+# copy
 @test "test export: export HELLO-=123" {
 
     assert_minishell_equal_bash "export HELLO-=123
@@ -258,6 +265,7 @@ echo \$HELLO-
 "
 }
 
+# copy
 @test "test export: export =" {
 
     assert_minishell_equal_bash "export =
