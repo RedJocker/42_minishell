@@ -227,9 +227,9 @@ echo \$HELLO
 }
 
 # copy
-@test "test export: export HELLO=123 A" {
+@test "test export: export HELLO=123 ABC" {
 
-    assert_minishell_equal_bash "export HELLO=123 A
+    assert_minishell_equal_bash "export HELLO=123 ABC
 echo \$?
 echo \$HELLO
 export | grep 'declare -x A'
