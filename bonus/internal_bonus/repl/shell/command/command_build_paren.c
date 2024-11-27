@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:05:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/19 22:48:18 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:58:13 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 #include "internal_bonus/repl/shell/command/command.h"
 #include "internal_bonus/repl/shell/command/command_internal.h"
 #include "internal_bonus/repl/shell/token/token.h"
-
-static const char	*g_err_template = "minishell: syntax error "\
-							"near unexpected token `%s'";
 
 static int	find_paren_end(t_token **tokens, int tokens_len)
 {
@@ -90,9 +87,11 @@ t_command	command_build_paren_err(
 {
 	t_command	cmd;
 	char		*err_msg;
+	const char	*err_template = "minishell: syntax error "\
+							"near unexpected token `%s'";
 
 	(void) tokens_len;
-	ft_asprintf(&err_msg, g_err_template, tokens[cmd_operator_idx]->content);
+	ft_asprintf(&err_msg, err_template, tokens[cmd_operator_idx]->content);
 	cmd = command_invalid_new(err_msg, EXIT_SYNTAX_ERROR);
 	free(err_msg);
 	return (cmd);

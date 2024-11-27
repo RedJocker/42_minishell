@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:53:03 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/18 19:59:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 23:07:37 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,25 @@
 #include "internal_bonus/env/env.h"
 #include "internal_bonus/repl/shell/runner/runner_internal.h"
 
-static const char	*g_not_found = "minishell: %s: command not found";
-static const char	*g_is_dir = "minishell: %s: Is a directory";
-static const char	*g_strerr = "minishell: %s: %s";
-static const char	*g_file_not_found = \
-	"minishell: %s: No such file or directory";
+static char	*build_err_msg(
+	t_runner_msg_error type,
+	char *cmd,
+	int err_num)
+{
+	char	*msg;
+
+	msg = NULL;
+	if (type == NOT_FOUND)
+		ft_asprintf(&msg, "minishell: %s: command not found", cmd);
+	else if (type == IS_DIR)
+		ft_asprintf(&msg, "minishell: %s: Is a directory", cmd);
+	else if (type == STRERR)
+		ft_asprintf(&msg, "minishell: %s: %s", cmd, strerror(err_num));
+	else if (type == FILE_NOT_FOUND)
+		ft_asprintf(&msg, \
+			"minishell: %s: No such file or directory", cmd);
+	return (msg);
+}
 
 static void	runner_cmd_simple_execve_error_eacces(t_runner_data *run_data, \
 				int err_num)
@@ -38,7 +52,7 @@ static void	runner_cmd_simple_execve_error_eacces(t_runner_data *run_data, \
 
 	if (cmd->simple->cmd_argv[0][0] == '\0')
 	{
-		ft_asprintf(&msg, g_not_found, cmd->simple->cmd_argv[0]);
+		msg = build_err_msg(NOT_FOUND, cmd->simple->cmd_argv[0], 0);
 		runner_cmd_simple_panic(run_data, msg, EXIT_CMD_NOT_FOUND, true);
 	}
 	stat(cmd->simple->cmd_argv[0], &path_stat);
@@ -47,15 +61,15 @@ static void	runner_cmd_simple_execve_error_eacces(t_runner_data *run_data, \
 	{
 		if (ft_strchr(cmd->simple->cmd_path, '/'))
 		{
-			ft_asprintf(&msg, g_is_dir, cmd->simple->cmd_argv[0]);
+			msg = build_err_msg(IS_DIR, cmd->simple->cmd_argv[0], 0);
 			runner_cmd_simple_panic(run_data, msg, EXIT_CMD_NOT_EXEC, true);
 			return ;
 		}
-		ft_asprintf(&msg, g_not_found, cmd->simple->cmd_argv[0]);
+		msg = build_err_msg(NOT_FOUND, cmd->simple->cmd_argv[0], 0);
 		runner_cmd_simple_panic(run_data, msg, EXIT_CMD_NOT_FOUND, true);
 		return ;
 	}
-	ft_asprintf(&msg, g_strerr, cmd->simple->cmd_argv[0], strerror(err_num));
+	msg = build_err_msg(STRERR, cmd->simple->cmd_argv[0], err_num);
 	runner_cmd_simple_panic(run_data, msg, EXIT_CMD_NOT_EXEC, true);
 }
 
@@ -70,14 +84,14 @@ static void	runner_cmd_simple_execve_error_enoent(t_runner_data *run_data)
 	{
 		if (path)
 			free(path);
-		ft_asprintf(&msg, g_file_not_found, cmd->simple->cmd_argv[0]);
+		msg = build_err_msg(FILE_NOT_FOUND, cmd->simple->cmd_argv[0], 0);
 		runner_cmd_simple_panic(run_data, msg, EXIT_CMD_NOT_FOUND, true);
 	}
 	else
 	{
 		if (path)
 			free(path);
-		ft_asprintf(&msg, g_not_found, cmd->simple->cmd_argv[0]);
+		msg = build_err_msg(NOT_FOUND, cmd->simple->cmd_argv[0], 0);
 		runner_cmd_simple_panic(run_data, msg, EXIT_CMD_NOT_FOUND, true);
 	}
 }
@@ -91,7 +105,7 @@ static void	runner_cmd_simple_execve_error(t_runner_data *run_data, int err_num)
 		return (runner_cmd_simple_execve_error_enoent(run_data));
 	else if (err_num == EACCES)
 		return (runner_cmd_simple_execve_error_eacces(run_data, err_num));
-	ft_asprintf(&msg, g_strerr, cmd->simple->cmd_argv[0], strerror(err_num));
+	msg = build_err_msg(STRERR, cmd->simple->cmd_argv[0], err_num);
 	return (runner_cmd_simple_panic(run_data, msg, err_num, true));
 }
 

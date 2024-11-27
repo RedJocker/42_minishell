@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 17:43:53 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/23 03:32:53 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/26 22:00:38 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "stringbuilder.h"
 #include "internal_bonus/repl/shell/command/io_handler.h"
 #include "internal_bonus/signal/signal.h"
-
-static const char		*g_endl = "\n";
 
 void	io_handlers_add_heredoc(t_arraylist *lst_ios, char *heredoc_limit)
 {
@@ -56,7 +54,7 @@ void	io_handler_heredoc_prompt(t_io_handler *io)
 			&& signal_status(DEFAULT, GET) != SIGINT)
 	{
 		stringbuilder_addstr(&builder, line);
-		stringbuilder_addstr(&builder, (char *) g_endl);
+		stringbuilder_addstr(&builder, "\n");
 		free(line);
 		line = readline("> ");
 	}

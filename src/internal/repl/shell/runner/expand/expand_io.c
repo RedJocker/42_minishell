@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:41:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/16 04:11:34 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/26 23:57:14 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "ft_util.h"
 #include "internal/repl/shell/command/io_handler.h"
 #include "internal/repl/shell/runner/expand/expand_internal.h"
-
-static const char	*g_ambiguous = "minishell: %s: ambiguous redirect";
 
 void	expand_io_dollar(t_io_handler *io, sig_atomic_t last_status_code)
 {
@@ -43,7 +41,8 @@ void	expand_io_split(t_io_handler *io, char *original_path)
 	split = expand_split_str(io->path, (t_pred_int) ft_isspace);
 	if (split[0] == NULL || split[1] != NULL)
 	{
-		ft_asprintf(&errmsg, g_ambiguous, original_path);
+		ft_asprintf(&errmsg, \
+			"minishell: %s: ambiguous redirect", original_path);
 		free(io->path);
 		ft_strarr_free(split);
 		return (io_handler_set_error(io, errno, errmsg));
@@ -67,7 +66,7 @@ void	expand_io_star(t_io_handler *io, char *original_path)
 	ft_arraylist_destroy(lst_new_args);
 	if (res[0] == NULL || res[1] != NULL)
 	{
-		ft_asprintf(&errmsg, g_ambiguous, original_path);
+		ft_asprintf(&errmsg, "minishell: %s: ambiguous redirect", original_path);
 		free(io->path);
 		ft_strarr_free(res);
 		return (io_handler_set_error(io, errno, errmsg));

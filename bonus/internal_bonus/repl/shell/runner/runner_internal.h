@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:17:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/20 01:41:02 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 22:29:26 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ typedef enum e_fork_flag
 	FORK_NOT,
 	FORK_YES
 }	t_fork_flag;
+
+typedef enum e_runner_msg_error
+{
+	NOT_FOUND,
+	IS_DIR,
+	STRERR,
+	FILE_NOT_FOUND,
+}	t_runner_msg_error;
 
 sig_atomic_t	runner_cmd(t_runner_data *run_data, t_fork_flag should_fork);
 sig_atomic_t	runner_cmd_simple(
