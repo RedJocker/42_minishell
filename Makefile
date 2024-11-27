@@ -287,6 +287,14 @@ endef
 
 define build_libftx
 	printf "$(PURPLE)Building library Libftx\n$(RESET)"
+	git submodule update --init --remote >/dev/null 2>&1 || true
+	git submodule foreach -q \
+		'branch="$(git config -f $toplevel/.gitmodules submodule.libftx)"; \
+		git pull origin master; \
+		git fetch; \
+		git checkout v$(LIBFTX_VERSION)' \
+		>/dev/null 2>&1 || true
+	$(SLEEP)
 	$(MAKE) -C $(LIBFTX_DIR)
 endef
 
