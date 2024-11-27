@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:38 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 04:00:12 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:41:27 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ typedef struct s_command	*t_command;
 
 typedef struct s_command_simple
 {
-	char	*cmd_path;
-	int		cmd_argc;
-	char	**cmd_argv;
-	char	**cmd_envp;
+	char		*cmd_path;
+	int			cmd_argc;
+	char		**cmd_argv;
+	char		**cmd_envp;
+	t_arraylist	pipes_to_close;
 }	t_command_simple;
 
 typedef struct s_command_pipe
@@ -87,5 +88,7 @@ t_command	command_build(t_token **tokens, int tokens_len);
 void		command_destroy(t_command cmd);
 void		command_close_ios(t_command cmd);
 void		command_add_pipe_io(t_command cmd, int pipe_fd, t_io_direction dir);
+void		command_add_close_io(
+				t_command cmd, int pipe_fd, t_io_direction dir);
 
 #endif

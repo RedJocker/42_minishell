@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:55:15 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:21:20 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:44:50 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 #include <unistd.h>
 #include "ft_assert.h"
 #include "internal_bonus/default.h"
+#include "internal_bonus/repl/shell/command/command.h"
 #include "internal_bonus/repl/shell/runner/runner_internal.h"
+#include "internal_bonus/repl/shell/command/io_handler.h"
 
 sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 {
@@ -33,6 +35,7 @@ sig_atomic_t	runner_cmd_pipe(t_runner_data *run_data)
 	run_data->pipes_to_close = ft_arraylist_add(run_data->pipes_to_close, \
 								to_close);
 	run_data->cmd = cmd->pipe->cmd_before;
+	command_add_close_io(cmd->pipe->cmd_before, pipe_fds[0], IO_IN);
 	runner_cmd(run_data, FORK_YES);
 	run_data->cmd = cmd->pipe->cmd_after;
 	runner_cmd(run_data, FORK_YES);

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/26 01:25:51 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 09:37:56 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ sig_atomic_t	runner_cmd_simple_child(t_runner_data *run_data, \
 {
 	const t_command		cmd = run_data->cmd;
 
+	io_handlers_close(cmd->simple->pipes_to_close);
 	run_data->is_main = 0;
 	free(pid);
 	if (!io_handlers_redirect(cmd->io_handlers))
