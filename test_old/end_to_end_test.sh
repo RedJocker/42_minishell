@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/20 23:42:32 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/26 02:06:15 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -1857,22 +1857,6 @@ cd $temp_dir
 touch a b c
 echo > '*'"
 }
-
-
-@test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
-
-    assert_minishell_equal_bash "
-unset PATH  
-ls
-echo \$? 
-/bin/ls
-echo \$?
-export PATH='/bin/'
-ls
-"
-}
-
-
 
 @test "pwd: permission denied error" {
 
@@ -3729,6 +3713,39 @@ echo \$SHELL
 "
 }
 
+@test "test unset: unset PATH \n ls echo \$? \n /bin/ls" {
+
+    assert_minishell_equal_bash "
+unset PATH  
+ls
+echo \$? 
+/bin/ls
+echo \$?
+export PATH='/bin/'
+ls
+"
+}
+
+@test "test builtin: echo implementation dependent \n unset @invalid" {
+    assert_minishell_equal_bash "echo implementation dependent
+unset @invalid
+"
+}
+
+
+@test "test builtin: echo implementation dependent \n unset HELLO-" {
+    assert_minishell_equal_bash "echo implementation dependent
+unset HELLO-
+"
+}
+
+
+@test "test builtin: echo implementation dependent \n unset 2 abc" {
+    assert_minishell_equal_bash "echo implementation dependent
+unset 2 abc
+"
+}
+
 @test "test builtin: cd \$PWD" {
     assert_minishell_equal_bash "
 cd \$PWD
@@ -3860,6 +3877,18 @@ uname
 @test "test exit: EXIT" {
 
     assert_minishell_equal_bash "EXIT
+"
+}
+
+@test "test exit: exit 1" {
+
+    assert_minishell_equal_bash "exit 1
+"
+}
+
+@test "test exit: exit 2" {
+
+    assert_minishell_equal_bash "exit 2
 "
 }
 
@@ -4109,9 +4138,27 @@ uname
 "
 }
 
+@test "test exit: ls | exit 1" {
+
+    assert_minishell_equal_bash "ls | exit 1
+"
+}
+
+@test "test exit: ls | exit 2" {
+
+    assert_minishell_equal_bash "ls | exit 2
+"
+}
+
 @test "test exit: ls | exit 42" {
 
     assert_minishell_equal_bash "ls | exit 42
+"
+}
+
+@test "test exit: ls | exit _42" {
+
+    assert_minishell_equal_bash "ls | exit _42
 "
 }
 
@@ -4160,5 +4207,42 @@ uname
 @test "test exit: ls -l > \$file | exit | wc -l" {
     file1="$temp_dir/text"
     assert_minishell_equal_bash "ls -l > \$file | exit | wc -l
+"
+}
+
+
+@test "test exit: (exit 1)" {
+
+    assert_minishell_equal_bash "(exit 1)
+"
+}
+
+@test "test exit: (exit 2)" {
+
+    assert_minishell_equal_bash "(exit 2)
+"
+}
+
+@test "test exit: (exit 42)" {
+
+    assert_minishell_equal_bash "(exit 42)
+"
+}
+
+@test "test exit: (exit _42)" {
+
+    assert_minishell_equal_bash "(exit _42)
+"
+}
+
+@test "test exit: (exit 12 abc)" {
+
+    assert_minishell_equal_bash "(exit 12 abc)
+"
+}
+
+@test "test exit: (exit abc 12)" {
+
+    assert_minishell_equal_bash "(exit abc 12)
 "
 }

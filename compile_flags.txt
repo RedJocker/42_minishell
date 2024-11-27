@@ -3,5 +3,7 @@
 -I
 ./src
 -I
+./bonus
+-I
 ./lib/libftx/includes
 

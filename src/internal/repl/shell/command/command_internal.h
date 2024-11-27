@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 23:18:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:42:20 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,15 @@ void		command_simple_close_ios(t_command cmd);
 void		command_pipe_close_ios(t_command cmd);
 void		command_and_close_ios(t_command cmd);
 void		command_or_close_ios(t_command cmd);
+void		command_pipe_add_close_io(
+				t_command cmd, int pipe_fd, t_io_direction dir);
+void		command_and_add_close_io(
+				t_command cmd, int pipe_fd, t_io_direction dir);
+void		command_or_add_close_io(
+				t_command cmd, int pipe_fd, t_io_direction dir);
+void		command_simple_add_close_io(
+				t_command cmd, int pipe_fd, t_io_direction dir);
+void		command_paren_add_close_io(
+				t_command cmd, int pipe_fd, t_io_direction dir);
 
 #endif

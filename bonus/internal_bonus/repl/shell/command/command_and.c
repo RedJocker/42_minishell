@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:08:27 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/17 04:10:13 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:31:38 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,11 @@ void	command_and_close_ios(t_command cmd)
 	io_handlers_close(cmd->io_handlers);
 	command_close_ios(cmd->and->cmd_before);
 	command_close_ios(cmd->and->cmd_after);
+}
+
+void	command_and_add_close_io(
+	t_command cmd, int pipe_fd, t_io_direction dir)
+{
+	if (dir == IO_IN)
+		command_add_close_io(cmd->and->cmd_after, pipe_fd, dir);
 }

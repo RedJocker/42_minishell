@@ -6,12 +6,14 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 03:19:01 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/20 20:42:47 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/26 01:35:34 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <unistd.h>
 #include "ft_string.h"
+#include "internal_bonus/default.h"
 #include "internal_bonus/env/envp.h"
 #include "internal_bonus/repl/shell/runner/builtins/builtins.h"
 
@@ -93,10 +95,14 @@ static sig_atomic_t	return_buildin_status(t_builtin_id builtin, \
 {
 	print_builtin_exit(builtin, run_data, status);
 	if (builtin == BUILTIN_EXIT \
-		&& (status == EXIT_SYNTAX_ERROR || status != -1))
+		&& (status == EXIT_NOT_NUMERIC || status != EXIT_TOO_MANY))
+	{
+		if (status < 0)
+			status *= -1;
 		runner_cmd_simple_exit_status(run_data, status);
-	if (status == -1)
-		status = 1;
+	}
+	if (status < 0)
+		status *= -1;
 	return (status);
 }
 

@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 01:11:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/15 23:22:03 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:25:25 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,6 @@ void	command_destroy(t_command cmd)
 		command_invalid_destroy(cmd);
 }
 
-void	command_free(t_command cmd)
-{
-	ft_arraylist_destroy(cmd->io_handlers);
-	free(cmd->debug_id);
-	free(cmd);
-}
-
 t_command	command_new(t_command_type	type, char *type_str)
 {
 	t_command	cmd;
@@ -87,4 +80,18 @@ t_command	command_new(t_command_type	type, char *type_str)
 	cmd->debug_id = ft_strjoin(type_str, id_str);
 	free(id_str);
 	return (cmd);
+}
+
+void	command_add_close_io(t_command cmd, int pipe_fd, t_io_direction dir)
+{
+	if (cmd->type == CMD_SIMPLE)
+		command_simple_add_close_io(cmd, pipe_fd, dir);
+	else if (cmd->type == CMD_PIPE)
+		command_pipe_add_close_io(cmd, pipe_fd, dir);
+	else if (cmd->type == CMD_AND)
+		command_and_add_close_io(cmd, pipe_fd, dir);
+	else if (cmd->type == CMD_OR)
+		command_or_add_close_io(cmd, pipe_fd, dir);
+	else if (cmd->type == CMD_PAREN)
+		command_paren_add_close_io(cmd, pipe_fd, dir);
 }
