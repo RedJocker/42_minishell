@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 19:15:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/26 21:40:09 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/28 03:28:45 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ void		command_simple_add_close_io(
 				t_command cmd, int pipe_fd, t_io_direction dir);
 void		command_paren_add_close_io(
 				t_command cmd, int pipe_fd, t_io_direction dir);
+int			has_redirect_before(t_token **tokens, int op_idx);
 
 #endif

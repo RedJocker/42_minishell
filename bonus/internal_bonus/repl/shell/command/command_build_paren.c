@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:05:18 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/26 21:58:13 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/28 03:25:42 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,29 @@
 #include "internal_bonus/repl/shell/command/command_internal.h"
 #include "internal_bonus/repl/shell/token/token.h"
 
-static int	find_paren_end(t_token **tokens, int tokens_len)
+static void	check_err_after_paren_close(
+	t_token **tokens, int tokens_len, int *err_i, int close_i)
+{
+	int	j;
+
+	if (tokens[close_i]->type != OP_PAREN_CLOSE || close_i == 1)
+		*err_i = close_i;
+	j = close_i;
+	while (*err_i < 0 && ++j < tokens_len)
+	{
+		if (!token_type_is_either_nl_eof(tokens[j]))
+			*err_i = j;
+	}
+}
+
+static int	find_paren_end(t_token **tokens, int tokens_len, int *err_i)
 {
 	int	open_paren;
 	int	i;
 
 	ft_assert(tokens[0]->type == OP_PAREN_OPEN, "expected paren open");
 	i = 1;
+	*err_i = -1;
 	open_paren = 1;
 	while (i < tokens_len)
 	{
@@ -37,20 +53,8 @@ static int	find_paren_end(t_token **tokens, int tokens_len)
 			break ;
 		i++;
 	}
+	check_err_after_paren_close(tokens, tokens_len, err_i, i);
 	return (i);
-}
-
-int	has_redirect_before(t_token **tokens, int op_idx)
-{
-	int	i;
-
-	i = -1;
-	while (++i < op_idx)
-	{
-		if (token_type_is_redirect(tokens[i]))
-			return (1);
-	}
-	return (0);
 }
 
 t_command	command_build_parentheses(
@@ -58,21 +62,15 @@ t_command	command_build_parentheses(
 {
 	t_command	cmd;
 	int			close_i;
+	int			err_i;
 
 	if (tokens[0]->type != OP_PAREN_OPEN && has_redirect_before(tokens, op_idx))
 		return (command_build_panic_zero(tokens[op_idx]->content));
 	else if (tokens[0]->type != OP_PAREN_OPEN)
 		return (command_build_panic_zero(tokens[op_idx + 1]->content));
-	close_i = find_paren_end(tokens, tokens_len);
-	if (tokens[close_i]->type != OP_PAREN_CLOSE \
-		|| !token_type_is_end_op(tokens[close_i + 1]) \
-		|| close_i < 2)
-	{
-		close_i += (close_i + 1 < tokens_len \
-								&& close_i > 1 \
-								&& !token_type_is_end_op(tokens[close_i + 1]));
-		return (command_build_panic_zero(tokens[close_i]->content));
-	}
+	close_i = find_paren_end(tokens, tokens_len, &err_i);
+	if (err_i >= 0)
+		return (command_build_panic_zero(tokens[err_i]->content));
 	cmd = command_build(tokens + 1, close_i - 1);
 	if (!cmd || cmd->type == CMD_INVALID)
 		return (cmd);
