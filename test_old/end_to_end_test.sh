@@ -7,7 +7,7 @@
 #    By: maurodri <maurodri@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/15 18:09:18 by maurodri          #+#    #+#              #
-#    Updated: 2024/11/26 02:06:15 by maurodri         ###   ########.fr        #
+#    Updated: 2024/11/28 03:32:07 by maurodri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -202,6 +202,61 @@ assert_minishell_expected() {
 
 
 ## NEW TESTS #########################
+
+@test "test paren syntax: (uname))" {
+
+    assert_minishell_equal_bash "(uname))
+"
+}
+
+@test "test paren syntax: (uname)) || echo nope" {
+
+    assert_minishell_equal_bash "(uname)) || echo nope
+"
+}
+
+@test "test paren syntax: (uname) date) || echo nope" {
+
+    assert_minishell_equal_bash "(uname) date) || echo nope
+"
+}
+
+@test "test paren syntax: (uname) date) bc -h) || echo nope" {
+
+    assert_minishell_equal_bash "(uname) date) bc -h) || echo nope
+"
+}
+
+@test "test paren syntax: (uname) | date) || echo nope" {
+
+    assert_minishell_equal_bash "(uname) | date) || echo nope
+"
+}
+
+@test "test paren syntax: (uname) && date) || echo nope" {
+
+    assert_minishell_equal_bash "(uname) && date) || echo nope
+"
+}
+
+@test "test paren syntax: (uname) || date) || echo nope" {
+
+    assert_minishell_equal_bash "(uname) || date) || echo nope
+"
+}
+
+@test "test paren syntax: (uname)))" {
+
+    assert_minishell_equal_bash "(uname)))
+"
+}
+
+# commands that are aliased, like ls sometimes is, before '(' have different error message
+@test "test paren syntax: uname (pwd) awk" {
+
+    assert_minishell_equal_bash "uname (pwd) awk
+"
+}
 
 # copy
 @test "test export: export hello" {

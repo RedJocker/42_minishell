@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 01:08:32 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/19 05:03:57 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/28 03:27:52 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	command_operator_idx(t_token **tokens, int tokens_len)
 	while (++i < tokens_len)
 	{
 		precedence_next = command_token_precedence(tokens[i]->type);
-		if (open_parens == 0 && precedence_next <= precedence_cur)
+		if (open_parens == 0 && precedence_next <= precedence_cur && \
+	!(precedence_next == OP_PAREN_OPEN && precedence_next == precedence_cur))
 		{
 			cmd_operator_idx = i;
 			precedence_cur = precedence_next;
@@ -46,4 +47,17 @@ int	command_operator_idx(t_token **tokens, int tokens_len)
 			open_parens--;
 	}
 	return (cmd_operator_idx);
+}
+
+int	has_redirect_before(t_token **tokens, int op_idx)
+{
+	int	i;
+
+	i = -1;
+	while (++i < op_idx)
+	{
+		if (token_type_is_redirect(tokens[i]))
+			return (1);
+	}
+	return (0);
 }
