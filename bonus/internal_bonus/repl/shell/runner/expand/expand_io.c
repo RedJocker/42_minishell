@@ -6,7 +6,7 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 21:41:12 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/26 23:57:15 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/27 23:49:02 by maurodri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ void	expand_io_star(t_io_handler *io, char *original_path)
 	ft_arraylist_destroy(lst_new_args);
 	if (res[0] == NULL || res[1] != NULL)
 	{
-		ft_asprintf(&errmsg, "minishell: %s: ambiguous redirect", original_path);
+		ft_asprintf(&errmsg, "minishell: %s: ambiguous redirect", \
+			original_path);
 		free(io->path);
 		ft_strarr_free(res);
 		return (io_handler_set_error(io, errno, errmsg));
