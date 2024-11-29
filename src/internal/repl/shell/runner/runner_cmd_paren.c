@@ -6,10 +6,11 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 03:14:47 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/20 00:07:07 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:56:27 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <readline/readline.h>
 #include <signal.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -21,6 +22,11 @@
 #include "internal/default.h"
 #include "internal/repl/shell/command/command.h"
 #include "internal/repl/shell/runner/runner_internal.h"
+
+static void	runner_cmd_paren_child(
+				t_runner_data *run_data,
+				sig_atomic_t *stat,
+				pid_t *pid);
 
 static void	runner_cmd_paren_init(t_runner_data *run_data, t_command cmd, \
 				pid_t **pid, sig_atomic_t *stat)
@@ -45,19 +51,26 @@ sig_atomic_t	runner_cmd_paren(t_runner_data *run_data)
 	if (*pid < 0)
 		exit(EXIT_FORK_FAIL);
 	if (*pid == 0)
-	{
-		run_data->is_main = 0;
-		free(pid);
-		pid = NULL;
-		stat = runner_cmd(run_data, FORK_NOT);
-		stat = stat << 8;
-		runner_wait(run_data, &stat);
-		stat = runner_normalize_status(stat);
-		runner_cmd_simple_exit_status(run_data, stat);
-	}
+		runner_cmd_paren_child(run_data, &stat, pid);
 	command_close_ios(cmd);
 	ft_arraylist_destroy(run_data->pids);
 	run_data->pids = ft_arraylist_pop(run_data->backup_pids);
 	run_data->pids = ft_arraylist_add(run_data->pids, pid);
 	return (stat);
+}
+
+static void	runner_cmd_paren_child(
+	t_runner_data *run_data,
+	sig_atomic_t *stat,
+	pid_t *pid)
+{
+	rl_clear_history();
+	run_data->is_main = 0;
+	free(pid);
+	pid = NULL;
+	*stat = runner_cmd(run_data, FORK_NOT);
+	*stat = *stat << 8;
+	runner_wait(run_data, stat);
+	*stat = runner_normalize_status(*stat);
+	runner_cmd_simple_exit_status(run_data, *stat);
 }

@@ -6,11 +6,12 @@
 /*   By: maurodri <maurodri@student.42sp...>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 21:36:24 by maurodri          #+#    #+#             */
-/*   Updated: 2024/11/26 21:46:05 by maurodri         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:51:20 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
+#include <readline/readline.h>
 #include <signal.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -66,6 +67,7 @@ sig_atomic_t	runner_cmd_simple_child(t_runner_data *run_data, \
 {
 	const t_command		cmd = run_data->cmd;
 
+	rl_clear_history();
 	io_handlers_close(cmd->simple->pipes_to_close);
 	run_data->is_main = 0;
 	free(pid);
