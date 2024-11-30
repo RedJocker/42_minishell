@@ -6,7 +6,7 @@
 /*   By: dande-je <dande-je@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 01:33:57 by dande-je          #+#    #+#             */
-/*   Updated: 2024/11/23 01:43:52 by dande-je         ###   ########.fr       */
+/*   Updated: 2024/11/30 10:48:39 by dande-je         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ void	env_update_default_values(void)
 		env_add_default_value("PS1=", "RedWillShell$ ");
 	else
 		env_update_default_value(env_var, "PS1", "RedWillShell$ ");
+	env_var = env_get_key("PATH", env()->env_var);
+	if (!env_var)
+		env_add_default_value("PATH=", \
+			"/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin");
 }
 
 static void	env_add_default_value(char *key, char *value)
